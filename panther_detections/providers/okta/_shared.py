@@ -1,6 +1,6 @@
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
-from panther_sdk import PantherEvent, detection
+from panther_sdk import PantherEvent
 
 from panther_detections.utils import standard_tags
 
@@ -16,7 +16,6 @@ __all__ = [
 
 SYSTEM_LOG_TYPE = "Okta.SystemLog"
 
-
 SUPPORT_ACCESS_EVENTS = [
     "user.session.impersonation.grant",
     "user.session.impersonation.initiate",
@@ -29,12 +28,10 @@ SUPPORT_RESET_EVENTS = [
     "user.mfa.attempt_bypass",
 ]
 
-
 SHARED_TAGS = [
     "Okta",
     standard_tags.IDENTITY_AND_ACCESS_MGMT,
 ]
-
 
 SHARED_SUMMARY_ATTRS = [
     "eventType",
@@ -57,23 +54,3 @@ def create_alert_context(event: PantherEvent) -> Dict[str, Any]:
         "target": event.get("target", ""),
         "client": event.get("client", ""),
     }
-
-
-def pick_filters(
-    pre_filters: Optional[List[detection.AnyFilter]],
-    overrides: detection.RuleOverrides,
-    defaults: List[detection.AnyFilter],
-) -> List[detection.AnyFilter]:
-    if pre_filters is None:
-        pre_filters = []
-
-    if overrides.filters is None:
-        return pre_filters + defaults
-
-    if isinstance(overrides.filters, detection.AnyFilter):
-        return pre_filters + [overrides.filters]
-
-    if isinstance(overrides.filters, list):
-        return pre_filters + overrides.filters
-
-    raise RuntimeError("unable to pick filters")

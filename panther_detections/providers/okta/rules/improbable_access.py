@@ -10,7 +10,6 @@ from .._shared import (
     SHARED_SUMMARY_ATTRS,
     SYSTEM_LOG_TYPE,
     create_alert_context,
-    pick_filters,
     rule_tags,
 )
 
@@ -139,38 +138,31 @@ def geo_improbable_access(
         return typing.cast(str, event.deep_get("actor", "alternateId"))
 
     return detection.Rule(
-        name=(overrides.name or "Geographically Improbable Okta Login"),
-        rule_id=(overrides.rule_id or "Okta.GeographicallyImprobableAccess"),
-        log_types=(overrides.log_types or [SYSTEM_LOG_TYPE]),
-        tags=(overrides.tags or rule_tags("Initial Access:Valid Accounts")),
-        reports=(overrides.reports or {detection.ReportKeyMITRE: ["TA0001:T1078"]}),
-        severity=(overrides.severity or detection.SeverityHigh),
-        description=(overrides.description or ""),
-        reference=(overrides.reference or ""),
-        runbook=(
-            overrides.runbook or "Reach out to the user if needed to validate the activity, then lock the account"
-        ),
-        filters=pick_filters(
-            overrides=overrides,
-            pre_filters=pre_filters,
-            defaults=[
-                match_filters.deep_equal("eventType", "user.session.start"),
-                match_filters.deep_equal("outcome.result", "FAILURE"),
-                geo_improbable_access_filter(),
-            ],
-        ),
-        alert_title=(overrides.alert_title or _title),
-        alert_context=(overrides.alert_context or create_alert_context),
-        summary_attrs=(overrides.summary_attrs or SHARED_SUMMARY_ATTRS),
-        alert_grouping=(overrides.alert_grouping or detection.AlertGrouping(group_by=_group_by, period_minutes=15)),
-        unit_tests=(
-            overrides.unit_tests
-            or [
-                detection.JSONUnitTest(
-                    name="Failed Login",
-                    expect_match=False,
-                    data=sample_logs.failed_login,
-                ),
-            ]
-        ),
+        overrides=overrides,
+        name="Geographically Improbable Okta Login",
+        rule_id="Okta.GeographicallyImprobableAccess",
+        log_types=[SYSTEM_LOG_TYPE],
+        tags=rule_tags("Initial Access:Valid Accounts"),
+        reports={detection.ReportKeyMITRE: ["TA0001:T1078"]},
+        severity=detection.SeverityHigh,
+        description="",
+        reference="",
+        runbook="Reach out to the user if needed to validate the activity, then lock the account",
+        filters=(pre_filters or [])
+        + [
+            match_filters.deep_equal("eventType", "user.session.start"),
+            match_filters.deep_equal("outcome.result", "FAILURE"),
+            geo_improbable_access_filter(),
+        ],
+        alert_title=_title,
+        alert_context=create_alert_context,
+        summary_attrs=SHARED_SUMMARY_ATTRS,
+        alert_grouping=detection.AlertGrouping(group_by=_group_by, period_minutes=15),
+        unit_tests=[
+            detection.JSONUnitTest(
+                name="Failed Login",
+                expect_match=False,
+                data=sample_logs.failed_login,
+            ),
+        ],
     )

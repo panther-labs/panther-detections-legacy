@@ -2,14 +2,14 @@ import typing
 
 from panther_core import PantherEvent
 from panther_sdk import detection
-from panther_utils import match_filters
+
+from panther_detections.utils import match_filters
 
 from .. import sample_logs
 from .._shared import (
     SHARED_SUMMARY_ATTRS,
     SYSTEM_LOG_TYPE,
     create_alert_context,
-    pick_filters,
     rule_tags,
 )
 
@@ -35,41 +35,33 @@ def api_key_created(
         )
 
     return detection.Rule(
-        name=(overrides.name or "Okta API Key Created"),
-        rule_id=(overrides.rule_id or "Okta.APIKeyCreated"),
-        log_types=(overrides.log_types or [SYSTEM_LOG_TYPE]),
-        tags=(
-            overrides.tags
-            or rule_tags(
-                "Credential Access:Steal Application Access Token",
-            )
+        overrides=overrides,
+        name="Okta API Key Created",
+        rule_id="Okta.APIKeyCreated",
+        log_types=[SYSTEM_LOG_TYPE],
+        tags=rule_tags(
+            "Credential Access:Steal Application Access Token",
         ),
-        reports=(overrides.reports or {detection.ReportKeyMITRE: ["TA0006:T1528"]}),
-        severity=(overrides.severity or detection.SeverityInfo),
-        description=(overrides.description or "A user created an API Key in Okta"),
-        reference=(overrides.reference or "https://help.okta.com/en/prod/Content/Topics/Security/API.htm"),
-        runbook=(overrides.runbook or "Reach out to the user if needed to validate the activity."),
-        filters=pick_filters(
-            overrides=overrides,
-            pre_filters=pre_filters,
-            defaults=[
-                match_filters.deep_equal("eventType", "system.api_token.create"),
-                match_filters.deep_equal("outcome.result", "SUCCESS"),
-            ],
-        ),
-        alert_title=(overrides.alert_title or _title),
-        alert_context=(overrides.alert_context or create_alert_context),
-        summary_attrs=(overrides.summary_attrs or SHARED_SUMMARY_ATTRS),
-        unit_tests=(
-            overrides.unit_tests
-            or [
-                detection.JSONUnitTest(
-                    name="API Key Created",
-                    expect_match=True,
-                    data=sample_logs.system_api_token_create,
-                ),
-            ]
-        ),
+        reports={detection.ReportKeyMITRE: ["TA0006:T1528"]},
+        severity=detection.SeverityInfo,
+        description="A user created an API Key in Okta",
+        reference="https://help.okta.com/en/prod/Content/Topics/Security/API.htm",
+        runbook="Reach out to the user if needed to validate the activity.",
+        filters=(pre_filters or [])
+        + [
+            match_filters.deep_equal("eventType", "system.api_token.create"),
+            match_filters.deep_equal("outcome.result", "SUCCESS"),
+        ],
+        alert_title=_title,
+        alert_context=create_alert_context,
+        summary_attrs=SHARED_SUMMARY_ATTRS,
+        unit_tests=[
+            detection.JSONUnitTest(
+                name="API Key Created",
+                expect_match=True,
+                data=sample_logs.system_api_token_create,
+            ),
+        ],
     )
 
 
@@ -89,33 +81,28 @@ def api_key_revoked(
         )
 
     return detection.Rule(
-        name=(overrides.name or "Okta API Key Revoked"),
-        rule_id=(overrides.rule_id or "Okta.APIKeyRevoked"),
-        log_types=(overrides.log_types or [SYSTEM_LOG_TYPE]),
-        tags=(overrides.tags or rule_tags()),
-        severity=(overrides.severity or detection.SeverityInfo),
-        description=(overrides.description or "A user has revoked an API Key in Okta"),
-        reference=(overrides.reference or "https://help.okta.com/en/prod/Content/Topics/Security/API.htm"),
-        runbook=(overrides.runbook or "Validate this action was authorized."),
-        filters=pick_filters(
-            overrides=overrides,
-            pre_filters=pre_filters,
-            defaults=[
-                match_filters.deep_equal("eventType", "system.api_token.revoke"),
-                match_filters.deep_equal("outcome.result", "SUCCESS"),
-            ],
-        ),
-        alert_title=(overrides.alert_title or _title),
-        alert_context=(overrides.alert_context or create_alert_context),
-        summary_attrs=(overrides.summary_attrs or SHARED_SUMMARY_ATTRS),
-        unit_tests=(
-            overrides.unit_tests
-            or [
-                detection.JSONUnitTest(
-                    name="API Key Revoked",
-                    expect_match=True,
-                    data=sample_logs.system_api_token_revoke,
-                ),
-            ]
-        ),
+        overrides=overrides,
+        name="Okta API Key Revoked",
+        rule_id="Okta.APIKeyRevoked",
+        log_types=[SYSTEM_LOG_TYPE],
+        tags=rule_tags(),
+        severity=detection.SeverityInfo,
+        description="A user has revoked an API Key in Okta",
+        reference="https://help.okta.com/en/prod/Content/Topics/Security/API.htm",
+        runbook="Validate this action was authorized.",
+        filters=(pre_filters or [])
+        + [
+            match_filters.deep_equal("eventType", "system.api_token.revoke"),
+            match_filters.deep_equal("outcome.result", "SUCCESS"),
+        ],
+        alert_title=_title,
+        alert_context=create_alert_context,
+        summary_attrs=SHARED_SUMMARY_ATTRS,
+        unit_tests=[
+            detection.JSONUnitTest(
+                name="API Key Revoked",
+                expect_match=True,
+                data=sample_logs.system_api_token_revoke,
+            ),
+        ],
     )

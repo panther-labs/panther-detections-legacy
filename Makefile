@@ -1,21 +1,22 @@
 dirs := panther_detections
+max_line_len := 120
 
 lint: lint-pylint lint-fmt
 
 lint-pylint:
 	pipenv run bandit -r $(dirs) --skip B101  # allow assert statements in tests
 	pipenv run pylint $(dirs) \
-	  --disable=missing-docstring,duplicate-code,import-error,fixme,consider-iterating-dictionary,global-variable-not-assigned \
+	  --disable=missing-docstring,duplicate-code,import-error,fixme,consider-iterating-dictionary,global-variable-not-assigned,C0415 \
 	  --load-plugins=pylint.extensions.mccabe,pylint_print \
-	  --max-line-length=100
+	  --max-line-length=$(max_line_len)
 
 lint-fmt:
 	@echo Checking python file formatting with the black code style checker
-	pipenv run black --line-length=100 --check $(dirs)
+	pipenv run black --line-length=$(max_line_len) --check $(dirs)
 
 fmt:
 	pipenv run isort --profile=black $(dirs)
-	pipenv run black --line-length=100 $(dirs)
+	pipenv run black --line-length=$(max_line_len) $(dirs)
 
 install:
 	pipenv install --dev

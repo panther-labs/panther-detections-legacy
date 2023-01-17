@@ -44,4 +44,3 @@ def create_alert_context(event: PantherEvent) -> Dict[str, Any]:
         "target": event.get("target", ""),
         "client": event.get("client", ""),
     }
-

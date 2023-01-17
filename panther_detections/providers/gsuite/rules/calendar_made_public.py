@@ -5,13 +5,13 @@ from panther_sdk import detection
 
 from panther_detections.providers.gsuite import sample_logs
 from panther_detections.providers.gsuite._shared import (
-    SHARED_SUMMARY_ATTRS,
-    REPORTS_LOG_TYPE,
     ACTIVITY_LOG_TYPE,
+    REPORTS_LOG_TYPE,
+    SHARED_SUMMARY_ATTRS,
     create_alert_context,
     rule_tags,
 )
-from panther_detections.utils import standard_tags, match_filters
+from panther_detections.utils import match_filters, standard_tags
 
 __all__ = ["gsuite_calendar_made_public"]
 
@@ -37,10 +37,8 @@ def gsuite_calendar_made_public(
         runbook="Follow up with user about this calendar share.",
         filters=(pre_filters or [])
         + [
-                match_filters.deep_equal(
-                    "name", "change_calendar_acls"),
-                match_filters.deep_equal(
-                    "parameters.grantee_email", "__public_principal__@public.calendar.google.com")
+            match_filters.deep_equal("name", "change_calendar_acls"),
+            match_filters.deep_equal("parameters.grantee_email", "__public_principal__@public.calendar.google.com"),
         ],
         alert_title=_title,
         alert_context=create_alert_context,
@@ -61,5 +59,5 @@ def gsuite_calendar_made_public(
                 expect_match=False,
                 data=sample_logs.list_object_type,
             ),
-        ]
+        ],
     )

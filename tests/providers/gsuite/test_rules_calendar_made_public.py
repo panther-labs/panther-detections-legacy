@@ -1,7 +1,9 @@
 import unittest
 
 from panther_sdk import detection
-from panther_detections.providers import gsuite
+import panther_detections.providers.gsuite as gsuite 
+
+print(gsuite.rules.calendar_made_public)
 
 
 class TestRulesCalendarPublic(unittest.TestCase):

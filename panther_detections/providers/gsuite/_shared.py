@@ -8,8 +8,6 @@ __all__ = [
     "rule_tags",
     "ACTIVITY_LOG_TYPE",
     "REPORTS_LOG_TYPE",
-    "SUPPORT_ACCESS_EVENTS",
-    "SUPPORT_RESET_EVENTS",
     "SHARED_TAGS",
     "SHARED_SUMMARY_ATTRS",
     "create_alert_context",

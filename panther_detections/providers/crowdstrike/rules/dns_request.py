@@ -4,12 +4,11 @@ from panther_sdk import PantherEvent, detection
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
-#from .._shared import (
+from .._shared import (
     # SYSTEM_LOG_TYPE,
-    # create_alert_context,
-    #rule_tags,
-    # standard_tags,
-#)
+    create_alert_context,
+    rule_tags,
+)
 
 def dns_request(
     pre_filters: typing.List[detection.AnyFilter] = None,
@@ -31,8 +30,8 @@ def dns_request(
         name="DNS request to denylisted domain",
         rule_id="Crowdstrike.DNS.Request",
         log_types=["Crowdstrike.DNSRequest"],
-        tags=['Crowdstrike', 'Initial Access:Phishing'],
-        reports={'MITRE ATT&CK': ['TA0001:T1566']},
+        tags=rule_tags("Initial Access:Phishing"),
+        reports={"MITRE ATT&CK": ["TA0001:T1566"]},
         severity=detection.SeverityCritical,
         description="A DNS request was made to a domain on an explicit denylist",
         reference="https://docs.runpanther.io/data-onboarding/supported-logs/crowdstrike#crowdstrike-dnsrequest",
@@ -42,6 +41,7 @@ def dns_request(
             match_filters.deep_in("DomainName", DENYLIST)
         ],
         alert_title=_title,
+        alert_context=create_alert_context,
         alert_grouping = detection.AlertGrouping(
             period_minutes=15,
             group_by=_dedup

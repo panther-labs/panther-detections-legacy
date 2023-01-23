@@ -4,12 +4,9 @@ from panther_sdk import PantherEvent, detection
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
-#from .._shared import (
-#     SYSTEM_LOG_TYPE,
-#     create_alert_context,
-#    rule_tags,
-#     standard_tags,
-#)
+from .._shared import (
+    rule_tags,
+)
 
 def real_time_response_session(
     pre_filters: typing.List[detection.AnyFilter] = None,
@@ -41,8 +38,8 @@ def real_time_response_session(
         overrides=overrides,
         name="Crowdstrike Real Time Response (RTS) Session",
         rule_id="Crowdstrike.RealTimeResponse.Session",
-        log_types=[['Crowdstrike.Unknown']],
-        tags=['Crowdstrike'],
+        log_types=['Crowdstrike.Unknown'],
+        tags=rule_tags(),
         reports="",
         severity=detection.SeverityMedium,
         description="Alert when someone uses Crowdstrike’s RTR (real-time response) capability to access a machine remotely to run commands.",
@@ -54,7 +51,7 @@ def real_time_response_session(
         ],
         alert_title=_title,
         alert_context=_alert_context,
-        summary_attrs=(overrides.summary_attrs),
+        #summary_attrs=
         threshold="",
         unit_tests=(
             [

@@ -4,12 +4,10 @@ from panther_sdk import PantherEvent, detection
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
-#from .._shared import (
+from .._shared import (
     # SYSTEM_LOG_TYPE,
-    # create_alert_context,
-    #rule_tags,
-    # standard_tags,
-#)
+    create_alert_context,
+    rule_tags,)
 
 __all__ = [
     "detection_passthrough"
@@ -22,13 +20,12 @@ def detection_passthrough(
     """Crowdstrike Falcon has detected malicious activity on a host."""
         
     def _title(event: PantherEvent) -> str:
-        
         return f"Crowdstrike Alert ({event.get('Technique')}) - {event.get('ComputerName')}({event.get('UserName')})"
 
     def _severity(event: PantherEvent) -> str:
         return event.get("SeverityName")
 
-    def _dedup(event):
+    def _dedup(event) -> str:
         return f"{event.get('EventUUID')} - {event.get('ComputerName')}"
     
     
@@ -37,7 +34,7 @@ def detection_passthrough(
         name="Crowdstrike Detection Passthrough",
         rule_id="Crowdstrike.Detection.passthrough",
         log_types=["Crowdstrike.DetectionSummary"],
-        tags=['Crowdstrike'],
+        tags=rule_tags(),
         reports="",
         severity=_severity,
         description="Crowdstrike Falcon has detected malicious activity on a host.",
@@ -48,7 +45,7 @@ def detection_passthrough(
             match_filters.deep_equal("ExternalApiType", "Event_DetectionSummaryEvent")
         ],
         alert_title=_title,
-        # alert_context=create_alert_context,
+        alert_context=create_alert_context,
         summary_attrs=['p_any_ip_addresses'],
         alert_grouping = detection.AlertGrouping(
             period_minutes=0,

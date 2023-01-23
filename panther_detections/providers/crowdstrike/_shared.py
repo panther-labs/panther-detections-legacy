@@ -28,10 +28,10 @@ from panther_detections.utils import standard_tags
 #     "user.mfa.attempt_bypass",
 # ]
 
-# SHARED_TAGS = [
-#     "Okta",
-#     standard_tags.IDENTITY_AND_ACCESS_MGMT,
-# ]
+SHARED_TAGS = [
+    "Crowdstrike",
+    #standard_tags.IDENTITY_AND_ACCESS_MGMT,
+]
 
 # SHARED_SUMMARY_ATTRS = [
 #     "eventType",
@@ -45,12 +45,16 @@ from panther_detections.utils import standard_tags
 #     return [*SHARED_TAGS, *extra_tags]
 
 
-# def create_alert_context(event: PantherEvent) -> Dict[str, Any]:
-#     """Returns common context for Okta alerts"""
+def create_alert_context(event: PantherEvent) -> Dict[str, Any]:
+    """Returns common context for Crowdstrike detections"""
 
-#     return {
-#         "ips": event.get("p_any_ip_addresses", []),
-#         "actor": event.get("actor", ""),
-#         "target": event.get("target", ""),
-#         "client": event.get("client", ""),
-#     }
+    return {
+        "user": event.get("UserName", ""),
+        "console-link": event.get("FalconHostLink", ""),
+        "commandline": event.get("CommandLine", ""),
+        "parentcommandline": event.get("ParentCommandLine", ""),
+        "filename": event.get("FileName", ""),
+        "filepath": event.get("FilePath", ""),
+        "description": event.get("DetectDescription", ""),
+        "action": event.get("PatternDispositionDescription", ""),
+    }

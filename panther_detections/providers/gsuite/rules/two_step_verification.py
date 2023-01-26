@@ -1,19 +1,17 @@
-import typing
 import json
+import typing
 
-from panther_sdk import detection, PantherEvent
+from panther_sdk import PantherEvent, detection
+
 from panther_detections.utils import match_filters
 
-from .._shared import (
-    pick_filters
-)
+from .._shared import pick_filters
 
 
 def gsuite_two_step_verification(
     pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
 ) -> detection.Rule:
-
     def rule_filter() -> detection.PythonFilter:
         def _rule(event: PantherEvent) -> bool:
             if event.get("type") == "2sv_change" and event.get("name") == "2sv_disable":
@@ -39,17 +37,10 @@ def gsuite_two_step_verification(
         rule_id=(overrides.rule_id or "GSuite.TwoStepVerification"),
         name=(overrides.name or "GSuite User Two Step Verification Change"),
         log_types=(overrides.log_types or ["GSuite.ActivityEvent"]),
-        tags=(overrides.tags or [
-              "GSuite", "Defense Evasion:Modify Authentication Process"]),
+        tags=(overrides.tags or ["GSuite", "Defense Evasion:Modify Authentication Process"]),
         severity=(overrides.severity or detection.SeverityLow),
-        description=(
-            overrides.description
-            or "A user disabled two step verification for themselves."
-        ),
-        reference=(
-            overrides.reference
-            or _reference_generator
-        ),
+        description=(overrides.description or "A user disabled two step verification for themselves."),
+        reference=(overrides.reference or _reference_generator),
         runbook=(
             overrides.runbook
             or "Investigate the behavior that got the account suspended. Verify with the user that this intended behavior. If not, the account may have been compromised."
@@ -59,9 +50,8 @@ def gsuite_two_step_verification(
             pre_filters=pre_filters,
             defaults=[
                 # the path needs to use dot notation as seen in this unit test: https://github.com/panther-labs/panther-utils/blob/main/tests/test_match_filters.py#L22
-                match_filters.deep_equal(
-                    "id.applicationName", "user_accounts"),
-                rule_filter()
+                match_filters.deep_equal("id.applicationName", "user_accounts"),
+                rule_filter(),
             ],
         ),
         alert_title=(overrides.alert_title or _title),
@@ -73,19 +63,21 @@ def gsuite_two_step_verification(
                 detection.JSONUnitTest(
                     name="Two Step Verification Disabled",
                     expect_match=True,
-                    data=json.dumps({
-                        "id": {
-                            "applicationName": "user_accounts",
-                        },
-                        "actor": {
-                            "callerType": "USER",
-                            "email": "some.user@somedomain.com",
-                        },
-                        "kind": "admin#reports#activity",
-                        "type": "2sv_change",
-                        "name": "2sv_disable",
-                    }
-                    )),
+                    data=json.dumps(
+                        {
+                            "id": {
+                                "applicationName": "user_accounts",
+                            },
+                            "actor": {
+                                "callerType": "USER",
+                                "email": "some.user@somedomain.com",
+                            },
+                            "kind": "admin#reports#activity",
+                            "type": "2sv_change",
+                            "name": "2sv_disable",
+                        }
+                    ),
+                ),
             ]
-        )
+        ),
     )

@@ -1,5 +1,7 @@
-from typing import List, Optional, Dict, Any
-from panther_sdk import detection, PantherEvent
+from typing import Any, Dict, List, Optional
+
+from panther_sdk import PantherEvent, detection
+
 from panther_detections.utils import standard_tags
 
 # code used across different rules of the same log type go here
@@ -27,10 +29,7 @@ def rule_tags(*extra_tags: str) -> List[str]:
 def create_alert_context(event: PantherEvent) -> Dict[str, Any]:
     """Returns common context for GSuite alerts"""
 
-    return {
-        "ips": event.get("p_any_ip_addresses", []),
-        "emails": event.get("p_any_emails", "")
-    }
+    return {"ips": event.get("p_any_ip_addresses", []), "emails": event.get("p_any_emails", "")}
 
 
 # # # # # # # # # # # # # #

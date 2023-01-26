@@ -1,19 +1,17 @@
-import typing
 import json
+import typing
 
-from panther_sdk import detection, PantherEvent
+from panther_sdk import PantherEvent, detection
+
 from panther_detections.utils import match_filters
 
-from .._shared import (
-    pick_filters
-)
+from .._shared import pick_filters
 
 
 def gsuite_user_suspended(
     pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
 ) -> detection.Rule:
-
     def rule_filter() -> detection.PythonFilter:
         def _rule(event: PantherEvent) -> bool:
             USER_SUSPENDED_EVENTS = {
@@ -53,10 +51,7 @@ def gsuite_user_suspended(
             overrides.description
             or "A GSuite user was suspended, the account may have been compromised by a spam network."
         ),
-        reference=(
-            overrides.reference
-            or _reference_generator
-        ),
+        reference=(overrides.reference or _reference_generator),
         runbook=(
             overrides.runbook
             or "Investigate the behavior that got the account suspended. Verify with the user that this intended behavior. If not, the account may have been compromised."
@@ -67,7 +62,7 @@ def gsuite_user_suspended(
             defaults=[
                 # the path needs to use dot notation as seen in this unit test: https://github.com/panther-labs/panther-utils/blob/main/tests/test_match_filters.py#L22
                 match_filters.deep_equal("id.applicationName", "login"),
-                rule_filter()
+                rule_filter(),
             ],
         ),
         alert_title=(overrides.alert_title or _title),
@@ -79,57 +74,59 @@ def gsuite_user_suspended(
                 detection.JSONUnitTest(
                     name="Account Warning For Suspended User",
                     expect_match=True,
-                    data=json.dumps({
-                        "id": {
-                            "applicationName": "login",
+                    data=json.dumps(
+                        {
+                            "id": {
+                                "applicationName": "login",
+                            },
+                            "kind": "admin#reports#activity",
+                            "type": "account_warning",
+                            "name": "account_disabled_spamming",
+                            "parameters": {"affected_email_address": "bobert@ext.runpanther.io"},
                         },
-                        "kind": "admin#reports#activity",
-                        "type": "account_warning",
-                        "name": "account_disabled_spamming",
-                        "parameters": {
-                            "affected_email_address": "bobert@ext.runpanther.io"
-                        },
-                    },
-                    )),
+                    ),
+                ),
                 detection.JSONUnitTest(
                     name="Account Warning Not For Suspended User",
                     expect_match=False,
-                    data=json.dumps({
-                        "id": {
-                            "applicationName": "login",
+                    data=json.dumps(
+                        {
+                            "id": {
+                                "applicationName": "login",
+                            },
+                            "kind": "admin#reports#activity",
+                            "type": "account_warning",
+                            "name": "suspicious_login ",
+                            "parameters": {"affected_email_address": "bobert@ext.runpanther.io"},
                         },
-                        "kind": "admin#reports#activity",
-                        "type": "account_warning",
-                        "name": "suspicious_login ",
-                        "parameters": {
-                            "affected_email_address": "bobert@ext.runpanther.io"
-                        },
-                    },
-                    )),
+                    ),
+                ),
                 detection.JSONUnitTest(
                     name="Normal Login Event",
                     expect_match=False,
-                    data=json.dumps({
-                        "id": {
-                            "applicationName": "login",
+                    data=json.dumps(
+                        {
+                            "id": {
+                                "applicationName": "login",
+                            },
+                            "kind": "admin#reports#activity",
+                            "type": "account_warning",
+                            "name": "login_success",
+                            "parameters": {"affected_email_address": "bobert@ext.runpanther.io"},
                         },
-                        "kind": "admin#reports#activity",
-                        "type": "account_warning",
-                        "name": "login_success",
-                        "parameters": {
-                            "affected_email_address": "bobert@ext.runpanther.io"
-                        },
-                    },
-                    )),
+                    ),
+                ),
                 detection.JSONUnitTest(
                     name="Not a Login Event",
                     expect_match=False,
-                    data=json.dumps({
-                        "id": {
-                            "applicationName": "something other than a login",
-                        }
-                    },
-                    )),
+                    data=json.dumps(
+                        {
+                            "id": {
+                                "applicationName": "something other than a login",
+                            }
+                        },
+                    ),
+                ),
             ]
-        )
+        ),
     )

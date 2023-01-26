@@ -1,11 +1,11 @@
 import typing
-from panther_sdk import detection, PantherEvent
-from panther_detections.utils import standard_tags, match_filters
+
+from panther_sdk import PantherEvent, detection
+
+from panther_detections.utils import match_filters, standard_tags
 
 from .. import sample_logs
-from .._shared import (
-    pick_filters
-)
+from .._shared import pick_filters
 
 # def generate_severity(str):
 #     return f'{str} hi'
@@ -23,28 +23,19 @@ def gsuite_brute_force_login(
     return detection.Rule(
         rule_id=(overrides.rule_id or "GSuite.BruteForceLogin"),
         log_types=(overrides.log_types or ["GSuite.ActivityEvent"]),
-        tags=(
-            overrides.tags or standard_tags.IDENTITY_AND_ACCESS_MGMT
-        ),
-        reports=(overrides.reports or {
-                 detection.ReportKeyMITRE: ["TA0005:T1556"]}),
-        description=(
-            overrides.description
-            or "A GSuite user was denied login access several times"
-        ),
+        tags=(overrides.tags or standard_tags.IDENTITY_AND_ACCESS_MGMT),
+        reports=(overrides.reports or {detection.ReportKeyMITRE: ["TA0005:T1556"]}),
+        description=(overrides.description or "A GSuite user was denied login access several times"),
         reference=(
             overrides.reference
             or "https://developers.google.com/admin-sdk/reports/v1/appendix/activity/login#login_failure"
         ),
-        runbook=(
-            overrides.runbook or "Analyze the IP they came from and actions taken before/after"
-        ),
+        runbook=(overrides.runbook or "Analyze the IP they came from and actions taken before/after"),
         filters=pick_filters(
             overrides=overrides,
             pre_filters=pre_filters,
             defaults=[
-                match_filters.deep_equal(
-                    "name", "login_failure"),
+                match_filters.deep_equal("name", "login_failure"),
             ],
         ),
         severity=(overrides.severity or "INFO"),

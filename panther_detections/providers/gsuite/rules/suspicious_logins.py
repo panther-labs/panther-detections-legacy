@@ -1,19 +1,17 @@
-import typing
 import json
+import typing
 
-from panther_sdk import detection, PantherEvent
+from panther_sdk import PantherEvent, detection
+
 from panther_detections.utils import match_filters
 
-from .._shared import (
-    pick_filters
-)
+from .._shared import pick_filters
 
 
 def gsuite_suspicious_logins(
     pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
 ) -> detection.Rule:
-
     def rule_filter() -> detection.PythonFilter:
         def _rule_filter(event: PantherEvent) -> bool:
             SUSPICIOUS_LOGIN_TYPES = {
@@ -45,10 +43,7 @@ def gsuite_suspicious_logins(
         log_types=(overrides.log_types or ["GSuite.ActivityEvent"]),
         tags=(overrides.tags or ["GSuite"]),
         severity=(overrides.severity or detection.SeverityMedium),
-        description=(
-            overrides.description
-            or "GSuite reported a suspicious login for this user."
-        ),
+        description=(overrides.description or "GSuite reported a suspicious login for this user."),
         reference=(
             overrides.reference
             or "https://developers.google.com/admin-sdk/reports/v1/appendix/activity/login#suspicious_login"
@@ -60,10 +55,7 @@ def gsuite_suspicious_logins(
         filters=pick_filters(
             overrides=overrides,
             pre_filters=pre_filters,
-            defaults=[
-                match_filters.deep_equal("id.applicationName", "login"),
-                rule_filter()
-            ],
+            defaults=[match_filters.deep_equal("id.applicationName", "login"), rule_filter()],
         ),
         alert_title=(overrides.alert_title or _title),
         alert_context=(overrides.alert_context or _make_context),
@@ -74,33 +66,33 @@ def gsuite_suspicious_logins(
                 detection.JSONUnitTest(
                     name="Normal Login Event",
                     expect_match=False,
-                    data=json.dumps({
-                        "id": {
-                            "applicationName": "login",
+                    data=json.dumps(
+                        {
+                            "id": {
+                                "applicationName": "login",
+                            },
+                            "kind": "admin#reports#activity",
+                            "type": "account_warning",
+                            "name": "login_success",
+                            "parameters": {"affected_email_address": "bobert@ext.runpanther.io"},
                         },
-                        "kind": "admin#reports#activity",
-                        "type": "account_warning",
-                        "name": "login_success",
-                        "parameters": {
-                                "affected_email_address": "bobert@ext.runpanther.io"
-                        },
-                    },
-                    )),
+                    ),
+                ),
                 detection.JSONUnitTest(
                     name="Account Warning For Suspicious Login",
                     expect_match=True,
-                    data=json.dumps({
-                        "id": {
-                            "applicationName": "login",
+                    data=json.dumps(
+                        {
+                            "id": {
+                                "applicationName": "login",
+                            },
+                            "kind": "admin#reports#activity",
+                            "type": "account_warning",
+                            "name": "suspicious_login",
+                            "parameters": {"affected_email_address": "bobert@ext.runpanther.io"},
                         },
-                        "kind": "admin#reports#activity",
-                        "type": "account_warning",
-                        "name": "suspicious_login",
-                        "parameters": {
-                                "affected_email_address": "bobert@ext.runpanther.io"
-                        },
-                    },
-                    )),
+                    ),
+                ),
             ]
         ),
     )

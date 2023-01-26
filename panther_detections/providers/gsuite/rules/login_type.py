@@ -1,11 +1,11 @@
 import typing
-from panther_sdk import detection, PantherEvent
-from panther_detections.utils import standard_tags, match_filters
+
+from panther_sdk import PantherEvent, detection
+
+from panther_detections.utils import match_filters, standard_tags
 
 from .. import sample_logs
-from .._shared import (
-    pick_filters
-)
+from .._shared import pick_filters
 
 
 def gsuite_login_type(
@@ -35,33 +35,26 @@ def gsuite_login_type(
     return detection.Rule(
         rule_id=(overrides.rule_id or "GSuite.LoginType"),
         log_types=(overrides.log_types or ["GSuite.ActivityEvent"]),
-        tags=(
-            overrides.tags or standard_tags.IDENTITY_AND_ACCESS_MGMT  # Check this
-        ),
+        tags=(overrides.tags or standard_tags.IDENTITY_AND_ACCESS_MGMT),  # Check this
         severity=(overrides.severity or detection.SeverityMedium),
-        description=(
-            overrides.description
-            or "A login of a non-approved type was detected for this user."
-        ),
+        description=(overrides.description or "A login of a non-approved type was detected for this user."),
         reference=(
-            overrides.reference
-            or "https://developers.google.com/admin-sdk/reports/v1/appendix/activity/login#login"
+            overrides.reference or "https://developers.google.com/admin-sdk/reports/v1/appendix/activity/login#login"
         ),
         runbook=(
-            overrides.runbook or "Correct the user account settings so that only logins of approved types are available."
+            overrides.runbook
+            or "Correct the user account settings so that only logins of approved types are available."
         ),
         filters=pick_filters(
             overrides=overrides,
             pre_filters=pre_filters,
             # name == change_calendars_acls &
-            #parameters.grantee_email == __public_principal__@public.calendar.google.com
+            # parameters.grantee_email == __public_principal__@public.calendar.google.com
             defaults=[
                 match_filters.deep_equal("type", "login"),
                 match_filters.deep_not_equal("name", "logout"),
-                match_filters.deep_not_in(
-                    "parameters.login_type", APPROVED_LOGIN_TYPES),
-                match_filters.deep_not_in(
-                    "id.applicationName", APPROVED_APPLICATION_NAMES)
+                match_filters.deep_not_in("parameters.login_type", APPROVED_LOGIN_TYPES),
+                match_filters.deep_not_in("id.applicationName", APPROVED_APPLICATION_NAMES),
             ],
         ),
         alert_title=(overrides.alert_title or _title),
@@ -88,7 +81,6 @@ def gsuite_login_type(
                     expect_match=False,
                     data=sample_logs.saml_login_event,
                 ),
-
             ]
         ),
     )

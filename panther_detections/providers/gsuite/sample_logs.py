@@ -93,54 +93,37 @@ list_object_type = json.dumps(
 
 access_event = json.dumps(
     {
-        'p_row_id': '111222',
-        'actor': {'email': 'bobert@example.com'},
-        'id': {'applicationName': 'drive'},
-        'events': [
-            {
-                'type': 'access',
-                'name': 'download'
-            }
-        ]
+        "p_row_id": "111222",
+        "actor": {"email": "bobert@example.com"},
+        "id": {"applicationName": "drive"},
+        "events": [{"type": "access", "name": "download"}],
     }
 )
 
 modify_event_without_over_visibility = json.dumps(
     {
-        'p_row_id': '111222',
-        'actor': {'email': 'bobert@example.com'},
-        'id': {'applicationName': 'drive'},
-        'events': [
-            {
-                'type': 'access',
-                'name': 'edit',
-                'parameters': [{'name': 'visibility', 'value': 'private'}]
-            }
-        ]
+        "p_row_id": "111222",
+        "actor": {"email": "bobert@example.com"},
+        "id": {"applicationName": "drive"},
+        "events": [{"type": "access", "name": "edit", "parameters": [{"name": "visibility", "value": "private"}]}],
     }
 )
 
 overly_visible_doc_modified = json.dumps(
     {
-        'p_row_id': '111222',
-        'actor': {'email': 'bobert@example.com'},
-        'id': {'applicationName': 'drive'},
-        'events': [
+        "p_row_id": "111222",
+        "actor": {"email": "bobert@example.com"},
+        "id": {"applicationName": "drive"},
+        "events": [
             {
-                'type': 'access',
-                'name': 'edit',
-                'parameters': [
-                    {
-                        'name': 'visibility',
-                        'value': 'people_with_link'
-                    },
-                    {
-                        'name': 'doc_title',
-                        'value': 'my shared document'
-                    }
-                ]
+                "type": "access",
+                "name": "edit",
+                "parameters": [
+                    {"name": "visibility", "value": "people_with_link"},
+                    {"name": "doc_title", "value": "my shared document"},
+                ],
             }
-        ]
+        ],
     }
 )
 
@@ -156,9 +139,7 @@ normal_login = json.dumps(
         "name": "login_success",
         "parameters": {
             "is_suspicious": "null",
-            "login_challenge_method": [
-                "none"
-            ],
+            "login_challenge_method": ["none"],
         },
     }
 )
@@ -175,9 +156,7 @@ gov_backed_warning = json.dumps(
         "name": "gov_attack_warning",
         "parameters": {
             "is_suspicious": "null",
-            "login_challenge_method": [
-                "none"
-            ],
+            "login_challenge_method": ["none"],
         },
     }
 )
@@ -193,9 +172,7 @@ normal_mobile_event = json.dumps(
         },
         "type": "device_updates",
         "name": "DEVICE_SYNC_EVENT",
-        "parameters": {
-            "USER_EMAIL": "homer.simpson@example.io"
-        },
+        "parameters": {"USER_EMAIL": "homer.simpson@example.io"},
     }
 )
 
@@ -210,9 +187,7 @@ suspicious_activity = json.dumps(
         },
         "type": "device_updates",
         "name": "SUSPICIOUS_ACTIVITY_EVENT",
-        "parameters": {
-            "USER_EMAIL": "homer.simpson@example.io"
-        },
+        "parameters": {"USER_EMAIL": "homer.simpson@example.io"},
     }
 )
 
@@ -221,10 +196,7 @@ advanced_protection_enabled = json.dumps(
         "id": {
             "applicationName": "user_accounts",
         },
-        "actor": {
-            "callerType": "USER",
-            "email": "homer.simpson@example.com"
-        },
+        "actor": {"callerType": "USER", "email": "homer.simpson@example.com"},
         "type": "titanium_change",
         "name": "titanium_enroll",
     }
@@ -235,10 +207,7 @@ advanced_protection_disabled = json.dumps(
         "id": {
             "applicationName": "user_accounts",
         },
-        "actor": {
-            "callerType": "USER",
-            "email": "homer.simpson@example.com"
-        },
+        "actor": {"callerType": "USER", "email": "homer.simpson@example.com"},
         "type": "titanium_change",
         "name": "titanium_unenroll",
     }
@@ -246,95 +215,53 @@ advanced_protection_disabled = json.dumps(
 
 non_triggered_rule = json.dumps(
     {
-        "id": {
-            "applicationName": "rules"
-        },
-        "actor": {
-            "email": "some.user@somedomain.com"
-        },
-        "parameters": {
-            "severity": "HIGH",
-            "triggered_actions": None
-        },
+        "id": {"applicationName": "rules"},
+        "actor": {"email": "some.user@somedomain.com"},
+        "parameters": {"severity": "HIGH", "triggered_actions": None},
     }
 )
 
 high_severity_rule = json.dumps(
     {
-        "id": {
-            "applicationName": "rules"
-        },
-        "actor": {
-            "email": "some.user@somedomain.com"
-        },
+        "id": {"applicationName": "rules"},
+        "actor": {"email": "some.user@somedomain.com"},
         "parameters": {
             "data_source": "DRIVE",
             "severity": "HIGH",
-            "triggered_actions": [
-                {
-                    "action_type": "DRIVE_UNFLAG_DOCUMENT"
-                }
-            ]
-        }
+            "triggered_actions": [{"action_type": "DRIVE_UNFLAG_DOCUMENT"}],
+        },
     }
 )
 
 medium_severity_rule = json.dumps(
     {
-        "id": {
-            "applicationName": "rules"
-        },
-        "actor": {
-            "email": "some.user@somedomain.com"
-        },
+        "id": {"applicationName": "rules"},
+        "actor": {"email": "some.user@somedomain.com"},
         "parameters": {
             "data_source": "DRIVE",
             "severity": "MEDIUM",
-            "triggered_actions": [
-                {
-                    "action_type": "DRIVE_UNFLAG_DOCUMENT"
-                }
-            ]
-        }
+            "triggered_actions": [{"action_type": "DRIVE_UNFLAG_DOCUMENT"}],
+        },
     }
 )
 
 low_severity_rule = json.dumps(
     {
-        "id": {
-            "applicationName": "rules"
-        },
-        "actor": {
-            "email": "some.user@somedomain.com"
-        },
-        "parameters": {
-            "severity": "LOW",
-            "triggered_actions": [
-                {
-                    "action_type": "DRIVE_UNFLAG_DOCUMENT"
-                }
-            ]
-        }
+        "id": {"applicationName": "rules"},
+        "actor": {"email": "some.user@somedomain.com"},
+        "parameters": {"severity": "LOW", "triggered_actions": [{"action_type": "DRIVE_UNFLAG_DOCUMENT"}]},
     }
 )
 
 high_severity_rule_with_rule_name = json.dumps(
     {
-        "id": {
-            "applicationName": "rules"
-        },
-        "actor": {
-            "email": "some.user@somedomain.com"
-        },
+        "id": {"applicationName": "rules"},
+        "actor": {"email": "some.user@somedomain.com"},
         "parameters": {
             "severity": "HIGH",
             "rule_name": "CEO Impersonation",
-            "triggered_actions": [
-                {
-                    "action_type": "MAIL_MARK_AS_PHISHING"
-                }
-            ]
-        }
+            "triggered_actions": [{"action_type": "MAIL_MARK_AS_PHISHING"}],
+        },
     }
 )
 
@@ -343,14 +270,10 @@ login_with_approved_type = json.dumps(
         "id": {
             "applicationName": "login",
         },
-        "actor": {
-            "email": "some.user@somedomain.com"
-        },
+        "actor": {"email": "some.user@somedomain.com"},
         "type": "login",
         "name": "login_success",
-        "parameters": {
-            "login_type": "saml"
-        },
+        "parameters": {"login_type": "saml"},
     }
 )
 
@@ -359,14 +282,10 @@ login_with_unapproved_type = json.dumps(
         "id": {
             "applicationName": "login",
         },
-        "actor": {
-            "email": "some.user@somedomain.com"
-        },
+        "actor": {"email": "some.user@somedomain.com"},
         "type": "login",
         "name": "login_success",
-        "parameters": {
-            "login_type": "turbo-snail"
-        },
+        "parameters": {"login_type": "turbo-snail"},
     }
 )
 
@@ -375,14 +294,10 @@ non_login_event = json.dumps(
         "id": {
             "applicationName": "logout",
         },
-        "actor": {
-            "email": "some.user@somedomain.com"
-        },
+        "actor": {"email": "some.user@somedomain.com"},
         "type": "login",
         "name": "login_success",
-        "parameters": {
-            "login_type": "saml"
-        },
+        "parameters": {"login_type": "saml"},
     }
 )
 
@@ -402,9 +317,9 @@ saml_login_event = json.dumps(
             "application_name": "Some SAML Application",
             "initiated_by": "sp",
             "orgunit_path": "/SomeOrgUnit",
-            "saml_status_code": "SUCCESS_URI"
+            "saml_status_code": "SUCCESS_URI",
         },
-        "type": "login"
+        "type": "login",
     }
 )
 
@@ -415,76 +330,30 @@ dangerous_share_of_known_doc_with_a_missing_user = json.dumps(
             "time": "2020-09-07T15:50:49.617Z",
             "uniqueQualifier": "1111111111111111111",
             "applicationName": "drive",
-            "customerId": "C010qxghg"
+            "customerId": "C010qxghg",
         },
-        "actor": {
-            "email": "example@acme.com",
-            "profileId": "1111111111111111111"
-        },
+        "actor": {"email": "example@acme.com", "profileId": "1111111111111111111"},
         "events": [
             {
                 "type": "acl_change",
                 "name": "change_user_access",
                 "parameters": [
-                    {
-                        "name": "primary_event",
-                        "boolValue": True
-                    },
-                    {
-                        "name": "visibility_change",
-                        "value": "external"
-                    },
-                    {
-                        "name": "target_user",
-                        "value": "outside@acme.com"
-                    },
-                    {
-                        "name": "old_visibility",
-                        "value": "private"
-                    },
-                    {
-                        "name": "doc_id",
-                        "value": "1111111111111111111"
-                    },
-                    {
-                        "name": "doc_type",
-                        "value": "document"
-                    },
-                    {
-                        "name": "doc_title",
-                        "value": "Document Title Primary"
-                    },
-                    {
-                        "name": "visibility",
-                        "value": "shared_externally"
-                    },
-                    {
-                        "name": "originating_app_id",
-                        "value": "1111111111111111111"
-                    },
-                    {
-                        "name": "owner_is_shared_drive",
-                        "boolValue": False
-                    },
-                    {
-                        "name": "owner_is_team_drive",
-                        "boolValue": False
-                    },
-                    {
-                        "name": "old_value",
-                        "multiValue": [
-                            "none"
-                        ]
-                    },
-                    {
-                        "name": "new_value",
-                        "multiValue": [
-                            "can_edit"
-                        ]
-                    }
-                ]
+                    {"name": "primary_event", "boolValue": True},
+                    {"name": "visibility_change", "value": "external"},
+                    {"name": "target_user", "value": "outside@acme.com"},
+                    {"name": "old_visibility", "value": "private"},
+                    {"name": "doc_id", "value": "1111111111111111111"},
+                    {"name": "doc_type", "value": "document"},
+                    {"name": "doc_title", "value": "Document Title Primary"},
+                    {"name": "visibility", "value": "shared_externally"},
+                    {"name": "originating_app_id", "value": "1111111111111111111"},
+                    {"name": "owner_is_shared_drive", "boolValue": False},
+                    {"name": "owner_is_team_drive", "boolValue": False},
+                    {"name": "old_value", "multiValue": ["none"]},
+                    {"name": "new_value", "multiValue": ["can_edit"]},
+                ],
             }
-        ]
+        ],
     }
 )
 
@@ -495,76 +364,30 @@ dangerous_share_of_unknown_doc = json.dumps(
             "time": "2020-09-07T15:50:49.617Z",
             "uniqueQualifier": "1111111111111111111",
             "applicationName": "drive",
-            "customerId": "C010qxghg"
+            "customerId": "C010qxghg",
         },
-        "actor": {
-            "email": "example@acme.com",
-            "profileId": "1111111111111111111"
-        },
+        "actor": {"email": "example@acme.com", "profileId": "1111111111111111111"},
         "events": [
             {
                 "type": "acl_change",
                 "name": "change_user_access",
                 "parameters": [
-                    {
-                        "name": "primary_event",
-                        "boolValue": True
-                    },
-                    {
-                        "name": "visibility_change",
-                        "value": "external"
-                    },
-                    {
-                        "name": "target_user",
-                        "value": "alice@external.com"
-                    },
-                    {
-                        "name": "old_visibility",
-                        "value": "private"
-                    },
-                    {
-                        "name": "doc_id",
-                        "value": "1111111111111111111"
-                    },
-                    {
-                        "name": "doc_type",
-                        "value": "document"
-                    },
-                    {
-                        "name": "doc_title",
-                        "value": "Untitled document"
-                    },
-                    {
-                        "name": "visibility",
-                        "value": "shared_externally"
-                    },
-                    {
-                        "name": "originating_app_id",
-                        "value": "1111111111111111111"
-                    },
-                    {
-                        "name": "owner_is_shared_drive",
-                        "boolValue": False
-                    },
-                    {
-                        "name": "owner_is_team_drive",
-                        "boolValue": False
-                    },
-                    {
-                        "name": "old_value",
-                        "multiValue": [
-                            "none"
-                        ]
-                    },
-                    {
-                        "name": "new_value",
-                        "multiValue": [
-                            "can_edit"
-                        ]
-                    }
-                ]
+                    {"name": "primary_event", "boolValue": True},
+                    {"name": "visibility_change", "value": "external"},
+                    {"name": "target_user", "value": "alice@external.com"},
+                    {"name": "old_visibility", "value": "private"},
+                    {"name": "doc_id", "value": "1111111111111111111"},
+                    {"name": "doc_type", "value": "document"},
+                    {"name": "doc_title", "value": "Untitled document"},
+                    {"name": "visibility", "value": "shared_externally"},
+                    {"name": "originating_app_id", "value": "1111111111111111111"},
+                    {"name": "owner_is_shared_drive", "boolValue": False},
+                    {"name": "owner_is_team_drive", "boolValue": False},
+                    {"name": "old_value", "multiValue": ["none"]},
+                    {"name": "new_value", "multiValue": ["can_edit"]},
+                ],
             }
-        ]
+        ],
     }
 )
 
@@ -575,95 +398,80 @@ share_allowed_by_exception = json.dumps(
             "time": "2020-07-07T15:50:49.617Z",
             "uniqueQualifier": "1111111111111111111",
             "applicationName": "drive",
-            "customerId": "C010qxghg"
+            "customerId": "C010qxghg",
         },
-        "actor": {
-            "email": "alice@acme.com",
-            "profileId": "1111111111111111111"
-        },
+        "actor": {"email": "alice@acme.com", "profileId": "1111111111111111111"},
         "events": [
             {
                 "type": "acl_change",
                 "name": "change_user_access",
                 "parameters": [
-                    {
-                        "name": "primary_event",
-                        "boolValue": True
-                    },
-                    {
-                        "name": "billable",
-                        "boolValue": True
-                    },
-                    {
-                        "name": "visibility_change",
-                        "value": "external"
-                    },
-                    {
-                        "name": "target_domain",
-                        "value": "acme.com"
-                    },
-                    {
-                        "name": "old_visibility",
-                        "value": "private"
-                    },
-                    {
-                        "name": "doc_id",
-                        "value": "1111111111111111111"
-                    },
-                    {
-                        "name": "doc_type",
-                        "value": "document"
-                    },
-                    {
-                        "name": "doc_title",
-                        "value": "Document Title Pattern"
-                    },
-                    {
-                        "name": "visibility",
-                        "value": "shared_externally"
-                    },
-                    {
-                        "name": "originating_app_id",
-                        "value": "1111111111111111111"
-                    },
-                    {
-                        "name": "owner_is_shared_drive",
-                        "boolValue": False
-                    },
-                    {
-                        "name": "owner_is_team_drive",
-                        "boolValue": False
-                    },
-                    {
-                        "name": "old_value",
-                        "multiValue": [
-                            "none"
-                        ]
-                    },
-                    {
-                        "name": "new_value",
-                        "multiValue": [
-                            "people_within_domain_with_link"
-                        ]
-                    }
-                ]
+                    {"name": "primary_event", "boolValue": True},
+                    {"name": "billable", "boolValue": True},
+                    {"name": "visibility_change", "value": "external"},
+                    {"name": "target_domain", "value": "acme.com"},
+                    {"name": "old_visibility", "value": "private"},
+                    {"name": "doc_id", "value": "1111111111111111111"},
+                    {"name": "doc_type", "value": "document"},
+                    {"name": "doc_title", "value": "Document Title Pattern"},
+                    {"name": "visibility", "value": "shared_externally"},
+                    {"name": "originating_app_id", "value": "1111111111111111111"},
+                    {"name": "owner_is_shared_drive", "boolValue": False},
+                    {"name": "owner_is_team_drive", "boolValue": False},
+                    {"name": "old_value", "multiValue": ["none"]},
+                    {"name": "new_value", "multiValue": ["people_within_domain_with_link"]},
+                ],
             }
-        ]
+        ],
     }
 )
 
-normal_login_event = json.dumps({'id': {'applicationName': 'login'},
-                                'type': 'login', 'name': 'logout', 'parameters': {'login_type': 'saml'}})
-account_warning_not_for_password_leaked = json.dumps({'id': {'applicationName': 'login'}, 'type': 'account_warning',
-                                                     'name': 'account_disabled_spamming', 'parameters': {'affected_email_address': 'homer.simpson@example.com'}})
-account_warning_for_password_leaked = json.dumps({'id': {'applicationName': 'login'}, 'type': 'account_warning',
-                                                 'name': 'account_disabled_password_leak', 'parameters': {'affected_email_address': 'homer.simpson@example.com'}})
-small_number_of_failed_logins = json.dumps({'id': {'applicationName': 'mobile'}, 'actor': {'callerType': 'USER', 'email': 'homer.simpson@example.io'},
-                                           'type': 'device_updates', 'name': 'FAILED_PASSWORD_ATTEMPTS_EVENT', 'parameters': {'USER_EMAIL': 'homer.simpson@example.io', 'FAILED_PASSWD_ATTEMPTS': 2}})
-multiple_failed_login_attempts_with_string_type = json.dumps({'id': {'applicationName': 'mobile'}, 'actor': {'callerType': 'USER', 'email': 'homer.simpson@example.io'},
-                                                             'type': 'device_updates', 'name': 'FAILED_PASSWORD_ATTEMPTS_EVENT', 'parameters': {'USER_EMAIL': 'homer.simpson@example.io', 'FAILED_PASSWD_ATTEMPTS': '100'}})
-multiple_failed_login_attempts_with_int_type = json.dumps({'id': {'applicationName': 'mobile'}, 'actor': {'callerType': 'USER', 'email': 'homer.simpson@example.io'},
-                                                          'type': 'device_updates', 'name': 'FAILED_PASSWORD_ATTEMPTS_EVENT', 'parameters': {'USER_EMAIL': 'homer.simpson@example.io', 'FAILED_PASSWD_ATTEMPTS': 100}})
+normal_login_event = json.dumps(
+    {"id": {"applicationName": "login"}, "type": "login", "name": "logout", "parameters": {"login_type": "saml"}}
+)
+account_warning_not_for_password_leaked = json.dumps(
+    {
+        "id": {"applicationName": "login"},
+        "type": "account_warning",
+        "name": "account_disabled_spamming",
+        "parameters": {"affected_email_address": "homer.simpson@example.com"},
+    }
+)
+account_warning_for_password_leaked = json.dumps(
+    {
+        "id": {"applicationName": "login"},
+        "type": "account_warning",
+        "name": "account_disabled_password_leak",
+        "parameters": {"affected_email_address": "homer.simpson@example.com"},
+    }
+)
+small_number_of_failed_logins = json.dumps(
+    {
+        "id": {"applicationName": "mobile"},
+        "actor": {"callerType": "USER", "email": "homer.simpson@example.io"},
+        "type": "device_updates",
+        "name": "FAILED_PASSWORD_ATTEMPTS_EVENT",
+        "parameters": {"USER_EMAIL": "homer.simpson@example.io", "FAILED_PASSWD_ATTEMPTS": 2},
+    }
+)
+multiple_failed_login_attempts_with_string_type = json.dumps(
+    {
+        "id": {"applicationName": "mobile"},
+        "actor": {"callerType": "USER", "email": "homer.simpson@example.io"},
+        "type": "device_updates",
+        "name": "FAILED_PASSWORD_ATTEMPTS_EVENT",
+        "parameters": {"USER_EMAIL": "homer.simpson@example.io", "FAILED_PASSWD_ATTEMPTS": "100"},
+    }
+)
+multiple_failed_login_attempts_with_int_type = json.dumps(
+    {
+        "id": {"applicationName": "mobile"},
+        "actor": {"callerType": "USER", "email": "homer.simpson@example.io"},
+        "type": "device_updates",
+        "name": "FAILED_PASSWORD_ATTEMPTS_EVENT",
+        "parameters": {"USER_EMAIL": "homer.simpson@example.io", "FAILED_PASSWD_ATTEMPTS": 100},
+    }
+)
 
 
 forwarding_to_external_address = json.dumps(
@@ -677,8 +485,6 @@ forwarding_to_external_address = json.dumps(
         },
         "type": "email_forwarding_change",
         "name": "email_forwarding_out_of_domain",
-        "parameters": {
-            "email_forwarding_destination_address": "HSimpson@gmail.com"
-        },
+        "parameters": {"email_forwarding_destination_address": "HSimpson@gmail.com"},
     }
 )

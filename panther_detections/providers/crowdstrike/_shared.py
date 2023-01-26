@@ -15,6 +15,10 @@ SHARED_TAGS = [
     #standard_tags.IDENTITY_AND_ACCESS_MGMT,
 ]
 
+DOMAIN_DENY_LIST = [
+    "baddomain.com",
+]
+
 def rule_tags(*extra_tags: str) -> List[str]:
     return [*SHARED_TAGS, *extra_tags]
 

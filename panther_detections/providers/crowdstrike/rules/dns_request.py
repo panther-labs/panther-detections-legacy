@@ -5,9 +5,9 @@ from panther_detections.utils import match_filters
 
 from .. import sample_logs
 from .._shared import (
-    # SYSTEM_LOG_TYPE,
     create_alert_context,
     rule_tags,
+    DOMAIN_DENY_LIST,
 )
 
 def dns_request(
@@ -22,13 +22,12 @@ def dns_request(
     def _dedup(event: PantherEvent) -> str:
         #  Alert on every individual lookup of a bad domain, per machine
         return f"{event.get('DomainName')}-{event.get('aid')}"
-
-    DENYLIST = ["baddomain.com"]
                 
     return detection.Rule(
         overrides=overrides,
         name="DNS request to denylisted domain",
         rule_id="Crowdstrike.DNS.Request",
+        enabled=False,
         log_types=["Crowdstrike.DNSRequest"],
         tags=rule_tags("Initial Access:Phishing"),
         reports={"MITRE ATT&CK": ["TA0001:T1566"]},
@@ -38,7 +37,7 @@ def dns_request(
         runbook="Filter for host ID in title in Crowdstrike Host Management console to identify the system that queried the domain.",
         filters=(pre_filters or [])
         + [
-            match_filters.deep_in("DomainName", DENYLIST)
+            match_filters.deep_in("DomainName", DOMAIN_DENY_LIST)
         ],
         alert_title=_title,
         alert_context=create_alert_context,

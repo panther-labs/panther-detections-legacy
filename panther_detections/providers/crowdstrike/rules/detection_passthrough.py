@@ -26,7 +26,7 @@ def detection_passthrough(
         return f"{event.get('EventUUID')} - {event.get('ComputerName')}"
 
     return detection.Rule(
-        # overrides=overrides,
+        overrides=overrides,
         name="Crowdstrike Detection Passthrough",
         rule_id="Crowdstrike.Detection.Passthrough",
         log_types=["Crowdstrike.DetectionSummary"],

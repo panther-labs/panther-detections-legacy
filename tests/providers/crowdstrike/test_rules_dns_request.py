@@ -1,15 +1,16 @@
 import unittest
 
 from panther_sdk import detection
-from panther_detections.providers import gsuite
+from panther_detections.providers import crowdstrike
 
 
-class TestRulesCalendarPublic(unittest.TestCase):
-    def test_calendar_public(self) -> None:
+class TestRulesDnsRequest(unittest.TestCase):
+    def test_dns_request(self) -> None:
         name_override = "Override Name"
-        rule = gsuite.rules.calendar_made_public(
+        rule = crowdstrike.rules.dns_request(
             overrides=detection.RuleOverrides(name=name_override)
         )
+
 
         self.assertIsInstance(rule, detection.Rule)
         self.assertEqual(rule.name, name_override)

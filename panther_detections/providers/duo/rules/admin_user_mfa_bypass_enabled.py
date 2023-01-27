@@ -13,8 +13,12 @@ from .. import sample_logs
 #     standard_tags,
 # )
 
+<<<<<<< HEAD:panther_detections/providers/duo/rules/duo_admin_user_mfa_bypass_enabled.py
 
 def duo_admin_user_mfa_bypass_enabled(
+=======
+def admin_user_mfa_bypass_enabled(
+>>>>>>> d529fd4 (initial duo tests):panther_detections/providers/duo/rules/admin_user_mfa_bypass_enabled.py
     pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
 ) -> detection.Rule:

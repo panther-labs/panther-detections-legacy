@@ -13,8 +13,12 @@ from .. import sample_logs
 #     standard_tags,
 # )
 
+<<<<<<< HEAD:panther_detections/providers/duo/rules/duo_admin_sso_saml_requirement_disabled.py
 
 def duo_admin_sso_saml_requirement_disabled(
+=======
+def admin_sso_saml_requirement_disabled(
+>>>>>>> d529fd4 (initial duo tests):panther_detections/providers/duo/rules/admin_sso_saml_requirement_disabled.py
     pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
 ) -> detection.Rule:

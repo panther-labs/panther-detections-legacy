@@ -13,8 +13,12 @@ from .. import sample_logs
 #     standard_tags,
 # )
 
+<<<<<<< HEAD:panther_detections/providers/duo/rules/duo_admin_new_admin_api_app_integration.py
 
 def duo_admin_new_admin_api_app_integration(
+=======
+def admin_new_admin_api_app_integration(
+>>>>>>> d529fd4 (initial duo tests):panther_detections/providers/duo/rules/admin_new_admin_api_app_integration.py
     pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
 ) -> detection.Rule:

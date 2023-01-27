@@ -1,6 +1,6 @@
 from typing import Literal
 
-from . import queries, rules, sample_logs
+from . import rules, sample_logs
 from ._shared import *
 
 

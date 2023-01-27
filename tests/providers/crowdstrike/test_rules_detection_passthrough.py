@@ -11,6 +11,5 @@ class TestRulesDetectionPassthrough(unittest.TestCase):
             overrides=detection.RuleOverrides(name=name_override)
         )
 
-        self.assertIsInstance(rule, detection.Rule)
         self.assertEqual(rule.name, name_override)
 

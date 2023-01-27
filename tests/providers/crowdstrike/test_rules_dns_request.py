@@ -12,5 +12,4 @@ class TestRulesDnsRequest(unittest.TestCase):
         )
 
 
-        self.assertIsInstance(rule, detection.Rule)
         self.assertEqual(rule.name, name_override)

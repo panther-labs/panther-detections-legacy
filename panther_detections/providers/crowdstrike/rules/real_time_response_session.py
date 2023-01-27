@@ -36,17 +36,16 @@ def real_time_response_session(
         rule_id="Crowdstrike.RealTimeResponse.Session",
         log_types=["Crowdstrike.Unknown"],
         tags=rule_tags(),
-        reports="",
         severity=detection.SeverityMedium,
-        description="Alert when someone uses Crowdstrike’s RTR (real-time response) capability to access a machine remotely to run commands.",
-        reference="https://falcon.us-2.crowdstrike.com/documentation/71/real-time-response-and-network-containment#reviewing-real-time-response-audit-logs",
+        description="Alert when someone uses Crowdstrike’s RTR (real-time response) capability to access a machine "\
+                    "remotely to run commands.",
+        reference="https://falcon.us-2.crowdstrike.com/documentation/71/real-time-response-and-network-containment#"\
+                    "reviewing-real-time-response-audit-logs",
         runbook="Validate the real-time response session started by the Actor.",
         filters=(pre_filters or [])
         + [match_filters.deep_equal("unknown_payload.ExternalApiType", "Event_RemoteResponseSessionStartEvent")],
         alert_title=_title,
         alert_context=_alert_context,
-        # summary_attrs=
-        threshold="",
         unit_tests=(
             [
                 detection.JSONUnitTest(

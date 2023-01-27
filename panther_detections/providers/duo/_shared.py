@@ -1,11 +1,10 @@
+import json
+from json import JSONDecodeError
 from typing import Any, Dict, List
 
 from panther_sdk import PantherEvent
 
 from panther_detections.utils import standard_tags
-
-import json
-from json import JSONDecodeError
 
 # __all__ = [
 #     "rule_tags",
@@ -40,8 +39,10 @@ ENDPOINT_REASONS = [
     "invalid_device",
 ]
 
+
 def rule_tags(*extra_tags: str) -> List[str]:
     return [*SHARED_TAGS, *extra_tags]
+
 
 def create_alert_context(event: PantherEvent) -> Dict[str, Any]:
     """Returns common context for Duo alerts"""
@@ -85,4 +86,3 @@ def deserialize_administrator_log_event_description(event: dict) -> dict:
             pass
 
     return {"value": desc_string}
-

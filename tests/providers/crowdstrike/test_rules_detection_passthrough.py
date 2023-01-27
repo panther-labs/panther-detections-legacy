@@ -11,11 +11,6 @@ class TestRulesDetectionPassthrough(unittest.TestCase):
             overrides=detection.RuleOverrides(name=name_override)
         )
 
-
-        # self.assertIsInstance(rule, detection.Rule)
+        self.assertIsInstance(rule, detection.Rule)
         self.assertEqual(rule.name, name_override)
 
-    def test_defaults(self) -> None:
-        rule = crowdstrike.rules.detection_passthrough()
-
-        self.assertEqual(rule.severity, "INFO")

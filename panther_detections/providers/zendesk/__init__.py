@@ -12,4 +12,3 @@ def use_all_with_defaults() -> None:
     rules.user_assumption()
     # rules.user_role() #(WIP) fix udm
     rules.user_suspension()
-

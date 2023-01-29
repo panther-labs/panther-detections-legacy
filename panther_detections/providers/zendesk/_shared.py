@@ -1,18 +1,16 @@
+import re
 from typing import Any, Dict, List
 
 from panther_sdk import PantherEvent
 
 from panther_detections.utils import standard_tags
-import re
 
 # key names
 ZENDESK_CHANGE_DESCRIPTION = "change_description"
 ZENDESK_APP_ROLE_ASSIGNED = re.compile(
     r"(?P<app>.*) role changed from (?P<old_role>.+) to (?P<new_role>.*)", re.IGNORECASE
 )
-ZENDESK_ROLE_ASSIGNED = re.compile(
-    r"Role changed from (?P<old_role>.+) to (?P<new_role>[^$]+)", re.IGNORECASE
-)
+ZENDESK_ROLE_ASSIGNED = re.compile(r"Role changed from (?P<old_role>.+) to (?P<new_role>[^$]+)", re.IGNORECASE)
 
 
 def zendesk_get_roles(event):
@@ -38,7 +36,8 @@ def zendesk_get_roles(event):
         old_role = "<UNKNOWN_APP>:<UNKNOWN_ROLE>"
     if not new_role:
         new_role = "<UNKNOWN_APP>:<UNKNOWN_ROLE>"
-    return old_role, 
+    return (old_role,)
+
 
 # __all__ = [
 #     "rule_tags",

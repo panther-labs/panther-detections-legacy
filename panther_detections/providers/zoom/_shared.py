@@ -4,6 +4,7 @@ from panther_sdk import PantherEvent
 
 from panther_detections.utils import standard_tags
 
+
 def get_zoom_user_context(event: PantherEvent):
     """
     Parses the operation_detail field of Zoom.Operation events related to Users
@@ -74,7 +75,6 @@ def get_zoom_room_context(event: PantherEvent):
             operation_context["Affected"] = raw_string.split("-")[4].split(":")[1].strip()
 
     return operation_context
-
 
 
 # __all__ = [

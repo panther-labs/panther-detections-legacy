@@ -4,7 +4,7 @@ from panther_sdk import detection
 from panther_detections.providers import teleport
 
 
-class TestRulesTestRulesSuspiciousCommands(unittest.TestCase):
+class TestRulesSuspiciousCommands(unittest.TestCase):
     def test_suspicious_commands(self) -> None:
         name_override = "Override Name"
         rule = teleport.rules.suspicious_commands(

@@ -4,7 +4,7 @@ from panther_sdk import detection
 from panther_detections.providers import teleport
 
 
-class TestRulesTestRulesNetworkScanning(unittest.TestCase):
+class TestRulesNetworkScanning(unittest.TestCase):
     def test_network_scanning(self) -> None:
         name_override = "Override Name"
         rule = teleport.rules.network_scanning(

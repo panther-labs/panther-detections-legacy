@@ -1,16 +1,14 @@
-from typing import Any, Dict, List
-
-from panther_sdk import PantherEvent
-
-from panther_detections.utils import standard_tags
-
 import base64
 import json
 import logging
 import os
 from datetime import datetime, timedelta
+from typing import Any, Dict, List
 
 import boto3
+from panther_sdk import PantherEvent
+
+from panther_detections.utils import standard_tags
 
 try:
     # boxsdk will only be available if `boxapi[jwt]` is
@@ -139,7 +137,8 @@ def build_jwt_settings(response: dict) -> dict:
         },
         "enterpriseID": data[BOX_ENTERPRISE_ID],
     }
-    return 
+    return
+
 
 def box_parse_additional_details(event: PantherEvent):
     additional_details = event.get("additional_details", {})

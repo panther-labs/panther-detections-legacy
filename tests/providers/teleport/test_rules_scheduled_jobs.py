@@ -5,7 +5,7 @@ from panther_detections.providers import teleport
 
 
 class TestRulesTestRulesScheduledJobs(unittest.TestCase):
-    def scheduled_jobs(self) -> None:
+    def test_scheduled_jobs(self) -> None:
         name_override = "Override Name"
         rule = teleport.rules.scheduled_jobs(
             overrides=detection.RuleOverrides(name=name_override)

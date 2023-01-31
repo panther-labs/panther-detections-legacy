@@ -7,24 +7,22 @@ from panther_detections.utils import standard_tags
 __all__ = [
     "rule_tags",
     "SHARED_TAGS",
-    "create_alert_context",
-]
-
-SHARED_TAGS = [
-    "Crowdstrike",
-    # standard_tags.IDENTITY_AND_ACCESS_MGMT,
+    "crowdstrike_alert_context",
 ]
 
 DOMAIN_DENY_LIST = [
     "baddomain.com",
 ]
 
+SHARED_TAGS = [
+    "Crowdstrike",
+]
 
 def rule_tags(*extra_tags: str) -> List[str]:
     return [*SHARED_TAGS, *extra_tags]
 
 
-def create_alert_context(event: PantherEvent) -> Dict[str, Any]:
+def crowdstrike_alert_context(event: PantherEvent) -> Dict[str, Any]:
     """Returns common context for Crowdstrike detections"""
 
     return {

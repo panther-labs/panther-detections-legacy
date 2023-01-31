@@ -5,7 +5,7 @@ from panther_sdk import PantherEvent, detection
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
-from .._shared import DOMAIN_DENY_LIST, create_alert_context, rule_tags
+from .._shared import DOMAIN_DENY_LIST, crowdstrike_alert_context, rule_tags
 
 
 def dns_request(
@@ -35,7 +35,7 @@ def dns_request(
         runbook="Filter for host ID in title in Crowdstrike Host Management console to identify the system that queried the domain.",
         filters=(pre_filters or []) + [match_filters.deep_in("DomainName", DOMAIN_DENY_LIST)],
         alert_title=_title,
-        alert_context=create_alert_context,
+        alert_context=crowdstrike_alert_context,
         alert_grouping=detection.AlertGrouping(period_minutes=15, group_by=_dedup),
         summary_attrs=["DomainName", "aid", "p_any_ip_addresses"],
         unit_tests=(

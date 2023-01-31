@@ -5,7 +5,7 @@ from panther_sdk import PantherEvent, detection
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
-from .._shared import create_alert_context, rule_tags
+from .._shared import crowdstrike_alert_context, rule_tags
 
 __all__ = ["detection_passthrough"]
 
@@ -39,7 +39,7 @@ def detection_passthrough(
         runbook="Follow the Falcon console link and follow the IR process as needed.",
         filters=(pre_filters or []) + [match_filters.deep_equal("ExternalApiType", "Event_DetectionSummaryEvent")],
         alert_title=_title,
-        alert_context=create_alert_context,
+        alert_context=crowdstrike_alert_context,
         summary_attrs=["p_any_ip_addresses"],
         alert_grouping=detection.AlertGrouping(period_minutes=0, group_by=_dedup),
         unit_tests=(

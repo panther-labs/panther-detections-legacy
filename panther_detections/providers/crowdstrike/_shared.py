@@ -18,6 +18,7 @@ SHARED_TAGS = [
     "Crowdstrike",
 ]
 
+
 def rule_tags(*extra_tags: str) -> List[str]:
     return [*SHARED_TAGS, *extra_tags]
 

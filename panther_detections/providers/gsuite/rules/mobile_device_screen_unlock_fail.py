@@ -8,7 +8,7 @@ from .. import sample_logs
 from .._shared import pick_filters
 
 
-def gsuite_mobile_device_screen_unlock_fail(
+def mobile_device_screen_unlock_fail(
     pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
 ) -> detection.Rule:
@@ -46,8 +46,10 @@ def gsuite_mobile_device_screen_unlock_fail(
             pre_filters=pre_filters,
             defaults=[
                 match_filters.deep_equal("id.applicationName", "mobile"),
-                match_filters.deep_equal("name", "FAILED_PASSWORD_ATTEMPTS_EVENT"),
-                match_filters.deep_greater_than(float("parameters.FAILED_PASSWD_ATTEMPTS"), 10),
+                match_filters.deep_equal(
+                    "name", "FAILED_PASSWORD_ATTEMPTS_EVENT"),
+                match_filters.deep_greater_than(
+                    float("parameters.FAILED_PASSWD_ATTEMPTS"), 10),
             ],
         ),
         unit_tests=(

@@ -8,7 +8,7 @@ from panther_detections.utils import match_filters
 from .._shared import pick_filters
 
 
-def gsuite_user_suspended(
+def user_suspended(
     pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
 ) -> detection.Rule:

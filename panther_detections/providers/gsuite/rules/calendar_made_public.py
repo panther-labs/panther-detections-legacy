@@ -13,10 +13,10 @@ from panther_detections.providers.gsuite._shared import (
 )
 from panther_detections.utils import match_filters, standard_tags
 
-__all__ = ["gsuite_calendar_made_public"]
+__all__ = ["calendar_made_public"]
 
 
-def gsuite_calendar_made_public(
+def calendar_made_public(
     pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
 ) -> detection.Rule:

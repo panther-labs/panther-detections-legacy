@@ -8,7 +8,7 @@ from .. import sample_logs
 from .._shared import pick_filters
 
 
-def gsuite_login_type(
+def login_type(
     pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
 ) -> detection.Rule:
@@ -37,7 +37,8 @@ def gsuite_login_type(
         log_types=(overrides.log_types or ["GSuite.ActivityEvent"]),
         tags=(overrides.tags or standard_tags.IDENTITY_AND_ACCESS_MGMT),  # Check this
         severity=(overrides.severity or detection.SeverityMedium),
-        description=(overrides.description or "A login of a non-approved type was detected for this user."),
+        description=(
+            overrides.description or "A login of a non-approved type was detected for this user."),
         reference=(
             overrides.reference or "https://developers.google.com/admin-sdk/reports/v1/appendix/activity/login#login"
         ),
@@ -53,8 +54,10 @@ def gsuite_login_type(
             defaults=[
                 match_filters.deep_equal("type", "login"),
                 match_filters.deep_not_equal("name", "logout"),
-                match_filters.deep_not_in("parameters.login_type", APPROVED_LOGIN_TYPES),
-                match_filters.deep_not_in("id.applicationName", APPROVED_APPLICATION_NAMES),
+                match_filters.deep_not_in(
+                    "parameters.login_type", APPROVED_LOGIN_TYPES),
+                match_filters.deep_not_in(
+                    "id.applicationName", APPROVED_APPLICATION_NAMES),
             ],
         ),
         alert_title=(overrides.alert_title or _title),

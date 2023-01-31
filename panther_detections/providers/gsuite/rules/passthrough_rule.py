@@ -8,7 +8,7 @@ from .. import sample_logs
 from .._shared import pick_filters
 
 
-def gsuite_passthrough_rule(
+def passthrough_rule(
     pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
 ) -> detection.Rule:
@@ -33,7 +33,8 @@ def gsuite_passthrough_rule(
         tags=(overrides.tags or standard_tags.IDENTITY_AND_ACCESS_MGMT),  # Check this
         severity=(overrides.severity or detection.SeverityInfo),
         description=(overrides.description or "A GSuite rule was triggered."),
-        reference=(overrides.reference or "https://support.google.com/a/answer/9420866"),
+        reference=(
+            overrides.reference or "https://support.google.com/a/answer/9420866"),
         runbook=(overrides.runbook or "Investigate what triggered the rule."),
         filters=pick_filters(
             overrides=overrides,

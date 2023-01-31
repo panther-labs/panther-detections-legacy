@@ -11,7 +11,7 @@ from .._shared import pick_filters
 # from ..global_helpers import deep_get
 
 
-def gsuite_device_compromised(
+def device_compromised(
     pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
 ) -> detection.Rule:
@@ -51,13 +51,16 @@ def gsuite_device_compromised(
         log_types=(overrides.log_types or ["GSuite.ActivityEvent"]),
         tags=(overrides.tags or ["GSuite"]),
         severity=(overrides.severity or detection.SeverityMedium),
-        description=(overrides.description or "GSuite reported a user's device has been compromised."),
+        description=(
+            overrides.description or "GSuite reported a user's device has been compromised."),
         reference=(overrides.reference or _reference_generator),
-        runbook=(overrides.runbook or "Have the user change their passwords and reset the device."),
+        runbook=(
+            overrides.runbook or "Have the user change their passwords and reset the device."),
         filters=pick_filters(
             overrides=overrides,
             pre_filters=pre_filters,
-            defaults=[match_filters.deep_equal("id.applicationName", "mobile"), rule_filter()],
+            defaults=[match_filters.deep_equal(
+                "id.applicationName", "mobile"), rule_filter()],
         ),
         alert_title=(overrides.alert_title or _title),
         alert_context=(overrides.alert_context or _make_context),

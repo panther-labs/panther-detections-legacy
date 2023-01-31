@@ -8,7 +8,7 @@ from panther_detections.utils import match_filters
 from .._shared import pick_filters
 
 
-def gsuite_two_step_verification(
+def two_step_verification(
     pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
 ) -> detection.Rule:

@@ -1,3 +1,11 @@
+# CP files
+panther_content/*
+.gitignore
+panther_detections/providers/__init__.py
+tests/providers/__init__.py
+tests/providers/okta/.panther/
+.panther/panther-sdk-cache
+
 # Environments
 .env
 .venv

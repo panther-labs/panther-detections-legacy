@@ -8,7 +8,7 @@ from .. import sample_logs
 from .._shared import pick_filters
 
 
-def gsuite_gov_attack(
+def gov_attack(
     pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
 ) -> detection.Rule:
@@ -32,7 +32,8 @@ def gsuite_gov_attack(
             overrides.reference
             or "https://developers.google.com/admin-sdk/reports/v1/appendix/activity/login#gov_attack_warning"
         ),
-        runbook=(overrides.runbook or "Follow up with GSuite support for more details."),
+        runbook=(
+            overrides.runbook or "Follow up with GSuite support for more details."),
         filters=pick_filters(
             overrides=overrides,
             pre_filters=pre_filters,

@@ -8,7 +8,7 @@ from .. import sample_logs
 from .._shared import pick_filters
 
 
-def gsuite_device_suspicious_activity(
+def device_suspicious_activity(
     pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
 ) -> detection.Rule:
@@ -24,12 +24,14 @@ def gsuite_device_suspicious_activity(
         log_types=(overrides.log_types or ["GSuite.ActivityEvent"]),
         tags=(overrides.tags or standard_tags.IDENTITY_AND_ACCESS_MGMT),  # Check this
         severity=(overrides.severity or detection.SeverityLow),
-        description=(overrides.description or "GSuite reported a suspicious activity on a user's device."),
+        description=(
+            overrides.description or "GSuite reported a suspicious activity on a user's device."),
         reference=(
             overrides.reference
             or "https://developers.google.com/admin-sdk/reports/v1/appendix/activity/mobile#SUSPICIOUS_ACTIVITY_EVENT"
         ),
-        runbook=(overrides.runbook or "Validate that the suspicious activity was expected by the user."),
+        runbook=(
+            overrides.runbook or "Validate that the suspicious activity was expected by the user."),
         filters=pick_filters(
             overrides=overrides,
             pre_filters=pre_filters,

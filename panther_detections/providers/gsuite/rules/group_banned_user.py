@@ -8,7 +8,7 @@ from panther_detections.utils import match_filters
 from .._shared import pick_filters
 
 
-def gsuite_group_banned_user(
+def group_banned_user(
     pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
 ) -> detection.Rule:
@@ -41,7 +41,8 @@ def gsuite_group_banned_user(
         log_types=(overrides.log_types or ["GSuite.ActivityEvent"]),
         tags=(overrides.tags or ["GSuite"]),
         severity=(overrides.severity or detection.SeverityLow),
-        description=(overrides.description or "A GSuite user was banned from an enterprise group by moderator action."),
+        description=(
+            overrides.description or "A GSuite user was banned from an enterprise group by moderator action."),
         reference=(overrides.reference or _reference_generator),
         runbook=(
             overrides.runbook or "Investigate the banned user to see if further disciplinary action needs to be taken."
@@ -49,7 +50,8 @@ def gsuite_group_banned_user(
         filters=pick_filters(
             overrides=overrides,
             pre_filters=pre_filters,
-            defaults=[match_filters.deep_equal("id.applicationName", "groups_enterprise"), rule_filter()],
+            defaults=[match_filters.deep_equal(
+                "id.applicationName", "groups_enterprise"), rule_filter()],
         ),
         alert_title=(overrides.alert_title or _title),
         alert_context=(overrides.alert_context or _make_context),

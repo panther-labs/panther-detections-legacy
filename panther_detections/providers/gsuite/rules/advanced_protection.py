@@ -5,15 +5,19 @@ from panther_sdk import PantherEvent, detection
 from panther_detections.utils import match_filters, standard_tags
 
 from .. import sample_logs
-from .._shared import pick_filters
+from .._shared import (
+    create_alert_context,
+    rule_tags,
+    standard_tags,
+    pick_filters
+)
 
 
-def gsuite_advanced_protection(
+def advanced_protection(
     pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
 ) -> detection.Rule:
     """A user disabled advanced protection for themselves."""
-
     def _title(event: PantherEvent) -> str:
         return (
             f"Advanced protection was disabled for user "
@@ -21,38 +25,36 @@ def gsuite_advanced_protection(
         )
 
     return detection.Rule(
-        rule_id=(overrides.rule_id or "GSuite.AdvancedProtection"),
-        log_types=(overrides.log_types or ["GSuite.ActivityEvent"]),
-        tags=(overrides.tags or standard_tags.IDENTITY_AND_ACCESS_MGMT),  # Check this
-        severity=(overrides.severity or detection.SeverityLow),
-        description=(overrides.description or "A user disabled advanced protection for themselves."),
-        reference=(
-            overrides.reference
-            or "https://developers.google.com/admin-sdk/reports/v1/appendix/activity/user-accounts#titanium_change"
-        ),
-        runbook=(overrides.runbook or "Have the user re-enable Google Advanced Protection"),
-        filters=pick_filters(
-            overrides=overrides,
-            pre_filters=pre_filters,
-            defaults=[
-                match_filters.deep_equal("id.applicationName", "user_accounts"),
-                match_filters.deep_equal("name", "titanium_unenroll"),
-            ],
-        ),
-        alert_title=(overrides.alert_title or _title),
+        overrides=overrides,
+        name="GSuite User Advanced Protection Change",
+        rule_id="GSuite.AdvancedProtection",
+        log_types=['GSuite.ActivityEvent'],
+        severity=detection.SeverityLow,
+        description="A user disabled advanced protection for themselves.",
+        tags=['GSuite', 'Defense Evasion:Impair Defenses'],
+        reports={'MITRE ATT&CK': ['TA0005:T1562']},
+        reference="https://developers.google.com/admin-sdk/reports/v1/appendix/activity/user-accounts#titanium_change",
+        runbook="Have the user re-enable Google Advanced Protection",
+        alert_title=_title,
+        summary_attrs=['actor:email'],
+        filters=(pre_filters or [])
+        + [
+            match_filters.deep_equal("id.applicationName", "user_accounts"),
+            match_filters.deep_equal("name", "titanium_unenroll"),
+
+        ],
         unit_tests=(
-            overrides.unit_tests
-            or [
-                detection.JSONUnitTest(
-                    name="Advanced Protection Disabled",
-                    expect_match=True,
-                    data=sample_logs.advanced_protection_disabled,
-                ),
+            [
                 detection.JSONUnitTest(
                     name="Advanced Protection Enabled",
                     expect_match=False,
-                    data=sample_logs.advanced_protection_enabled,
+                    data=sample_logs.advanced_protection_advanced_protection_enabled
+                ),
+                detection.JSONUnitTest(
+                    name="Advanced Protection Disabled",
+                    expect_match=True,
+                    data=sample_logs.advanced_protection_advanced_protection_disabled
                 ),
             ]
-        ),
+        )
     )

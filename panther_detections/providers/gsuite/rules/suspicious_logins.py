@@ -8,7 +8,7 @@ from panther_detections.utils import match_filters
 from .._shared import pick_filters
 
 
-def gsuite_suspicious_logins(
+def suspicious_logins(
     pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
 ) -> detection.Rule:
@@ -43,7 +43,8 @@ def gsuite_suspicious_logins(
         log_types=(overrides.log_types or ["GSuite.ActivityEvent"]),
         tags=(overrides.tags or ["GSuite"]),
         severity=(overrides.severity or detection.SeverityMedium),
-        description=(overrides.description or "GSuite reported a suspicious login for this user."),
+        description=(
+            overrides.description or "GSuite reported a suspicious login for this user."),
         reference=(
             overrides.reference
             or "https://developers.google.com/admin-sdk/reports/v1/appendix/activity/login#suspicious_login"
@@ -55,7 +56,8 @@ def gsuite_suspicious_logins(
         filters=pick_filters(
             overrides=overrides,
             pre_filters=pre_filters,
-            defaults=[match_filters.deep_equal("id.applicationName", "login"), rule_filter()],
+            defaults=[match_filters.deep_equal(
+                "id.applicationName", "login"), rule_filter()],
         ),
         alert_title=(overrides.alert_title or _title),
         alert_context=(overrides.alert_context or _make_context),

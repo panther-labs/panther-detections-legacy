@@ -1,8 +1,11 @@
 import typing
+
 from panther_sdk import PantherEvent, detection
+
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
+
 # from .._shared import (
 #     create_alert_context,
 #     rule_tags,
@@ -15,14 +18,14 @@ def drive_external_share(
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
 ) -> detection.Rule:
     """An employee shared a sensitive file externally with another organization"""
-    #import datetime
+    # import datetime
     # from panther_base_helpers import (
     #    PantherUnexpectedAlert,
     #    deep_get,
     #    pattern_match,
     #    pattern_match_list,
     # )
-    #COMPANY_DOMAIN = "your-company-name.com"
+    # COMPANY_DOMAIN = "your-company-name.com"
     # EXCEPTION_PATTERNS = {
     #    # The glob pattern for the document title (lowercased)
     #    "document title p*": {
@@ -69,12 +72,11 @@ def drive_external_share(
         enabled=False,
         name="External GSuite File Share",
         rule_id="GSuite.Drive.ExternalFileShare",
-        log_types=['GSuite.Reports'],
+        log_types=["GSuite.Reports"],
         severity=detection.SeverityHigh,
         description="An employee shared a sensitive file externally with another organization",
-        tags=['GSuite', 'Security Control', 'Configuration Required',
-              'Collection:Data from Information Repositories'],
-        reports={'MITRE ATT&CK': ['TA0009:T1213']},
+        tags=["GSuite", "Security Control", "Configuration Required", "Collection:Data from Information Repositories"],
+        reports={"MITRE ATT&CK": ["TA0009:T1213"]},
         # reference=,
         runbook="Contact the employee who made the share and make sure they redact the access. If the share was legitimate, add to the EXCEPTION_PATTERNS in the detection.",
         alert_title=_title,
@@ -94,26 +96,24 @@ def drive_external_share(
             #            _check_acl_change_event(actor_email, acl_change_event) for acl_change_event in events
             #        )
             #    return False
-
         ],
         unit_tests=(
             [
                 detection.JSONUnitTest(
                     name="Dangerous Share of Known Document with a Missing User",
                     expect_match=True,
-                    data=sample_logs.drive_external_share_dangerous_share_of_known_document_with_a_missing_user
+                    data=sample_logs.drive_external_share_dangerous_share_of_known_document_with_a_missing_user,
                 ),
                 detection.JSONUnitTest(
                     name="Dangerous Share of Unknown Document",
                     expect_match=True,
-                    data=sample_logs.drive_external_share_dangerous_share_of_unknown_document
+                    data=sample_logs.drive_external_share_dangerous_share_of_unknown_document,
                 ),
                 detection.JSONUnitTest(
                     name="Share Allowed by Exception",
                     expect_match=False,
-                    data=sample_logs.drive_external_share_share_allowed_by_exception
+                    data=sample_logs.drive_external_share_share_allowed_by_exception,
                 ),
-
             ]
-        )
+        ),
     )

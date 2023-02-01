@@ -1,8 +1,11 @@
 import typing
+
 from panther_sdk import PantherEvent, detection
+
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
+
 # from .._shared import (
 #     create_alert_context,
 #     rule_tags,
@@ -15,12 +18,12 @@ def drive_visibility_change(
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
 ) -> detection.Rule:
     """A Google drive resource became externally accessible."""
-    #import json
-    #from unittest.mock import MagicMock
-    #from panther_base_helpers import deep_get
-    #from panther_base_helpers import gsuite_parameter_lookup as param_lookup
+    # import json
+    # from unittest.mock import MagicMock
+    # from panther_base_helpers import deep_get
+    # from panther_base_helpers import gsuite_parameter_lookup as param_lookup
     # Add any domain name(s) that you expect to share documents with in the ALLOWED_DOMAINS set
-    #ALLOWED_DOMAINS = set()
+    # ALLOWED_DOMAINS = set()
     # PUBLIC_PROVIDERS = {
     #    "gmail.com",
     #    "yahoo.com",
@@ -45,7 +48,7 @@ def drive_visibility_change(
     #    "shared_externally",
     #    "unknown",
     # }
-    #ALERT_DETAILS = {}
+    # ALERT_DETAILS = {}
     # Events where documents have changed perms due to parent folder change
     # INHERITANCE_EVENTS = {
     #    "change_user_access_hierarchy_reconciled",
@@ -104,21 +107,18 @@ def drive_visibility_change(
         enabled=False,
         name="GSuite External Drive Document",
         rule_id="GSuite.DriveVisibilityChanged",
-        log_types=['GSuite.Reports'],
-        severity=detection.DynamicStringField(
-            func=_severity, fallback=detection.SeverityLow),
+        log_types=["GSuite.Reports"],
+        severity=detection.DynamicStringField(func=_severity, fallback=detection.SeverityLow),
         description="A Google drive resource became externally accessible.",
-        tags=['GSuite', 'Collection:Data from Information Repositories',
-              'Configuration Required'],
-        reports={'MITRE ATT&CK': ['TA0009:T1213']},
+        tags=["GSuite", "Collection:Data from Information Repositories", "Configuration Required"],
+        reports={"MITRE ATT&CK": ["TA0009:T1213"]},
         reference="https://developers.google.com/admin-sdk/reports/v1/appendix/activity/drive#acl_change",
         runbook="Investigate whether the drive document is appropriate to be publicly accessible.",
         alert_title=_title,
-        summary_attrs=['actor:email'],
+        summary_attrs=["actor:email"],
         # threshold=,
         alert_context=_alert_context,
-        alert_grouping=detection.AlertGrouping(
-            group_by=_group_by, period_minutes=15),
+        alert_grouping=detection.AlertGrouping(group_by=_group_by, period_minutes=15),
         filters=(pre_filters or [])
         + [
             # def rule(event):
@@ -203,75 +203,71 @@ def drive_visibility_change(
             #                )
             #            change_user_access = True
             #    return change_user_access
-
         ],
         unit_tests=(
             [
                 detection.JSONUnitTest(
-                    name="Access Event",
-                    expect_match=False,
-                    data=sample_logs.drive_visibility_change_access_event
+                    name="Access Event", expect_match=False, data=sample_logs.drive_visibility_change_access_event
                 ),
                 detection.JSONUnitTest(
                     name="ACL Change without Visibility Change",
                     expect_match=False,
-                    data=sample_logs.drive_visibility_change_acl_change_without_visibility_change
+                    data=sample_logs.drive_visibility_change_acl_change_without_visibility_change,
                 ),
                 detection.JSONUnitTest(
                     name="Doc Became Public - Link (Unrestricted)",
                     expect_match=True,
-                    data=sample_logs.drive_visibility_change_doc_became_public___link_(
-                        unrestricted)
+                    data=sample_logs.drive_visibility_change_doc_became_public___link_(unrestricted),
                 ),
                 detection.JSONUnitTest(
                     name="Doc Became Public - Link (Allowlisted Domain Not Configured)",
                     expect_match=True,
                     data=sample_logs.drive_visibility_change_doc_became_public___link_(
-                        allowlisted_domain_not_configured)
+                        allowlisted_domain_not_configured
+                    ),
                 ),
                 detection.JSONUnitTest(
                     name="Doc Became Public - Link (Allowlisted Domain Is Configured)",
                     expect_match=False,
                     data=sample_logs.drive_visibility_change_doc_became_public___link_(
-                        allowlisted_domain_is_configured)
+                        allowlisted_domain_is_configured
+                    ),
                 ),
                 detection.JSONUnitTest(
                     name="Doc Became Private - Link",
                     expect_match=False,
-                    data=sample_logs.drive_visibility_change_doc_became_private___link
+                    data=sample_logs.drive_visibility_change_doc_became_private___link,
                 ),
                 detection.JSONUnitTest(
                     name="Doc Became Public - User",
                     expect_match=True,
-                    data=sample_logs.drive_visibility_change_doc_became_public___user
+                    data=sample_logs.drive_visibility_change_doc_became_public___user,
                 ),
                 detection.JSONUnitTest(
                     name="Doc Became Public - User (Multiple)",
                     expect_match=True,
-                    data=sample_logs.drive_visibility_change_doc_became_public___user_(
-                        multiple)
+                    data=sample_logs.drive_visibility_change_doc_became_public___user_(multiple),
                 ),
                 detection.JSONUnitTest(
                     name="Doc Inherits Folder Permissions",
                     expect_match=False,
-                    data=sample_logs.drive_visibility_change_doc_inherits_folder_permissions
+                    data=sample_logs.drive_visibility_change_doc_inherits_folder_permissions,
                 ),
                 detection.JSONUnitTest(
                     name="Doc Inherits Folder Permissions - Sharing Link",
                     expect_match=False,
-                    data=sample_logs.drive_visibility_change_doc_inherits_folder_permissions___sharing_link
+                    data=sample_logs.drive_visibility_change_doc_inherits_folder_permissions___sharing_link,
                 ),
                 detection.JSONUnitTest(
                     name="Doc Became Public - Public email provider",
                     expect_match=True,
-                    data=sample_logs.drive_visibility_change_doc_became_public___public_email_provider
+                    data=sample_logs.drive_visibility_change_doc_became_public___public_email_provider,
                 ),
                 detection.JSONUnitTest(
                     name="Doc Shared With Multiple Users All From ALLOWED_DOMAINS",
                     expect_match=False,
-                    data=sample_logs.drive_visibility_change_doc_shared_with_multiple_users_all_from_allowed_domains
+                    data=sample_logs.drive_visibility_change_doc_shared_with_multiple_users_all_from_allowed_domains,
                 ),
-
             ]
-        )
+        ),
     )

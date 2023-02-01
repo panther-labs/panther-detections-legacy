@@ -1,8 +1,11 @@
 import typing
+
 from panther_sdk import PantherEvent, detection
+
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
+
 # from .._shared import (
 #     create_alert_context,
 #     rule_tags,
@@ -33,7 +36,7 @@ def workspace_apps_marketplace_new_domain_application(
         # enabled=,
         name="Google Workspace Apps Marketplace New Domain Application",
         rule_id="Google.Workspace.Apps.Marketplace.New.Domain.Application",
-        log_types=['GSuite.ActivityEvent'],
+        log_types=["GSuite.ActivityEvent"],
         severity=detection.SeverityMedium,
         description="A Google Workspace User configured a new domain application from the Google Workspace Apps Marketplace.",
         # tags=,
@@ -54,31 +57,29 @@ def workspace_apps_marketplace_new_domain_application(
             #        and event.get("parameters", {}).get("APPLICATION_ENABLED", "<NO_APPLICATION_FOUND>")
             #        == "true"
             #    )
-
         ],
         unit_tests=(
             [
                 detection.JSONUnitTest(
                     name="Change Email Setting Default",
                     expect_match=False,
-                    data=sample_logs.workspace_apps_marketplace_new_domain_application_change_email_setting_default
+                    data=sample_logs.workspace_apps_marketplace_new_domain_application_change_email_setting_default,
                 ),
                 detection.JSONUnitTest(
                     name="DocuSign for Google",
                     expect_match=True,
-                    data=sample_logs.workspace_apps_marketplace_new_domain_application_docusign_for_google
+                    data=sample_logs.workspace_apps_marketplace_new_domain_application_docusign_for_google,
                 ),
                 detection.JSONUnitTest(
                     name="Microsoft Apps for Google",
                     expect_match=True,
-                    data=sample_logs.workspace_apps_marketplace_new_domain_application_microsoft_apps_for_google
+                    data=sample_logs.workspace_apps_marketplace_new_domain_application_microsoft_apps_for_google,
                 ),
                 detection.JSONUnitTest(
                     name="ListObject Type",
                     expect_match=False,
-                    data=sample_logs.workspace_apps_marketplace_new_domain_application_listobject_type
+                    data=sample_logs.workspace_apps_marketplace_new_domain_application_listobject_type,
                 ),
-
             ]
-        )
+        ),
     )

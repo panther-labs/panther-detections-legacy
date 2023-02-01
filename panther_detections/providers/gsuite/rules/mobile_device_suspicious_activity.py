@@ -1,8 +1,11 @@
 import typing
+
 from panther_sdk import PantherEvent, detection
+
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
+
 # from .._shared import (
 #     create_alert_context,
 #     rule_tags,
@@ -28,15 +31,15 @@ def mobile_device_suspicious_activity(
         # enabled=,
         name="GSuite Device Suspicious Activity",
         rule_id="GSuite.DeviceSuspiciousActivity",
-        log_types=['GSuite.ActivityEvent'],
+        log_types=["GSuite.ActivityEvent"],
         severity=detection.SeverityLow,
         description="GSuite reported a suspicious activity on a user's device.",
-        tags=['GSuite'],
+        tags=["GSuite"],
         # reports=,
         reference="https://developers.google.com/admin-sdk/reports/v1/appendix/activity/mobile#SUSPICIOUS_ACTIVITY_EVENT",
         runbook="Validate that the suspicious activity was expected by the user.",
         alert_title=_title,
-        summary_attrs=['actor:email'],
+        summary_attrs=["actor:email"],
         # threshold=,
         # alert_context=,
         # alert_grouping=,
@@ -48,21 +51,19 @@ def mobile_device_suspicious_activity(
             #    if deep_get(event, "id", "applicationName") != "mobile":
             #        return False
             #    return bool(event.get("name") == "SUSPICIOUS_ACTIVITY_EVENT")
-
         ],
         unit_tests=(
             [
                 detection.JSONUnitTest(
                     name="Normal Mobile Event",
                     expect_match=False,
-                    data=sample_logs.mobile_device_suspicious_activity_normal_mobile_event
+                    data=sample_logs.mobile_device_suspicious_activity_normal_mobile_event,
                 ),
                 detection.JSONUnitTest(
                     name="Suspicious Activity",
                     expect_match=True,
-                    data=sample_logs.mobile_device_suspicious_activity_suspicious_activity
+                    data=sample_logs.mobile_device_suspicious_activity_suspicious_activity,
                 ),
-
             ]
-        )
+        ),
     )

@@ -4,8 +4,17 @@ from panther_sdk import PantherEvent, detection
 
 from panther_detections.utils import standard_tags
 
-__all__ = ['ACTIVITY_LOG_TYPE', 'REPORTS_LOG_TYPE', 'SHARED_TAGS', 'SHARED_SUMMARY_ATTRS', 'rule_tags',
-           'create_alert_context', 'GSUITE_PARAMETER_VALUES', 'gsuite_parameter_lookup', 'gsuite_details_lookup']
+__all__ = [
+    "ACTIVITY_LOG_TYPE",
+    "REPORTS_LOG_TYPE",
+    "SHARED_TAGS",
+    "SHARED_SUMMARY_ATTRS",
+    "rule_tags",
+    "create_alert_context",
+    "GSUITE_PARAMETER_VALUES",
+    "gsuite_parameter_lookup",
+    "gsuite_details_lookup",
+]
 
 
 ACTIVITY_LOG_TYPE = "GSuite.ActivityEvent"

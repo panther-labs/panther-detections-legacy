@@ -39,11 +39,9 @@ def two_step_verification(
         runbook="Investigate the behavior that got the account suspended. Verify with the user that this intended behavior. If not, the account may have been compromised.",
         filters=(pre_filters or [])
         + [
-            match_filters.deep_equal(
-                "id.applicationName", "user_accounts"),
+            match_filters.deep_equal("id.applicationName", "user_accounts"),
             rule_filter(),
         ],
-
         alert_title=_title,
         # alert_context=
         summary_attrs=["actor:email"],
@@ -66,5 +64,5 @@ def two_step_verification(
                     }
                 ),
             ),
-        ]
+        ],
     )

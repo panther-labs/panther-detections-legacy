@@ -47,11 +47,7 @@ def suspicious_logins(
         description="GSuite reported a suspicious login for this user.",
         reference="https://developers.google.com/admin-sdk/reports/v1/appendix/activity/login#suspicious_login",
         runbook="Check out the details of the login and verify this behavior with the user to ensure the account wasn't compromised.",
-        filters=(pre_filters or [])
-        + [
-            match_filters.deep_equal(
-                "id.applicationName", "login"), rule_filter()
-        ],
+        filters=(pre_filters or []) + [match_filters.deep_equal("id.applicationName", "login"), rule_filter()],
         alert_title=_title,
         alert_context=_make_context,
         summary_attrs=["actor:email"],
@@ -86,5 +82,5 @@ def suspicious_logins(
                     },
                 ),
             ),
-        ]
+        ],
     )

@@ -1,8 +1,11 @@
 import typing
+
 from panther_sdk import PantherEvent, detection
+
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
+
 # from .._shared import (
 #     create_alert_context,
 #     rule_tags,
@@ -36,34 +39,30 @@ def group_banned_user(
         # enabled=,
         name="GSuite User Banned from Group",
         rule_id="GSuite.GroupBannedUser",
-        log_types=['GSuite.ActivityEvent'],
+        log_types=["GSuite.ActivityEvent"],
         severity=detection.SeverityLow,
         description="A GSuite user was banned from an enterprise group by moderator action.",
-        tags=['GSuite'],
+        tags=["GSuite"],
         # reports=,
         reference="https://developers.google.com/admin-sdk/reports/v1/appendix/activity/groups-enterprise#ban_user_with_moderation",
         runbook="Investigate the banned user to see if further disciplinary action needs to be taken.",
         alert_title=_title,
-        summary_attrs=['actor:email'],
+        summary_attrs=["actor:email"],
         # threshold=,
         # alert_context=,
         # alert_grouping=,
         filters=(pre_filters or [])
-        + [match_filters.deep_equal(
-                "id.applicationName", "groups_enterprise"), rule_filter()],
+        + [match_filters.deep_equal("id.applicationName", "groups_enterprise"), rule_filter()],
         unit_tests=(
             [
                 detection.JSONUnitTest(
-                    name="User Added",
-                    expect_match=False,
-                    data=sample_logs.group_banned_user_user_added
+                    name="User Added", expect_match=False, data=sample_logs.group_banned_user_user_added
                 ),
                 detection.JSONUnitTest(
                     name="User Banned from Group",
                     expect_match=True,
-                    data=sample_logs.group_banned_user_user_banned_from_group
+                    data=sample_logs.group_banned_user_user_banned_from_group,
                 ),
-
             ]
-        )
+        ),
     )

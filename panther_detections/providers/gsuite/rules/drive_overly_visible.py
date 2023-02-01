@@ -1,8 +1,11 @@
 import typing
+
 from panther_sdk import PantherEvent, detection
+
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
+
 # from .._shared import (
 #     create_alert_context,
 #     rule_tags,
@@ -15,9 +18,9 @@ def drive_overly_visible(
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
 ) -> detection.Rule:
     """A Google drive resource that is overly visible has been modified."""
-    #from panther_base_helpers import deep_get
-    #from panther_base_helpers import gsuite_details_lookup as details_lookup
-    #from panther_base_helpers import gsuite_parameter_lookup as param_lookup
+    # from panther_base_helpers import deep_get
+    # from panther_base_helpers import gsuite_details_lookup as details_lookup
+    # from panther_base_helpers import gsuite_parameter_lookup as param_lookup
     # RESOURCE_CHANGE_EVENTS = {
     #    "create",
     #    "move",
@@ -50,19 +53,18 @@ def drive_overly_visible(
         # enabled=,
         name="GSuite Overly Visible Drive Document",
         rule_id="GSuite.DriveOverlyVisible",
-        log_types=['GSuite.Reports'],
+        log_types=["GSuite.Reports"],
         severity=detection.SeverityInfo,
         description="A Google drive resource that is overly visible has been modified.",
-        tags=['GSuite', 'Collection:Data from Information Repositories'],
-        reports={'MITRE ATT&CK': ['TA0009:T1213']},
+        tags=["GSuite", "Collection:Data from Information Repositories"],
+        reports={"MITRE ATT&CK": ["TA0009:T1213"]},
         reference="https://developers.google.com/admin-sdk/reports/v1/appendix/activity/drive#access",
         runbook="Investigate whether the drive document is appropriate to be this visible.",
         alert_title=_title,
-        summary_attrs=['actor:email'],
+        summary_attrs=["actor:email"],
         # threshold=,
         # alert_context=,
-        alert_grouping=detection.AlertGrouping(
-            group_by=_group_by, period_minutes=15),
+        alert_grouping=detection.AlertGrouping(group_by=_group_by, period_minutes=15),
         filters=(pre_filters or [])
         + [
             # def rule(event):
@@ -73,26 +75,22 @@ def drive_overly_visible(
             #        bool(details)
             #        and param_lookup(details.get("parameters", {}), "visibility") in PERMISSIVE_VISIBILITY
             #    )
-
         ],
         unit_tests=(
             [
                 detection.JSONUnitTest(
-                    name="Access Event",
-                    expect_match=False,
-                    data=sample_logs.drive_overly_visible_access_event
+                    name="Access Event", expect_match=False, data=sample_logs.drive_overly_visible_access_event
                 ),
                 detection.JSONUnitTest(
                     name="Modify Event Without Over Visibility",
                     expect_match=False,
-                    data=sample_logs.drive_overly_visible_modify_event_without_over_visibility
+                    data=sample_logs.drive_overly_visible_modify_event_without_over_visibility,
                 ),
                 detection.JSONUnitTest(
                     name="Overly Visible Doc Modified",
                     expect_match=True,
-                    data=sample_logs.drive_overly_visible_overly_visible_doc_modified
+                    data=sample_logs.drive_overly_visible_overly_visible_doc_modified,
                 ),
-
             ]
-        )
+        ),
     )

@@ -1,8 +1,11 @@
 import typing
+
 from panther_sdk import PantherEvent, detection
+
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
+
 # from .._shared import (
 #     create_alert_context,
 #     rule_tags,
@@ -44,42 +47,39 @@ def user_suspended(
         # enabled=,
         name="GSuite User Suspended",
         rule_id="GSuite.UserSuspended",
-        log_types=['GSuite.ActivityEvent'],
+        log_types=["GSuite.ActivityEvent"],
         severity=detection.SeverityHigh,
         description="A GSuite user was suspended, the account may have been compromised by a spam network.",
-        tags=['GSuite'],
+        tags=["GSuite"],
         # reports=,
         reference="https://developers.google.com/admin-sdk/reports/v1/appendix/activity/login#account_disabled_generic",
         runbook="Investigate the behavior that got the account suspended. Verify with the user that this intended behavior. If not, the account may have been compromised.",
         alert_title=_title,
-        summary_attrs=['actor:email'],
+        summary_attrs=["actor:email"],
         # threshold=,
         # alert_context=,
         # alert_grouping=,
         filters=(pre_filters or [])
         + [
-                # the path needs to use dot notation as seen in this unit test: https://github.com/panther-labs/panther-utils/blob/main/tests/test_match_filters.py#L22
-                match_filters.deep_equal("id.applicationName", "login"),
-                rule_filter(),
+            # the path needs to use dot notation as seen in this unit test: https://github.com/panther-labs/panther-utils/blob/main/tests/test_match_filters.py#L22
+            match_filters.deep_equal("id.applicationName", "login"),
+            rule_filter(),
         ],
         unit_tests=(
             [
                 detection.JSONUnitTest(
-                    name="Normal Login Event",
-                    expect_match=False,
-                    data=sample_logs.user_suspended_normal_login_event
+                    name="Normal Login Event", expect_match=False, data=sample_logs.user_suspended_normal_login_event
                 ),
                 detection.JSONUnitTest(
                     name="Account Warning Not For User Suspended",
                     expect_match=False,
-                    data=sample_logs.user_suspended_account_warning_not_for_user_suspended
+                    data=sample_logs.user_suspended_account_warning_not_for_user_suspended,
                 ),
                 detection.JSONUnitTest(
                     name="Account Warning For Suspended User",
                     expect_match=True,
-                    data=sample_logs.user_suspended_account_warning_for_suspended_user
+                    data=sample_logs.user_suspended_account_warning_for_suspended_user,
                 ),
-
             ]
-        )
+        ),
     )

@@ -5,6 +5,7 @@ from panther_sdk import PantherEvent, detection
 from panther_detections.utils import match_filters, standard_tags
 
 from .. import sample_logs
+
 # from .._shared import (
 #     create_alert_context,
 #     rule_tags,
@@ -54,5 +55,5 @@ def gov_attack(
                 expect_match=False,
                 data=sample_logs.normal_login,
             ),
-        ]
+        ],
     )

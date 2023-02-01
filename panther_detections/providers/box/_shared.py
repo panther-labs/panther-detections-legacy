@@ -140,7 +140,7 @@ def build_jwt_settings(response: dict) -> dict:
     return
 
 
-def box_parse_additional_details(event: PantherEvent):
+def box_parse_additional_details(event: PantherEvent) -> Dict[str, Any]:
     additional_details = event.get("additional_details", {})
     if isinstance(additional_details, (str, bytes)):
         try:

@@ -25,8 +25,10 @@ def anomalous_download(
             f"Anomalous download activity triggered by user "
             f"[{deep_get(event, 'created_by', 'name', default='<UNKNOWN_USER>')}]."
         )
-
+    
     def _filter(event: PantherEvent) -> bool:
+        from panther_detections.providers.box._shared import box_parse_additional_details
+
         if event.get("event_type") != "SHIELD_ALERT":
             return False
         alert_details = box_parse_additional_details(event).get("shield_alert", {})

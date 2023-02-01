@@ -28,9 +28,11 @@ def malicious_content(
             f"File [{deep_get(alert_details, 'user', 'email', default='<UNKNOWN_USER>')}], owned by "
             f"[{deep_get(alert_details, 'alert_summary', 'upload_activity', 'item_name', default='<UNKNOWN_FILE>')}], "
             f"was marked malicious."
-        )
+       )
 
     def _filter(event: PantherEvent) -> bool:
+        from panther_detections.providers.box._shared import box_parse_additional_details
+
         # enterprise  malicious file alert event
         if event.get("event_type") == "FILE_MARKED_MALICIOUS":
             return True

@@ -20,6 +20,7 @@ def suspicious_login_or_session(
         "Suspicious Sessions",
     }
 
+
     def _title(event: PantherEvent) -> str:
         details = box_parse_additional_details(event)
         description = deep_get(details, "shield_alert", "alert_summary", "description", default="")
@@ -31,6 +32,8 @@ def suspicious_login_or_session(
         )
 
     def _filter(event: PantherEvent) -> bool:
+        from panther_detections.providers.box._shared import box_parse_additional_details
+
         if event.get("event_type") != "SHIELD_ALERT":
             return False
         alert_details = box_parse_additional_details(event).get("shield_alert", {})

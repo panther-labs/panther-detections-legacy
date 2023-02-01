@@ -9,6 +9,8 @@ from .. import sample_logs
 #     standard_tags,
 # )
 
+__all__ = ["workspace_data_export_created"]
+
 
 def workspace_data_export_created(
     pre_filters: typing.List[detection.AnyFilter] = None,

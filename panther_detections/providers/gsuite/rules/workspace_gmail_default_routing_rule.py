@@ -9,6 +9,8 @@ from .. import sample_logs
 #     standard_tags,
 # )
 
+__all__ = ["workspace_gmail_default_routing_rule"]
+
 
 def workspace_gmail_default_routing_rule(
     pre_filters: typing.List[detection.AnyFilter] = None,

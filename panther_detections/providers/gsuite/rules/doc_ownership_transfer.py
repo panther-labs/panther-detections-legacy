@@ -9,16 +9,31 @@ from .. import sample_logs
 #     standard_tags,
 # )
 
+__all__ = ["doc_ownership_transfer"]
+
 
 def doc_ownership_transfer(
     pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
 ) -> detection.Rule:
     """A GSuite document's ownership was transferred to an external party."""
-    #from panther_base_helpers import deep_get
-    # ORG_DOMAINS = {
-    #    "@example.com",
-    # }
+
+    def rule_filter() -> detection.PythonFilter:
+        def _rule_filter(event: PantherEvent) -> bool:
+            from panther_detections.utils.legacy_filters import deep_get
+            ORG_DOMAINS = {
+                "@example.com",
+            }
+
+            if deep_get(event, "id", "applicationName") != "admin":
+                return False
+            if bool(event.get("name") == "TRANSFER_DOCUMENT_OWNERSHIP"):
+                new_owner = deep_get(event, "parameters",
+                                     "NEW_VALUE", default="<UNKNOWN USER>")
+                return bool(new_owner) and not any(new_owner.endswith(x) for x in ORG_DOMAINS)
+            return False
+
+        return detection.PythonFilter(func=_rule_filter)
 
     return detection.Rule(
         overrides=overrides,
@@ -33,20 +48,13 @@ def doc_ownership_transfer(
         reports={'MITRE ATT&CK': ['TA0009:T1213']},
         reference="https://developers.google.com/admin-sdk/reports/v1/appendix/activity/admin-docs-settings#TRANSFER_DOCUMENT_OWNERSHIP",
         runbook="Verify that this document did not contain sensitive or private company information.",
-        alert_title=_title,
         summary_attrs=['actor:email'],
         # threshold=,
         # alert_context=,
         # alert_grouping=,
         filters=(pre_filters or [])
         + [
-            # def rule(event):
-            #    if deep_get(event, "id", "applicationName") != "admin":
-            #        return False
-            #    if bool(event.get("name") == "TRANSFER_DOCUMENT_OWNERSHIP"):
-            #        new_owner = deep_get(event, "parameters", "NEW_VALUE", default="<UNKNOWN USER>")
-            #        return bool(new_owner) and not any(new_owner.endswith(x) for x in ORG_DOMAINS)
-            #    return False
+            rule_filter()
 
         ],
         unit_tests=(

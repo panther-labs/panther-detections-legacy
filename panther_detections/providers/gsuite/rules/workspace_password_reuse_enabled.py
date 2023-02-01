@@ -9,6 +9,8 @@ from .. import sample_logs
 #     standard_tags,
 # )
 
+__all__ = ["workspace_password_reuse_enabled"]
+
 
 def workspace_password_reuse_enabled(
     pre_filters: typing.List[detection.AnyFilter] = None,

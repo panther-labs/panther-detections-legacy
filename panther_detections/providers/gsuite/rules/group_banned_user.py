@@ -1,17 +1,23 @@
-import json
 import typing
-
 from panther_sdk import PantherEvent, detection
-
 from panther_detections.utils import match_filters
 
-from .._shared import pick_filters
+from .. import sample_logs
+# from .._shared import (
+#     create_alert_context,
+#     rule_tags,
+#     standard_tags,
+# )
+
+__all__ = ["group_banned_user"]
 
 
 def group_banned_user(
     pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
 ) -> detection.Rule:
+    """A GSuite user was banned from an enterprise group by moderator action."""
+
     def rule_filter() -> detection.PythonFilter:
         def _rule_filter(event: PantherEvent) -> bool:
             if event.get("type") == "moderator_action":
@@ -20,74 +26,44 @@ def group_banned_user(
         return detection.PythonFilter(func=_rule_filter)
 
     def _title(event: PantherEvent) -> str:
-        # from global_helpers import deep_get
         return (
             f"User [{event.deep_get('actor', 'email', default='<UNKNOWN_EMAIL>')}] "
             f"banned another user from a group."
         )
 
-    def _make_context(event):
-        return event
-
-    def _reference_generator() -> str:
-        return "https://developers.google.com/admin-sdk/reports/v1/appendix/activity/groups-enterprise#ban_user_with_moderation"
-
-    # def _alert_grouping(event: PantherEvent) -> str:
-    #     return "Dedup string"
-
     return detection.Rule(
-        rule_id=(overrides.rule_id or "GSuite.GroupBannedUser"),
-        name=(overrides.name or "Human Readable Detection Name"),
-        log_types=(overrides.log_types or ["GSuite.ActivityEvent"]),
-        tags=(overrides.tags or ["GSuite"]),
-        severity=(overrides.severity or detection.SeverityLow),
-        description=(
-            overrides.description or "A GSuite user was banned from an enterprise group by moderator action."),
-        reference=(overrides.reference or _reference_generator),
-        runbook=(
-            overrides.runbook or "Investigate the banned user to see if further disciplinary action needs to be taken."
-        ),
-        filters=pick_filters(
-            overrides=overrides,
-            pre_filters=pre_filters,
-            defaults=[match_filters.deep_equal(
+        overrides=overrides,
+        # enabled=,
+        name="GSuite User Banned from Group",
+        rule_id="GSuite.GroupBannedUser",
+        log_types=['GSuite.ActivityEvent'],
+        severity=detection.SeverityLow,
+        description="A GSuite user was banned from an enterprise group by moderator action.",
+        tags=['GSuite'],
+        # reports=,
+        reference="https://developers.google.com/admin-sdk/reports/v1/appendix/activity/groups-enterprise#ban_user_with_moderation",
+        runbook="Investigate the banned user to see if further disciplinary action needs to be taken.",
+        alert_title=_title,
+        summary_attrs=['actor:email'],
+        # threshold=,
+        # alert_context=,
+        # alert_grouping=,
+        filters=(pre_filters or [])
+        + [match_filters.deep_equal(
                 "id.applicationName", "groups_enterprise"), rule_filter()],
-        ),
-        alert_title=(overrides.alert_title or _title),
-        alert_context=(overrides.alert_context or _make_context),
-        summary_attrs=(overrides.summary_attrs or ["actor:email"]),
         unit_tests=(
-            overrides.unit_tests
-            or [
+            [
                 detection.JSONUnitTest(
                     name="User Added",
                     expect_match=False,
-                    data=json.dumps(
-                        {
-                            "id": {
-                                "applicationName": "groups_enterprise",
-                            },
-                            "actor": {"email": "homer.simpson@example.com"},
-                            "type": "moderator_action",
-                            "name": "add_member",
-                        },
-                    ),
+                    data=sample_logs.group_banned_user_user_added
                 ),
                 detection.JSONUnitTest(
                     name="User Banned from Group",
                     expect_match=True,
-                    data=json.dumps(
-                        {
-                            "id": {
-                                "applicationName": "groups_enterprise",
-                            },
-                            "actor": {"email": "homer.simpson@example.com"},
-                            "type": "moderator_action",
-                            "name": "ban_user_with_moderation",
-                        },
-                    ),
+                    data=sample_logs.group_banned_user_user_banned_from_group
                 ),
+
             ]
-        ),
-        # alert_grouping=(overrides.alert_grouping or _alert_grouping)
+        )
     )

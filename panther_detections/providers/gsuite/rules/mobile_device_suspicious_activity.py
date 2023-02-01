@@ -9,19 +9,19 @@ from .. import sample_logs
 #     standard_tags,
 # )
 
+__all__ = ["mobile_device_suspicious_activity"]
+
 
 def mobile_device_suspicious_activity(
     pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
 ) -> detection.Rule:
     """GSuite reported a suspicious activity on a user's device."""
-    #from panther_base_helpers import deep_get
 
-    # def _title(event: PantherEvent) -> str:
-    #    return (
-    #        f"User [{deep_get(event, 'actor', 'email', default='<UNKNOWN_USER>')}]"
-    #        f"'s device was compromised"
-    #    )
+    def _title(event: PantherEvent) -> str:
+        return (
+            f"User [{event.deep_get(event, 'actor', 'email', default='<UNKNOWN_USER>')}]" f"'s device was compromised"
+        )
 
     return detection.Rule(
         overrides=overrides,
@@ -42,6 +42,8 @@ def mobile_device_suspicious_activity(
         # alert_grouping=,
         filters=(pre_filters or [])
         + [
+            match_filters.deep_equal("id.applicationName", "mobile"),
+            match_filters.deep_equal("name", "SUSPICIOUS_ACTIVITY_EVENT"),
             # def rule(event):
             #    if deep_get(event, "id", "applicationName") != "mobile":
             #        return False

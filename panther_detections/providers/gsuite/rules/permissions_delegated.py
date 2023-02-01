@@ -9,6 +9,8 @@ from .. import sample_logs
 #     standard_tags,
 # )
 
+__all__ = ["permissions_delegated"]
+
 
 def permissions_delegated(
     pre_filters: typing.List[detection.AnyFilter] = None,
@@ -16,9 +18,19 @@ def permissions_delegated(
 ) -> detection.Rule:
     """A GSuite user was granted new administrator privileges."""
     #from panther_base_helpers import deep_get
-    # PERMISSION_DELEGATED_EVENTS = {
-    #    "ASSIGN_ROLE",
-    # }
+    PERMISSION_DELEGATED_EVENTS = {
+        "ASSIGN_ROLE",
+    }
+
+    def rule_filter() -> detection.PythonFilter:
+        def _rule_filter(event: PantherEvent) -> bool:
+            from panther_detections.utils.legacy_filters import deep_get
+            if deep_get(event, "id", "applicationName") != "admin":
+                return False
+            if event.get("type") == "DELEGATED_ADMIN_SETTINGS":
+                return bool(event.get("name") in PERMISSION_DELEGATED_EVENTS)
+            return False
+        return detection.PythonFilter(func=_rule_filter)
 
     def _title(event: PantherEvent) -> str:
         role = event.deep_get("parameters", "ROLE_NAME")
@@ -51,13 +63,7 @@ def permissions_delegated(
         # alert_grouping=,
         filters=(pre_filters or [])
         + [
-            # def rule(event):
-            #    if deep_get(event, "id", "applicationName") != "admin":
-            #        return False
-            #    if event.get("type") == "DELEGATED_ADMIN_SETTINGS":
-            #        return bool(event.get("name") in PERMISSION_DELEGATED_EVENTS)
-            #    return False
-
+            rule_filter()
         ],
         unit_tests=(
             [

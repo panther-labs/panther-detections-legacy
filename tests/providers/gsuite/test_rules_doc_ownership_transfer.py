@@ -12,4 +12,3 @@ class TestRulesDocOwnershipTransfer(unittest.TestCase):
         )
 
         self.assertEqual(rule.name, name_override)
-    

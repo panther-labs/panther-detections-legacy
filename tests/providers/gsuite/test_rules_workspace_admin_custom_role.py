@@ -1,13 +1,13 @@
 import unittest
 
 from panther_sdk import detection
-from panther_detections.providers import google
+from panther_detections.providers import gsuite
 
 
 class TestRulesWorkspaceAdminCustomRole(unittest.TestCase):
     def test_workspace_admin_custom_role(self) -> None:
         name_override = "Override Name"
-        rule = google.rules.workspace_admin_custom_role(
+        rule = gsuite.rules.workspace_admin_custom_role(
             overrides=detection.RuleOverrides(name=name_override)
         )
 

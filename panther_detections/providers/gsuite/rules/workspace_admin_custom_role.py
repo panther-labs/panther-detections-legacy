@@ -9,6 +9,8 @@ from .. import sample_logs
 #     standard_tags,
 # )
 
+__all__ = ["workspace_admin_custom_role"]
+
 
 def workspace_admin_custom_role(
     pre_filters: typing.List[detection.AnyFilter] = None,

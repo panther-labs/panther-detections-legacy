@@ -9,6 +9,8 @@ from .. import sample_logs
 #     standard_tags,
 # )
 
+__all__ = ["workspace_gmail_enhanced_predelivery_scanning"]
+
 
 def workspace_gmail_enhanced_predelivery_scanning(
     pre_filters: typing.List[detection.AnyFilter] = None,

@@ -5,12 +5,13 @@ from panther_sdk import PantherEvent, detection
 from panther_detections.utils import match_filters, standard_tags
 
 from .. import sample_logs
-from .._shared import (
-    create_alert_context,
-    rule_tags,
-    standard_tags,
-    pick_filters
-)
+# from .._shared import (
+#     create_alert_context,
+#     rule_tags,
+#     standard_tags,
+# )
+
+__all__ = ["advanced_protection"]
 
 
 def advanced_protection(

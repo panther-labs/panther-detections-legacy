@@ -9,6 +9,8 @@ from .. import sample_logs
 #     standard_tags,
 # )
 
+__all__ = ["mobile_device_compromise"]
+
 
 def mobile_device_compromise(
     pre_filters: typing.List[detection.AnyFilter] = None,
@@ -17,11 +19,21 @@ def mobile_device_compromise(
     """GSuite reported a user's device has been compromised."""
     #from panther_base_helpers import deep_get
 
-    # def _title(event: PantherEvent) -> str:
-    #    return (
-    #        f"User [{deep_get(event, 'parameters', 'USER_EMAIL', default='<UNKNOWN_USER>')}]'s "
-    #        f"device was compromised"
-    #    )
+    def _title(event: PantherEvent) -> str:
+        return (
+            f"User [{event.deep_get('parameters', 'USER_EMAIL', default='<UNKNOWN_USER>')}]'s "
+            f"device was compromised"
+        )
+
+    def rule_filter() -> detection.PythonFilter:
+        def _rule_filter(event: PantherEvent) -> bool:
+            # from global_helpers import deep_get
+            if event.get("name") == "DEVICE_COMPROMISED_EVENT":
+                # return bool(deep_get(event, "parameters", "DEVICE_COMPROMISED_STATE") == "COMPROMISED")
+                return bool(event["parameters"]["DEVICE_COMPROMISED_STATE"] == "COMPROMISED")
+
+            return False
+        return detection.PythonFilter(func=_rule_filter)
 
     return detection.Rule(
         overrides=overrides,
@@ -42,13 +54,8 @@ def mobile_device_compromise(
         # alert_grouping=,
         filters=(pre_filters or [])
         + [
-            # def rule(event):
-            #    if deep_get(event, "id", "applicationName") != "mobile":
-            #        return False
-            #    if event.get("name") == "DEVICE_COMPROMISED_EVENT":
-            #        return bool(deep_get(event, "parameters", "DEVICE_COMPROMISED_STATE") == "COMPROMISED")
-            #    return False
-
+            match_filters.deep_equal(
+                "id.applicationName", "mobile"), rule_filter()
         ],
         unit_tests=(
             [

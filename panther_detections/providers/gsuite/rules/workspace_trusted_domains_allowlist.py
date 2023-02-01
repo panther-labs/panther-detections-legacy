@@ -9,6 +9,8 @@ from .. import sample_logs
 #     standard_tags,
 # )
 
+__all__ = ["workspace_trusted_domains_allowlist"]
+
 
 def workspace_trusted_domains_allowlist(
     pre_filters: typing.List[detection.AnyFilter] = None,

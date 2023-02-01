@@ -1,18 +1,23 @@
 import typing
-
 from panther_sdk import PantherEvent, detection
-
-from panther_detections.utils import match_filters, standard_tags
+from panther_detections.utils import match_filters
 
 from .. import sample_logs
-from .._shared import pick_filters
+# from .._shared import (
+#     create_alert_context,
+#     rule_tags,
+#     standard_tags,
+# )
+
+
+__all__ = ['leaked_password']
 
 
 def leaked_password(
     pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
 ) -> detection.Rule:
-    """GSuite User Password Leaked"""
+    """GSuite reported a user's password has been compromised, so they disabled the account."""
 
     def _title(event: PantherEvent) -> str:
         user = event.deep_get("parameters", "affected_email_address")
@@ -21,54 +26,47 @@ def leaked_password(
         return f"User [{user}]'s account was disabled due to a password leak"
 
     return detection.Rule(
-        name=(overrides.name or "GSuite User Password Leaked"),
-        rule_id=(overrides.rule_id or "GSuite.LeakedPassword"),
-        log_types=(overrides.log_types or ["GSuite.ActivityEvent"]),
-        tags=(overrides.tags or [
-              "GSuite", "Credential Access:Unsecured Credentials"],),
-        reports=(overrides.reports or {"MITRE ATT&CK": ["TA0006:T1552"]}),
-        severity=(overrides.severity or detection.SeverityHigh),
-        description=(
-            overrides.description
-            or "GSuite reported a user's password has been compromised, so they disabled the account."
-        ),
-        reference=(
-            overrides.reference
-            or "https://developers.google.com/admin-sdk/reports/v1/appendix/activity/login#account_disabled_password_leak"
-        ),
-        runbook=(
-            overrides.runbook
-            or "GSuite has already disabled the compromised user's account. Consider investigating how the user's account was compromised, and reset their account and password. Advise the user to change any other passwords in use that are the sae as the compromised password."
-        ),
-        threshold=(overrides.threshold),
-        alert_title=(overrides.alert_title or _title),
-        summary_attrs=(overrides.summary_attrs or ["actor:email"]),
-        filters=pick_filters(
-            overrides=overrides,
-            pre_filters=pre_filters,
-            defaults=[
-                match_filters.deep_equal("id.applicationName", "login"),
-                match_filters.deep_equal("type", "account_warning"),
-                match_filters.deep_in(
-                    "name", ["account_disabled_password_leak"]),
-            ],
-        ),
+        overrides=overrides,
+        # enabled=,
+        name="GSuite User Password Leaked",
+        rule_id="GSuite.LeakedPassword",
+        log_types=['GSuite.ActivityEvent'],
+        severity=detection.SeverityHigh,
+        description="GSuite reported a user's password has been compromised, so they disabled the account.",
+        tags=['GSuite', 'Credential Access:Unsecured Credentials'],
+        reports={'MITRE ATT&CK': ['TA0006:T1552']},
+        reference="https://developers.google.com/admin-sdk/reports/v1/appendix/activity/login#account_disabled_password_leak",
+        runbook="GSuite has already disabled the compromised user's account. Consider investigating how the user's account was compromised, and reset their account and password. Advise the user to change any other passwords in use that are the sae as the compromised password.",
+        alert_title=_title,
+        summary_attrs=['actor:email'],
+        # threshold=,
+        # alert_context=,
+        # alert_grouping=,
+        filters=(pre_filters or [])
+        + [
+            match_filters.deep_equal("id.applicationName", "login"),
+            match_filters.deep_equal("type", "account_warning"),
+            match_filters.deep_in(
+                "name", ["account_disabled_password_leak"]),
+        ],
         unit_tests=(
-            overrides.unit_tests
-            or [
+            [
                 detection.JSONUnitTest(
-                    name="Normal Login Event", expect_match=False, data=sample_logs.normal_login_event
+                    name="Normal Login Event",
+                    expect_match=False,
+                    data=sample_logs.leaked_password_normal_login_event
                 ),
                 detection.JSONUnitTest(
                     name="Account Warning Not For Password Leaked",
                     expect_match=False,
-                    data=sample_logs.account_warning_not_for_password_leaked,
+                    data=sample_logs.leaked_password_account_warning_not_for_password_leaked
                 ),
                 detection.JSONUnitTest(
                     name="Account Warning For Password Leaked",
                     expect_match=True,
-                    data=sample_logs.account_warning_for_password_leaked,
+                    data=sample_logs.leaked_password_account_warning_for_password_leaked
                 ),
+
             ]
-        ),
+        )
     )

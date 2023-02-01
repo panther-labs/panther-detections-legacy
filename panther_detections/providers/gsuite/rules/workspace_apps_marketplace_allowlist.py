@@ -9,6 +9,8 @@ from .. import sample_logs
 #     standard_tags,
 # )
 
+__all__ = ["workspace_apps_marketplace_allowlist"]
+
 
 def workspace_apps_marketplace_allowlist(
     pre_filters: typing.List[detection.AnyFilter] = None,
@@ -19,7 +21,7 @@ def workspace_apps_marketplace_allowlist(
     def rule_filter() -> detection.PythonFilter:
         def _rule_filter(event: PantherEvent) -> bool:
             from panther_detections.utils.legacy_filters import deep_get
-            
+
             setting_name = deep_get(event, "parameters",
                                     "SETTING_NAME", default="<NO_SETTING_NAME>")
             old_val = deep_get(event, "parameters", "OLD_VALUE",

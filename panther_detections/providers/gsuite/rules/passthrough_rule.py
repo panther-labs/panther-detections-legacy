@@ -1,80 +1,99 @@
 import typing
-
 from panther_sdk import PantherEvent, detection
-
-from panther_detections.utils import match_filters, standard_tags
+from panther_detections.utils import match_filters
 
 from .. import sample_logs
-from .._shared import pick_filters
+# from .._shared import (
+#     create_alert_context,
+#     rule_tags,
+#     standard_tags,
+# )
+
+__all__ = ["passthrough_rule"]
 
 
 def passthrough_rule(
     pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
 ) -> detection.Rule:
-    """GSuite Passthrough Rule Triggered"""
+    """A GSuite rule was triggered."""
+
+    def rule_filter() -> detection.PythonFilter:
+        def _rule_filter(event: PantherEvent) -> bool:
+            from panther_detections.utils.legacy_filters import deep_get
+            if deep_get(event, "id", "applicationName") != "rules":
+                return False
+            if not deep_get(event, "parameters", "triggered_actions"):
+                return False
+            return True
+        return detection.PythonFilter(func=_rule_filter)
 
     def _title(event: PantherEvent) -> str:
-        rule_severity = event.deep_get(event, "parameters", "severity")
-
-        if event.deep_get(event, "parameters", "rule_name"):
+        rule_severity = event.deep_get("parameters", "severity")
+        if event.deep_get("parameters", "rule_name"):
             return (
                 "GSuite "
                 + rule_severity
                 + " Severity Rule Triggered: "
-                + event.deep_get(event, "parameters", "rule_name")
+                + event.deep_get("parameters", "rule_name")
             )
-
         return "GSuite " + rule_severity + " Severity Rule Triggered"
 
+    def _severity(event: PantherEvent) -> str:
+        return event.deep_get("parameters", "severity", default="INFO")
+
     return detection.Rule(
-        rule_id=(overrides.rule_id or "GSuite.Rule"),
-        log_types=(overrides.log_types or ["GSuite.ActivityEvent"]),
-        tags=(overrides.tags or standard_tags.IDENTITY_AND_ACCESS_MGMT),  # Check this
-        severity=(overrides.severity or detection.SeverityInfo),
-        description=(overrides.description or "A GSuite rule was triggered."),
-        reference=(
-            overrides.reference or "https://support.google.com/a/answer/9420866"),
-        runbook=(overrides.runbook or "Investigate what triggered the rule."),
-        filters=pick_filters(
-            overrides=overrides,
-            pre_filters=pre_filters,
-            # name == change_calendars_acls &
-            # parameters.grantee_email == __public_principal__@public.calendar.google.com
-            defaults=[
-                match_filters.deep_equal("id.applicationName", "rules"),
-                match_filters.deep_exists("parameters.triggered_actions"),
-            ],
-        ),
-        alert_title=(overrides.alert_title or _title),
+        overrides=overrides,
+        # enabled=,
+        name="GSuite Passthrough Rule Triggered",
+        rule_id="GSuite.Rule",
+        log_types=['GSuite.ActivityEvent'],
+        severity=detection.DynamicStringField(
+            func=_severity, fallback=detection.SeverityInfo),
+        description="A GSuite rule was triggered.",
+        tags=['GSuite'],
+        # reports=,
+        reference="https://support.google.com/a/answer/9420866",
+        runbook="Investigate what triggered the rule.",
+        alert_title=_title,
+        summary_attrs=['actor:email'],
+        # threshold=,
+        # alert_context=,
+        # alert_grouping=,
+        filters=(pre_filters or [])
+        + [
+            # match_filters.deep_equal("applicationName", "rules"),
+            # match_filters.deep_exists("triggered_actions")
+            rule_filter()
+        ],
         unit_tests=(
-            overrides.unit_tests
-            or [
+            [
+                detection.JSONUnitTest(
+                    name="Non Triggered Rule",
+                    expect_match=False,
+                    data=sample_logs.passthrough_rule_non_triggered_rule
+                ),
                 detection.JSONUnitTest(
                     name="High Severity Rule",
                     expect_match=True,
-                    data=sample_logs.high_severity_rule,
-                ),
-                detection.JSONUnitTest(
-                    name="High Severity Rule with Rule Name",
-                    expect_match=True,
-                    data=sample_logs.high_severity_rule_with_rule_name,
+                    data=sample_logs.passthrough_rule_high_severity_rule
                 ),
                 detection.JSONUnitTest(
                     name="Medium Severity Rule",
                     expect_match=True,
-                    data=sample_logs.medium_severity_rule,
+                    data=sample_logs.passthrough_rule_medium_severity_rule
                 ),
                 detection.JSONUnitTest(
                     name="Low Severity Rule",
                     expect_match=True,
-                    data=sample_logs.low_severity_rule,
+                    data=sample_logs.passthrough_rule_low_severity_rule
                 ),
                 detection.JSONUnitTest(
-                    name="Non Triggered Rule",
-                    expect_match=False,
-                    data=sample_logs.non_triggered_rule,
+                    name="High Severity Rule with Rule Name",
+                    expect_match=True,
+                    data=sample_logs.passthrough_rule_high_severity_rule_with_rule_name
                 ),
+
             ]
-        ),
+        )
     )

@@ -4,7 +4,9 @@ from panther_sdk import PantherEvent, detection
 
 from panther_detections.utils import standard_tags
 
-# code used across different rules of the same log type go here
+__all__ = ['ACTIVITY_LOG_TYPE', 'REPORTS_LOG_TYPE', 'SHARED_TAGS', 'SHARED_SUMMARY_ATTRS', 'rule_tags',
+           'create_alert_context', 'GSUITE_PARAMETER_VALUES', 'gsuite_parameter_lookup', 'gsuite_details_lookup']
+
 
 ACTIVITY_LOG_TYPE = "GSuite.ActivityEvent"
 REPORTS_LOG_TYPE = "GSuite.Reports"
@@ -27,9 +29,14 @@ def rule_tags(*extra_tags: str) -> List[str]:
 
 
 def create_alert_context(event: PantherEvent) -> Dict[str, Any]:
-    """Returns common context for GSuite alerts"""
+    """Returns common context for Okta alerts"""
 
-    return {"ips": event.get("p_any_ip_addresses", []), "emails": event.get("p_any_emails", "")}
+    return {
+        "ips": event.get("p_any_ip_addresses", []),
+        "actor": event.get("actor", ""),
+        "target": event.get("target", ""),
+        "client": event.get("client", ""),
+    }
 
 
 # # # # # # # # # # # # # #
@@ -94,23 +101,3 @@ def gsuite_details_lookup(detail_type, detail_names, event):
             return details
     # not found, return empty dict
     return {}
-
-
-def pick_filters(
-    pre_filters: Optional[List[detection.AnyFilter]],
-    overrides: detection.RuleOverrides,
-    defaults: List[detection.AnyFilter],
-) -> List[detection.AnyFilter]:
-    if pre_filters is None:
-        pre_filters = []
-
-    if overrides.filters is None:
-        return pre_filters + defaults
-    else:
-        if isinstance(overrides.filters, detection.AnyFilter):
-            return pre_filters + [overrides.filters]
-
-        if isinstance(overrides.filters, list):
-            return pre_filters + overrides.filters
-
-    raise RuntimeError("unable to pick filters")

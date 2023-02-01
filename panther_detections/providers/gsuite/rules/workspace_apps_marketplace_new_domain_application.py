@@ -9,6 +9,8 @@ from .. import sample_logs
 #     standard_tags,
 # )
 
+__all__ = ["workspace_apps_marketplace_new_domain_application"]
+
 
 def workspace_apps_marketplace_new_domain_application(
     pre_filters: typing.List[detection.AnyFilter] = None,

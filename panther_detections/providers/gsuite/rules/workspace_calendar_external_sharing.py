@@ -9,6 +9,8 @@ from .. import sample_logs
 #     standard_tags,
 # )
 
+__all__ = ["workspace_calendar_external_sharing"]
+
 
 def workspace_calendar_external_sharing(
     pre_filters: typing.List[detection.AnyFilter] = None,

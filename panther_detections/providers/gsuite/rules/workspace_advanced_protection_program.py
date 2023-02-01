@@ -9,6 +9,8 @@ from .. import sample_logs
 #     standard_tags,
 # )
 
+__all__ = ["workspace_advanced_protection_program"]
+
 
 def workspace_advanced_protection_program(
     pre_filters: typing.List[detection.AnyFilter] = None,

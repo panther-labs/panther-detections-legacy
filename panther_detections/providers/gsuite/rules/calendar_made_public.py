@@ -38,7 +38,8 @@ def calendar_made_public(
         filters=(pre_filters or [])
         + [
             match_filters.deep_equal("name", "change_calendar_acls"),
-            match_filters.deep_equal("parameters.grantee_email", "__public_principal__@public.calendar.google.com"),
+            match_filters.deep_equal(
+                "parameters.grantee_email", "__public_principal__@public.calendar.google.com"),
         ],
         alert_title=_title,
         alert_context=create_alert_context,

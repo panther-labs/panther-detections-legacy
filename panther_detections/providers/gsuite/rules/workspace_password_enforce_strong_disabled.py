@@ -9,6 +9,8 @@ from .. import sample_logs
 #     standard_tags,
 # )
 
+__all__ = ["workspace_password_enforce_strong_disabled"]
+
 
 def workspace_password_enforce_strong_disabled(
     pre_filters: typing.List[detection.AnyFilter] = None,

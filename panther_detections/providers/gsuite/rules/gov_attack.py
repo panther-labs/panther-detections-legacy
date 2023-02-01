@@ -5,7 +5,13 @@ from panther_sdk import PantherEvent, detection
 from panther_detections.utils import match_filters, standard_tags
 
 from .. import sample_logs
-from .._shared import pick_filters
+# from .._shared import (
+#     create_alert_context,
+#     rule_tags,
+#     standard_tags,
+# )
+
+__all__ = ["gov_attack"]
 
 
 def gov_attack(
@@ -21,42 +27,32 @@ def gov_attack(
         )
 
     return detection.Rule(
-        rule_id=(overrides.rule_id or "GSuite.GovernmentBackedAttack"),
-        log_types=(overrides.log_types or ["GSuite.ActivityEvent"]),
-        tags=(overrides.tags or standard_tags.IDENTITY_AND_ACCESS_MGMT),  # Check this
-        severity=(overrides.severity or detection.SeverityCritical),
-        description=(
-            overrides.description or "GSuite reported that it detected a government backed attack against your account."
-        ),
-        reference=(
-            overrides.reference
-            or "https://developers.google.com/admin-sdk/reports/v1/appendix/activity/login#gov_attack_warning"
-        ),
-        runbook=(
-            overrides.runbook or "Follow up with GSuite support for more details."),
-        filters=pick_filters(
-            overrides=overrides,
-            pre_filters=pre_filters,
+        overrides=overrides,
+        name="GSuite Government Backed Attack",
+        rule_id="GSuite.GovernmentBackedAttack",
+        log_types=["GSuite.ActivityEvent"],
+        tags=standard_tags.IDENTITY_AND_ACCESS_MGMT,  # Check this
+        severity=detection.SeverityCritical,
+        description="GSuite reported that it detected a government backed attack against your account.",
+        reference="https://developers.google.com/admin-sdk/reports/v1/appendix/activity/login#gov_attack_warning",
+        runbook="Follow up with GSuite support for more details.",
+        filters=(pre_filters or [])
+        + [
             # name == change_calendars_acls &
             # parameters.grantee_email == __public_principal__@public.calendar.google.com
-            defaults=[
-                match_filters.deep_equal("name", "gov_attack_warning"),
-            ],
-        ),
-        alert_title=(overrides.alert_title or _title),
-        unit_tests=(
-            overrides.unit_tests
-            or [
-                detection.JSONUnitTest(
-                    name="Gov backed warning",
-                    expect_match=True,
-                    data=sample_logs.gov_backed_warning,
-                ),
-                detection.JSONUnitTest(
-                    name="Normal login",
-                    expect_match=False,
-                    data=sample_logs.normal_login,
-                ),
-            ]
-        ),
+            match_filters.deep_equal("name", "gov_attack_warning")
+        ],
+        alert_title=_title,
+        unit_tests=[
+            detection.JSONUnitTest(
+                name="Gov backed warning",
+                expect_match=True,
+                data=sample_logs.gov_backed_warning,
+            ),
+            detection.JSONUnitTest(
+                name="Normal login",
+                expect_match=False,
+                data=sample_logs.normal_login,
+            ),
+        ]
     )

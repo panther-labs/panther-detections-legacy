@@ -4,6 +4,8 @@ from panther_core import PantherEvent
 from panther_sdk import detection
 
 from panther_detections.utils import match_filters
+from panther_detections.utils.legacy_utils import deep_get
+
 
 from .. import sample_logs
 from .._shared import (
@@ -18,15 +20,16 @@ __all__ = ["geo_improbable_access", "geo_improbable_access_filter"]
 
 # pylint: disable=R0914
 def geo_improbable_access_filter() -> detection.PythonFilter:
+
     def _geo_improbable_access_filter(event: PantherEvent) -> bool:
+        from panther_detections.utils.legacy_utils import deep_get
         from datetime import datetime, timedelta
         from json import dumps, loads
         from math import asin, cos, radians, sin, sqrt
-
-        from panther_oss_helpers import (  # type: ignore
-            get_string_set,
-            put_string_set,
-            set_key_expiration,
+        from panther_detections.utils.dynamo_utils import (
+            get_string_set, 
+            put_string_set, 
+            set_key_expiration
         )
 
         def haversine_distance(grid_one: typing.Any, grid_two: typing.Any) -> float:
@@ -47,18 +50,18 @@ def geo_improbable_access_filter() -> detection.PythonFilter:
 
             return radius * distance_c
 
-        def store_login_info(key: str, old_city: str = "") -> None:
+        def store_login_info(key, event) -> None:
+
             # Map the user to the lon/lat and time of the most recent login
             put_string_set(
                 key,
                 [
                     dumps(
                         {
-                            "city": event.deep_get("client", "geographicalContext", "city"),
-                            "lon": event.deep_get("client", "geographicalContext", "geolocation", "lon"),
-                            "lat": event.deep_get("client", "geographicalContext", "geolocation", "lat"),
+                            "city": deep_get(event, "client", "geographicalContext", "city"),
+                            "lon": deep_get(event, "client", "geographicalContext", "geolocation", "lon"),
+                            "lat": deep_get(event, "client", "geographicalContext", "geolocation", "lat"),
                             "time": event.get("p_event_time"),
-                            "old_city": old_city,
                         }
                     )
                 ],
@@ -70,16 +73,16 @@ def geo_improbable_access_filter() -> detection.PythonFilter:
         event_city_tracking = {}
 
         new_login_stats = {
-            "city": event.deep_get("client", "geographicalContext", "city"),
-            "lon": event.deep_get("client", "geographicalContext", "geolocation", "lon"),
-            "lat": event.deep_get("client", "geographicalContext", "geolocation", "lat"),
+            "city": deep_get(event, "client", "geographicalContext", "city"),
+            "lon": deep_get(event, "client", "geographicalContext", "geolocation", "lon"),
+            "lat": deep_get(event, "client", "geographicalContext", "geolocation", "lat"),
         }
         # Bail out if we have a None value in set as it causes false positives
         if None in new_login_stats.values():
             return False
 
         # Generate a unique cache key for each user
-        login_key = f"Okta.Login.GeographicallyImprobable{event.deep_get('actor', 'alternateId')}"
+        login_key = f"Okta.Login.GeographicallyImprobable{deep_get(event, 'actor', 'alternateId')}"
         # Retrieve the prior login info from the cache, if any
         last_login = get_string_set(login_key)
         # If we haven't seen this user login recently, store this login for future use and don't alert

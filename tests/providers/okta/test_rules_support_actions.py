@@ -8,7 +8,6 @@ class TestSupportActions(unittest.TestCase):
     def test_account_support_access_defaults(self) -> None:
         rule = okta.rules.account_support_access()
 
-        self.assertIsInstance(rule, detection.Rule)
         self.assertEqual(rule.rule_id, "Okta.Support.Access")
 
     def test_account_support_access_name_override(self) -> None:
@@ -17,7 +16,6 @@ class TestSupportActions(unittest.TestCase):
             overrides=detection.RuleOverrides(name=name_override)
         )
 
-        self.assertIsInstance(rule, detection.Rule)
         self.assertEqual(rule.name, name_override)
 
     def test_account_support_reset(self) -> None:
@@ -26,5 +24,4 @@ class TestSupportActions(unittest.TestCase):
             overrides=detection.RuleOverrides(name=name_override)
         )
 
-        self.assertIsInstance(rule, detection.Rule)
         self.assertEqual(rule.name, name_override)

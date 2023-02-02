@@ -5,7 +5,7 @@ from panther_sdk import PantherEvent, detection
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
-from .._shared import create_alert_context_ip
+from .._shared import duo_alert_context_ip
 
 
 def user_bypass_code_used(
@@ -34,11 +34,24 @@ def user_bypass_code_used(
         alert_title=_title,
         unit_tests=(
             [
-                detection.JSONUnitTest(name="bypass_code_used", expect_match=True, data=sample_logs.bypass_code_used),
-                detection.JSONUnitTest(name="good_auth", expect_match=False, data=sample_logs.good_auth),
-                detection.JSONUnitTest(name="denied_old_creds", expect_match=False, data=sample_logs.denied_old_creds),
+                detection.JSONUnitTest(
+                    name="bypass_code_used",
+                    expect_match=True,
+                    data=sample_logs.user_bypass_code_used_bypass_code_used
+                ),
+                detection.JSONUnitTest(
+                    name="good_auth",
+                    expect_match=False,
+                    data=sample_logs.user_bypass_code_used_good_auth
+                ),
+                detection.JSONUnitTest(
+                    name="denied_old_creds",
+                    expect_match=False,
+                    data=sample_logs.user_bypass_code_used_denied_old_creds
+                ),
+                
             ]
         ),
-        alert_context=create_alert_context_ip,
+        alert_context=duo_alert_context_ip,
         alert_grouping=detection.AlertGrouping(period_minutes=5),
     )

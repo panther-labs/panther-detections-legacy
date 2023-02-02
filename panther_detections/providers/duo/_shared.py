@@ -44,7 +44,7 @@ def rule_tags(*extra_tags: str) -> List[str]:
     return [*SHARED_TAGS, *extra_tags]
 
 
-def create_alert_context(event: PantherEvent) -> Dict[str, Any]:
+def duo_alert_context(event: PantherEvent) -> Dict[str, Any]:
     """Returns common context for Duo alerts"""
     return {
         "action": event.get("action", "<action_not_found>"),
@@ -54,7 +54,7 @@ def create_alert_context(event: PantherEvent) -> Dict[str, Any]:
     }
 
 
-def create_alert_context_ip(event: PantherEvent) -> Dict[str, Any]:
+def duo_alert_context_ip(event: PantherEvent) -> Dict[str, Any]:
     return {
         "factor": event.get("factor"),
         "reason": event.get("reason"),

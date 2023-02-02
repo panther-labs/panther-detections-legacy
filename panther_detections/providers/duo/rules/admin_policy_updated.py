@@ -5,7 +5,7 @@ from panther_sdk import PantherEvent, detection
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
-from .._shared import create_alert_context
+from .._shared import duo_alert_context
 
 
 def admin_policy_updated(
@@ -32,10 +32,19 @@ def admin_policy_updated(
         threshold=1,
         unit_tests=(
             [
-                detection.JSONUnitTest(name="Policy Update", expect_match=True, data=sample_logs.policy_update),
-                detection.JSONUnitTest(name="Other event", expect_match=False, data=sample_logs.other_event),
+                detection.JSONUnitTest(
+                    name="Policy Update",
+                    expect_match=True,
+                    data=sample_logs.admin_policy_updated_policy_update
+                ),
+                detection.JSONUnitTest(
+                    name="Other event",
+                    expect_match=False,
+                    data=sample_logs.admin_policy_updated_other_event
+                ),
+                
             ]
         ),
-        alert_context=create_alert_context,
+        alert_context=duo_alert_context,
         alert_grouping=detection.AlertGrouping(period_minutes=60),
     )

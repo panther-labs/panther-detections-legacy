@@ -1,67 +1,78 @@
 import typing
-
 from panther_sdk import PantherEvent, detection
-
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
+from .._shared import (
+    duo_alert_context,
+    deserialize_administrator_log_event_description
+)
 
-# from .._shared import (
-#     SYSTEM_LOG_TYPE,
-#     create_alert_context,
-#     rule_tags,
-#     standard_tags,
-# )
+__all__ = [
+    "admin_sso_saml_requirement_disabled"
+]
 
-<<<<<<< HEAD:panther_detections/providers/duo/rules/duo_admin_sso_saml_requirement_disabled.py
-
-def duo_admin_sso_saml_requirement_disabled(
-=======
 def admin_sso_saml_requirement_disabled(
->>>>>>> d529fd4 (initial duo tests):panther_detections/providers/duo/rules/admin_sso_saml_requirement_disabled.py
     pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
 ) -> detection.Rule:
     """Detects when SAML Authentication for Administrators is marked as Disabled or Optional."""
 
-    # def _title(event: PantherEvent) -> str:
-    #
-    #     return "The title of the alert"
+    def _title(event: PantherEvent) -> str:
+        description = deserialize_administrator_log_event_description(event)
+        return (
+            f"Duo: [{event.get('username', '<username_not_found>')}] "
+            "changed SAML authentication requirements for Administrators "
+            f"to [{description.get('enforcement_status', '<enforcement_status_not_found>')}]"
+        )
 
+    def _filter(event: PantherEvent) -> bool:
+        from panther_detections.providers.duo._shared import deserialize_administrator_log_event_description
+
+        if event.get("action") == "admin_single_sign_on_update":
+            description = deserialize_administrator_log_event_description(event)
+            enforcement_status = description.get("enforcement_status", "required")
+            return enforcement_status != "required"
+        return False        
+        
     return detection.Rule(
         overrides=overrides,
         name="Duo Admin SSO SAML Requirement Disabled",
         rule_id="Duo.Admin.SSO.SAML.Requirement.Disabled",
-        log_types=["Duo.Administrator"],
-        # tags=(overrides.tags),
-        # reports="",
+        log_types=['Duo.Administrator'],
         severity=detection.SeverityMedium,
         description="Detects when SAML Authentication for Administrators is marked as Disabled or Optional.",
-        # reference="",
-        # runbook="",
+        alert_title=_title,
+        threshold=1,
+        alert_context=duo_alert_context,
+        alert_grouping=detection.AlertGrouping(period_minutes=60),
         filters=(pre_filters or [])
         + [
-            # filters
+            detection.PythonFilter(func=_filter)
         ],
-        alert_title=_title,
-        # summary_attrs=(overrides.summary_attrs),
-        threshold=1,
         unit_tests=(
             [
                 detection.JSONUnitTest(
-                    name="Enforcement Disabled", expect_match=True, data=sample_logs.enforcement_disabled
+                    name="Enforcement Disabled",
+                    expect_match=True,
+                    data=sample_logs.admin_sso_saml_requirement_disabled_enforcement_disabled
                 ),
                 detection.JSONUnitTest(
-                    name="Enforcement Optional", expect_match=True, data=sample_logs.enforcement_optional
+                    name="Enforcement Optional",
+                    expect_match=True,
+                    data=sample_logs.admin_sso_saml_requirement_disabled_enforcement_optional
                 ),
                 detection.JSONUnitTest(
-                    name="Enforcement Required", expect_match=False, data=sample_logs.enforcement_required
+                    name="Enforcement Required",
+                    expect_match=False,
+                    data=sample_logs.admin_sso_saml_requirement_disabled_enforcement_required
                 ),
-                detection.JSONUnitTest(name="SSO Update", expect_match=False, data=sample_logs.sso_update),
+                detection.JSONUnitTest(
+                    name="SSO Update",
+                    expect_match=False,
+                    data=sample_logs.admin_sso_saml_requirement_disabled_sso_update
+                ),
+                
             ]
-        ),
-        # alert_context=,
-        # alert_grouping=
-        # destinations=
-        # enabled=
+        )
     )

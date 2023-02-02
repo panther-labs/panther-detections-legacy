@@ -7,14 +7,6 @@ from panther_detections.utils import match_filters
 
 from .. import sample_logs
 
-# from .._shared import (
-#     SYSTEM_LOG_TYPE,
-#     create_alert_context,
-#     rule_tags,
-#     standard_tags,
-# )
-
-
 def admin_lockout(
     pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
@@ -45,12 +37,21 @@ def admin_lockout(
         unit_tests=(
             [
                 detection.JSONUnitTest(
-                    name="Admin lockout- invalid json", expect_match=True, data=sample_logs.admin_lockout__invalid_json
+                    name="Admin lockout- invalid json",
+                    expect_match=True,
+                    data=sample_logs.admin_lockout_admin_lockout__invalid_json
                 ),
                 detection.JSONUnitTest(
-                    name="Admin lockout- valid json", expect_match=True, data=sample_logs.admin_lockout__valid_json
+                    name="Admin lockout- valid json",
+                    expect_match=True,
+                    data=sample_logs.admin_lockout_admin_lockout__valid_json
                 ),
-                detection.JSONUnitTest(name="Bypass Create", expect_match=False, data=sample_logs.bypass_create),
+                detection.JSONUnitTest(
+                    name="Bypass Create",
+                    expect_match=False,
+                    data=sample_logs.admin_lockout_bypass_create
+                ),
+                
             ]
         ),
         alert_grouping=detection.AlertGrouping(period_minutes=60),

@@ -6,14 +6,6 @@ from panther_detections.utils import match_filters
 
 from .. import sample_logs
 
-# from .._shared import (
-#     SYSTEM_LOG_TYPE,
-#     create_alert_context,
-#     rule_tags,
-#     standard_tags,
-# )
-
-
 def admin_app_integration_secret_key_viewed(
     pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
@@ -41,8 +33,17 @@ def admin_app_integration_secret_key_viewed(
         threshold=1,
         unit_tests=(
             [
-                detection.JSONUnitTest(name="Generic Skey View", expect_match=True, data=sample_logs.generic_skey_view),
-                detection.JSONUnitTest(name="Duo app install ", expect_match=False, data=sample_logs.duo_app_install_),
+                detection.JSONUnitTest(
+                    name="Generic Skey View",
+                    expect_match=True,
+                    data=sample_logs.admin_app_integration_secret_key_viewed_generic_skey_view
+                ),
+                detection.JSONUnitTest(
+                    name="Duo app install ",
+                    expect_match=False,
+                    data=sample_logs.admin_app_integration_secret_key_viewed_duo_app_install_
+                ),
+                
             ]
         ),
         alert_grouping=detection.AlertGrouping(period_minutes=60),

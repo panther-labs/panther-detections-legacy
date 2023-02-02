@@ -5,7 +5,7 @@ from panther_sdk import PantherEvent, detection
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
-from .._shared import create_alert_context_ip
+from .._shared import duo_alert_context_ip
 
 
 def user_action_fraudulent(
@@ -18,17 +18,6 @@ def user_action_fraudulent(
 
         user = event.deep_get("user.name", default="Unknown")
         return f"A Duo action was marked as fraudulent by [{user}]"
-
-    # def _alert_context(event: PantherEvent) -> Dict[str, Any]:
-    #     return {
-    #         "factor": event.get("factor"),
-    #         "reason": event.get("reason"),
-    #         "user": event.deep_get("user.name", default=""),
-    #         "os": event.deep_get("access_device.os", default=""),
-    #         "ip_access": event.deep_get("access_device.ip", default=""),
-    #         "ip_auth": event.deep_get("auth_device.ip", default=""),
-    #         "application": event.deep_get("application.name", default=""),
-    #     }
 
     return detection.Rule(
         overrides=overrides,
@@ -44,9 +33,14 @@ def user_action_fraudulent(
         alert_title=_title,
         unit_tests=(
             [
-                detection.JSONUnitTest(name="user_marked_fraud", expect_match=True, data=sample_logs.user_marked_fraud),
+                detection.JSONUnitTest(
+                    name="user_marked_fraud",
+                    expect_match=True,
+                    data=sample_logs.user_action_fraudulent_user_marked_fraud
+                ),
+                
             ]
         ),
-        alert_context=create_alert_context_ip,
+        alert_context=duo_alert_context_ip,
         alert_grouping=detection.AlertGrouping(period_minutes=15),
     )

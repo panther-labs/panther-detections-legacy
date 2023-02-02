@@ -4,8 +4,8 @@ from panther_sdk import detection
 from panther_detections.providers import duo
 
 
-class TestRulesTestRulesAdminUserMfaBypassEnabled(unittest.TestCase):
-    def admin_user_mfa_bypass_enabled(self) -> None:
+class TestRulesAdminUserMfaBypassEnabled(unittest.TestCase):
+    def test_admin_user_mfa_bypass_enabled(self) -> None:
         name_override = "Override Name"
         rule = duo.rules.admin_user_mfa_bypass_enabled(
             overrides=detection.RuleOverrides(name=name_override)

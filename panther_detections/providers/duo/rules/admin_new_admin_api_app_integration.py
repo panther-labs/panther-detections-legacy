@@ -1,66 +1,74 @@
 import typing
-
 from panther_sdk import PantherEvent, detection
-
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
+from .._shared import (
+    duo_alert_context,
+    deserialize_administrator_log_event_description
+)
 
-# from .._shared import (
-#     SYSTEM_LOG_TYPE,
-#     create_alert_context,
-#     rule_tags,
-#     standard_tags,
-# )
+__all__ = [
+    "admin_new_admin_api_app_integration"
+]
 
-<<<<<<< HEAD:panther_detections/providers/duo/rules/duo_admin_new_admin_api_app_integration.py
 
-def duo_admin_new_admin_api_app_integration(
-=======
 def admin_new_admin_api_app_integration(
->>>>>>> d529fd4 (initial duo tests):panther_detections/providers/duo/rules/admin_new_admin_api_app_integration.py
     pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
 ) -> detection.Rule:
     """Identifies creation of new Admin API integrations for Duo."""
 
-    # def _title(event: PantherEvent) -> str:
-    #
-    #     return "The title of the alert"
+    def _title(event: PantherEvent) -> str:
+        return (
+            f"Duo: [{event.get('username', '<username_not_found>')}] "
+            "created a new Admin API integration "
+            f"to [{event.get('object', '<object_not_found>')}]"
+        )
+    
+    def _filter(event: PantherEvent) -> bool:
+        from panther_detections.providers.duo._shared import deserialize_administrator_log_event_description
+
+        if event.get("action") == "integration_create":
+            description = deserialize_administrator_log_event_description(event)
+            integration_type = description.get("type")
+            return integration_type == "Admin API"
+        return False
+        
 
     return detection.Rule(
         overrides=overrides,
         name="Duo Admin New Admin API App Integration",
         rule_id="Duo.Admin.New.Admin.API.App.Integration",
-        log_types=["Duo.Administrator"],
-        # tags=(overrides.tags),
-        # reports="",
+        log_types=['Duo.Administrator'],
         severity=detection.SeverityHigh,
         description="Identifies creation of new Admin API integrations for Duo.",
-        # reference="",
-        # runbook="",
+        alert_title=_title,
+        threshold=1,
+        alert_context=duo_alert_context,
+        alert_grouping=detection.AlertGrouping(period_minutes=60),
         filters=(pre_filters or [])
         + [
-            # filters
+            detection.PythonFilter(func=_filter)
         ],
-        alert_title=_title,
-        # summary_attrs=(overrides.summary_attrs),
-        threshold=1,
         unit_tests=(
             [
                 detection.JSONUnitTest(
                     name="Admin API Integration Created",
                     expect_match=True,
-                    data=sample_logs.admin_api_integration_created,
+                    data=sample_logs.admin_new_admin_api_app_integration_admin_api_integration_created
                 ),
                 detection.JSONUnitTest(
-                    name="Non Admin API Integration", expect_match=False, data=sample_logs.non_admin_api_integration
+                    name="Non Admin API Integration",
+                    expect_match=False,
+                    data=sample_logs.admin_new_admin_api_app_integration_non_admin_api_integration
                 ),
-                detection.JSONUnitTest(name="Other Event", expect_match=False, data=sample_logs.other_event),
+                detection.JSONUnitTest(
+                    name="Other Event",
+                    expect_match=False,
+                    data=sample_logs.admin_new_admin_api_app_integration_other_event
+                ),
+                
             ]
-        ),
-        # alert_context=,
-        # alert_grouping=
-        # destinations=
-        # enabled=
+        )
     )

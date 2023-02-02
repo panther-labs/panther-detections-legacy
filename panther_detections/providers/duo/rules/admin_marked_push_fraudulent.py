@@ -6,7 +6,7 @@ from panther_detections.utils import match_filters
 
 from .. import sample_logs
 from .._shared import (
-    create_alert_context,
+    duo_alert_context,
     deserialize_administrator_log_event_description,
 )
 
@@ -25,8 +25,9 @@ def admin_marked_push_fraudulent(
 
         return f"Duo Admin [{admin_username}] denied due to an anomalous 2FA push for [{user_email}]"
 
-    def _marked_fraud(event: PantherEvent) -> bool:
-        print(event)
+    def _filter(event: PantherEvent) -> bool:
+        from panther_detections.providers.duo._shared import deserialize_administrator_log_event_description
+
         event_description = deserialize_administrator_log_event_description(event)
         return "fraudulent" in event_description.get("error", "").lower()
 
@@ -43,20 +44,24 @@ def admin_marked_push_fraudulent(
         filters=(pre_filters or [])
         + [
             match_filters.deep_equal("action", "admin_2fa_error"),
-            # match_filters.deep_equal("error".lower(), "fraudulent"),
-            detection.PythonFilter(func=_marked_fraud),
+            detection.PythonFilter(func=_filter),
         ],
         alert_title=_title,
         unit_tests=(
             [
-                detection.JSONUnitTest(name="marked_fraud", expect_match=True, data=sample_logs.marked_fraud),
                 detection.JSONUnitTest(
-                    name="different_admin_action", expect_match=False, data=sample_logs.different_admin_action
+                    name="marked_fraud",
+                    expect_match=True,
+                    data=sample_logs.admin_marked_push_fraudulent_marked_fraud
                 ),
+                detection.JSONUnitTest(
+                    name="different_admin_action",
+                    expect_match=False,
+                    data=sample_logs.admin_marked_push_fraudulent_different_admin_action
+                ),
+                
             ]
         ),
-        alert_context=create_alert_context,
+        alert_context=duo_alert_context,
         alert_grouping=detection.AlertGrouping(period_minutes=15),
-        # destinations=
-        # enabled=
     )

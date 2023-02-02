@@ -5,7 +5,7 @@ from panther_sdk import PantherEvent, detection
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
-from .._shared import create_alert_context
+from .._shared import duo_alert_context
 
 
 def admin_mfa_restrictions_updated(
@@ -28,13 +28,21 @@ def admin_mfa_restrictions_updated(
         filters=(pre_filters or []) + [match_filters.deep_equal("action", "update_admin_factor_restrictions")],
         alert_title=_title,
         threshold=1,
+        alert_context=duo_alert_context,
+        alert_grouping=detection.AlertGrouping(period_minutes=60),
         unit_tests=(
             [
                 detection.JSONUnitTest(
-                    name="Admin MFA Update Event", expect_match=True, data=sample_logs.admin_mfa_update_event
+                    name="Admin MFA Update Event",
+                    expect_match=True,
+                    data=sample_logs.admin_mfa_restrictions_updated_admin_mfa_update_event
                 ),
-                detection.JSONUnitTest(name="Login Event", expect_match=False, data=sample_logs.login_event),
+                detection.JSONUnitTest(
+                    name="Login Event",
+                    expect_match=False,
+                    data=sample_logs.admin_mfa_restrictions_updated_login_event
+                ),
+                
             ]
         ),
-        alert_grouping=detection.AlertGrouping(period_minutes=60),
     )

@@ -2,8 +2,6 @@ from typing import Any, Dict, List
 
 from panther_sdk import PantherEvent
 
-from panther_detections.utils import standard_tags
-
 __all__ = ["rule_tags", "SYSTEM_LOG_TYPE", "SHARED_TAGS", "create_alert_context"]
 
 SYSTEM_LOG_TYPE = "Atlassian.Audit"

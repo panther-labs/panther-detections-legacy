@@ -37,7 +37,7 @@ def user_promoted_to_privileged_role(
         operator, email, from_role, to_role = extract_values(event)
         return f"Zoom: [{email}]'s role was changed from [{from_role}] " f"to [{to_role}] by [{operator}]."
 
-    def _filter_func(event: PantherEvent) -> bool:
+    def _filter(event: PantherEvent) -> bool:
         _, _, from_role, to_role = extract_values(event)
         return to_role in PRIVILEGED_ROLES and from_role not in PRIVILEGED_ROLES
 
@@ -53,10 +53,10 @@ def user_promoted_to_privileged_role(
         alert_grouping=detection.AlertGrouping(period_minutes=60),
         filters=(pre_filters or [])
         + [
-            match_filters.deep_equal_pattern("action", r"Update"),
-            match_filters.deep_equal_pattern("operational_detail", r"^Change Role"),
+            match_filters.deep_equal_pattern("action", "Update"),
+            match_filters.deep_equal_pattern("operational_detail", "^Change Role"),
             match_filters.deep_equal("category_type", "User"),
-            detection.PythonFilter(func=_filter_func),
+            detection.PythonFilter(func=_filter)
         ],
         unit_tests=(
             [

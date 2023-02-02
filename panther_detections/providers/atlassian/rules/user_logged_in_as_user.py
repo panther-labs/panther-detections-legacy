@@ -5,11 +5,7 @@ from panther_sdk import PantherEvent, detection
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
-from .._shared import (
-    SYSTEM_LOG_TYPE,
-    rule_tags,
-    create_alert_context
-)
+from .._shared import SYSTEM_LOG_TYPE, create_alert_context, rule_tags
 
 
 def user_logged_in_as_user(

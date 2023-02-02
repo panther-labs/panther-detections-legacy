@@ -42,12 +42,12 @@ def user_logged_in_as_user(
         alert_context=create_alert_context,
         unit_tests=[
             detection.JSONUnitTest(
-                name="MFA Disabled",
+                name="Admin impersonated user successfully",
                 expect_match=True,
                 data=sample_logs.admin_impersonated_user_successfully,
             ),
             detection.JSONUnitTest(
-                name="Login Event",
+                name="user_logged_in_as_user not in log",
                 expect_match=False,
                 data=sample_logs.user_logged_in_as_user_not_in_log,
             ),

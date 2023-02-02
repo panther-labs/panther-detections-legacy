@@ -6,7 +6,6 @@ from panther_sdk import detection
 from panther_detections.utils import match_filters
 from panther_detections.utils.legacy_utils import deep_get
 
-
 from .. import sample_logs
 from .._shared import (
     SHARED_SUMMARY_ATTRS,
@@ -20,17 +19,17 @@ __all__ = ["geo_improbable_access", "geo_improbable_access_filter"]
 
 # pylint: disable=R0914
 def geo_improbable_access_filter() -> detection.PythonFilter:
-
     def _geo_improbable_access_filter(event: PantherEvent) -> bool:
-        from panther_detections.utils.legacy_utils import deep_get
         from datetime import datetime, timedelta
         from json import dumps, loads
         from math import asin, cos, radians, sin, sqrt
+
         from panther_detections.utils.dynamo_utils import (
-            get_string_set, 
-            put_string_set, 
-            set_key_expiration
+            get_string_set,
+            put_string_set,
+            set_key_expiration,
         )
+        from panther_detections.utils.legacy_utils import deep_get
 
         def haversine_distance(grid_one: typing.Any, grid_two: typing.Any) -> float:
             # approximate radius of earth in km

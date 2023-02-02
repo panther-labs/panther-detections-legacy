@@ -1,9 +1,7 @@
-from typing import Any, Dict, Optional, Sequence, Set, Union
 import os
+from typing import Any, Dict, Optional, Sequence, Set, Union
+
 import boto3
-
-
-
 from panther_sdk import PantherEvent, detection
 
 # __all__ = ["deep_equal", "deep_equal_pattern", "deep_in"]

@@ -5,10 +5,8 @@ from panther_sdk import PantherEvent, detection
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
-from .._shared import ( 
-    duo_alert_context,
-    deserialize_administrator_log_event_description,
-)
+from .._shared import deserialize_administrator_log_event_description, duo_alert_context
+
 
 def admin_create_admin(
     pre_filters: typing.List[detection.AnyFilter] = None,
@@ -38,16 +36,11 @@ def admin_create_admin(
         unit_tests=(
             [
                 detection.JSONUnitTest(
-                    name="Admin Create",
-                    expect_match=True,
-                    data=sample_logs.admin_create_admin_admin_create
+                    name="Admin Create", expect_match=True, data=sample_logs.admin_create_admin_admin_create
                 ),
                 detection.JSONUnitTest(
-                    name="Other Event",
-                    expect_match=False,
-                    data=sample_logs.admin_create_admin_other_event
+                    name="Other Event", expect_match=False, data=sample_logs.admin_create_admin_other_event
                 ),
-                
             ]
         ),
         alert_context=duo_alert_context,

@@ -37,19 +37,14 @@ def user_anomalous_push(
                 detection.JSONUnitTest(
                     name="anomalous_push_occurred",
                     expect_match=True,
-                    data=sample_logs.user_anomalous_push_anomalous_push_occurred
+                    data=sample_logs.user_anomalous_push_anomalous_push_occurred,
                 ),
                 detection.JSONUnitTest(
-                    name="good_auth",
-                    expect_match=False,
-                    data=sample_logs.user_anomalous_push_good_auth
+                    name="good_auth", expect_match=False, data=sample_logs.user_anomalous_push_good_auth
                 ),
                 detection.JSONUnitTest(
-                    name="denied_old_creds",
-                    expect_match=False,
-                    data=sample_logs.user_anomalous_push_denied_old_creds
+                    name="denied_old_creds", expect_match=False, data=sample_logs.user_anomalous_push_denied_old_creds
                 ),
-                
             ]
         ),
         alert_context=duo_alert_context_ip,

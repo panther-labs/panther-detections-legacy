@@ -7,6 +7,7 @@ from panther_detections.utils import match_filters
 
 from .. import sample_logs
 
+
 def admin_lockout(
     pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
@@ -39,19 +40,16 @@ def admin_lockout(
                 detection.JSONUnitTest(
                     name="Admin lockout- invalid json",
                     expect_match=True,
-                    data=sample_logs.admin_lockout_admin_lockout__invalid_json
+                    data=sample_logs.admin_lockout_admin_lockout__invalid_json,
                 ),
                 detection.JSONUnitTest(
                     name="Admin lockout- valid json",
                     expect_match=True,
-                    data=sample_logs.admin_lockout_admin_lockout__valid_json
+                    data=sample_logs.admin_lockout_admin_lockout__valid_json,
                 ),
                 detection.JSONUnitTest(
-                    name="Bypass Create",
-                    expect_match=False,
-                    data=sample_logs.admin_lockout_bypass_create
+                    name="Bypass Create", expect_match=False, data=sample_logs.admin_lockout_bypass_create
                 ),
-                
             ]
         ),
         alert_grouping=detection.AlertGrouping(period_minutes=60),

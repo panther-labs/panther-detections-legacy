@@ -5,10 +5,7 @@ from panther_sdk import PantherEvent, detection
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
-from .._shared import (
-    duo_alert_context,
-    deserialize_administrator_log_event_description,
-)
+from .._shared import deserialize_administrator_log_event_description, duo_alert_context
 
 
 def admin_marked_push_fraudulent(
@@ -26,7 +23,9 @@ def admin_marked_push_fraudulent(
         return f"Duo Admin [{admin_username}] denied due to an anomalous 2FA push for [{user_email}]"
 
     def _filter(event: PantherEvent) -> bool:
-        from panther_detections.providers.duo._shared import deserialize_administrator_log_event_description
+        from panther_detections.providers.duo._shared import (
+            deserialize_administrator_log_event_description,
+        )
 
         event_description = deserialize_administrator_log_event_description(event)
         return "fraudulent" in event_description.get("error", "").lower()
@@ -50,16 +49,13 @@ def admin_marked_push_fraudulent(
         unit_tests=(
             [
                 detection.JSONUnitTest(
-                    name="marked_fraud",
-                    expect_match=True,
-                    data=sample_logs.admin_marked_push_fraudulent_marked_fraud
+                    name="marked_fraud", expect_match=True, data=sample_logs.admin_marked_push_fraudulent_marked_fraud
                 ),
                 detection.JSONUnitTest(
                     name="different_admin_action",
                     expect_match=False,
-                    data=sample_logs.admin_marked_push_fraudulent_different_admin_action
+                    data=sample_logs.admin_marked_push_fraudulent_different_admin_action,
                 ),
-                
             ]
         ),
         alert_context=duo_alert_context,

@@ -6,6 +6,7 @@ from panther_detections.utils import match_filters
 
 from .. import sample_logs
 
+
 def admin_bypass_code_viewed(
     pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
@@ -34,16 +35,11 @@ def admin_bypass_code_viewed(
         unit_tests=(
             [
                 detection.JSONUnitTest(
-                    name="Bypass View",
-                    expect_match=True,
-                    data=sample_logs.admin_bypass_code_viewed_bypass_view
+                    name="Bypass View", expect_match=True, data=sample_logs.admin_bypass_code_viewed_bypass_view
                 ),
                 detection.JSONUnitTest(
-                    name="Bypass Create",
-                    expect_match=False,
-                    data=sample_logs.admin_bypass_code_viewed_bypass_create
+                    name="Bypass Create", expect_match=False, data=sample_logs.admin_bypass_code_viewed_bypass_create
                 ),
-                
             ]
         ),
         alert_grouping=detection.AlertGrouping(period_minutes=60),

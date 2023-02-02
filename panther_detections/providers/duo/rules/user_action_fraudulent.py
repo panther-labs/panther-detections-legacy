@@ -36,9 +36,8 @@ def user_action_fraudulent(
                 detection.JSONUnitTest(
                     name="user_marked_fraud",
                     expect_match=True,
-                    data=sample_logs.user_action_fraudulent_user_marked_fraud
+                    data=sample_logs.user_action_fraudulent_user_marked_fraud,
                 ),
-                
             ]
         ),
         alert_context=duo_alert_context_ip,

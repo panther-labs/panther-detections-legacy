@@ -37,39 +37,36 @@ def user_endpoint_failure_multi(
                 detection.JSONUnitTest(
                     name="endpoint_is_not_in_management_system",
                     expect_match=True,
-                    data=sample_logs.user_endpoint_failure_multi_endpoint_is_not_in_management_system
+                    data=sample_logs.user_endpoint_failure_multi_endpoint_is_not_in_management_system,
                 ),
                 detection.JSONUnitTest(
                     name="endpoint_failed_google_verification",
                     expect_match=True,
-                    data=sample_logs.user_endpoint_failure_multi_endpoint_failed_google_verification
+                    data=sample_logs.user_endpoint_failure_multi_endpoint_failed_google_verification,
                 ),
                 detection.JSONUnitTest(
                     name="endpoint_is_not_trusted",
                     expect_match=True,
-                    data=sample_logs.user_endpoint_failure_multi_endpoint_is_not_trusted
+                    data=sample_logs.user_endpoint_failure_multi_endpoint_is_not_trusted,
                 ),
                 detection.JSONUnitTest(
                     name="could_not_determine_if_endpoint_was_trusted",
                     expect_match=True,
-                    data=sample_logs.user_endpoint_failure_multi_could_not_determine_if_endpoint_was_trusted
+                    data=sample_logs.user_endpoint_failure_multi_could_not_determine_if_endpoint_was_trusted,
                 ),
                 detection.JSONUnitTest(
                     name="invalid_device",
                     expect_match=True,
-                    data=sample_logs.user_endpoint_failure_multi_invalid_device
+                    data=sample_logs.user_endpoint_failure_multi_invalid_device,
                 ),
                 detection.JSONUnitTest(
-                    name="good_auth",
-                    expect_match=False,
-                    data=sample_logs.user_endpoint_failure_multi_good_auth
+                    name="good_auth", expect_match=False, data=sample_logs.user_endpoint_failure_multi_good_auth
                 ),
                 detection.JSONUnitTest(
                     name="denied_old_creds",
                     expect_match=False,
-                    data=sample_logs.user_endpoint_failure_multi_denied_old_creds
+                    data=sample_logs.user_endpoint_failure_multi_denied_old_creds,
                 ),
-                
             ]
         ),
         alert_context=duo_alert_context_ip,

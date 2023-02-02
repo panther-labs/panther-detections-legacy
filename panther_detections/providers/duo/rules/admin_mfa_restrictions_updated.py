@@ -35,14 +35,11 @@ def admin_mfa_restrictions_updated(
                 detection.JSONUnitTest(
                     name="Admin MFA Update Event",
                     expect_match=True,
-                    data=sample_logs.admin_mfa_restrictions_updated_admin_mfa_update_event
+                    data=sample_logs.admin_mfa_restrictions_updated_admin_mfa_update_event,
                 ),
                 detection.JSONUnitTest(
-                    name="Login Event",
-                    expect_match=False,
-                    data=sample_logs.admin_mfa_restrictions_updated_login_event
+                    name="Login Event", expect_match=False, data=sample_logs.admin_mfa_restrictions_updated_login_event
                 ),
-                
             ]
         ),
     )

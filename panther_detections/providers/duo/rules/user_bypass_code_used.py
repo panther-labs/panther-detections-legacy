@@ -35,21 +35,14 @@ def user_bypass_code_used(
         unit_tests=(
             [
                 detection.JSONUnitTest(
-                    name="bypass_code_used",
-                    expect_match=True,
-                    data=sample_logs.user_bypass_code_used_bypass_code_used
+                    name="bypass_code_used", expect_match=True, data=sample_logs.user_bypass_code_used_bypass_code_used
                 ),
                 detection.JSONUnitTest(
-                    name="good_auth",
-                    expect_match=False,
-                    data=sample_logs.user_bypass_code_used_good_auth
+                    name="good_auth", expect_match=False, data=sample_logs.user_bypass_code_used_good_auth
                 ),
                 detection.JSONUnitTest(
-                    name="denied_old_creds",
-                    expect_match=False,
-                    data=sample_logs.user_bypass_code_used_denied_old_creds
+                    name="denied_old_creds", expect_match=False, data=sample_logs.user_bypass_code_used_denied_old_creds
                 ),
-                
             ]
         ),
         alert_context=duo_alert_context_ip,

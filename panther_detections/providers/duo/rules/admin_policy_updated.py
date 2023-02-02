@@ -33,16 +33,11 @@ def admin_policy_updated(
         unit_tests=(
             [
                 detection.JSONUnitTest(
-                    name="Policy Update",
-                    expect_match=True,
-                    data=sample_logs.admin_policy_updated_policy_update
+                    name="Policy Update", expect_match=True, data=sample_logs.admin_policy_updated_policy_update
                 ),
                 detection.JSONUnitTest(
-                    name="Other event",
-                    expect_match=False,
-                    data=sample_logs.admin_policy_updated_other_event
+                    name="Other event", expect_match=False, data=sample_logs.admin_policy_updated_other_event
                 ),
-                
             ]
         ),
         alert_context=duo_alert_context,

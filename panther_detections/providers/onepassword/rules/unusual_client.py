@@ -10,12 +10,10 @@ from .._shared import (
     SYSTEM_LOG_TYPE,
     CLIENT_ALLOWLIST,
     create_unusual_client_alert_context,
-    rule_tags
-    )
+    rule_tags,
+)
 
-__all__ = [
-    "unusual_client"
-]
+__all__ = ["unusual_client"]
 
 
 def unusual_client(
@@ -40,10 +38,7 @@ def unusual_client(
         description="Detects when unusual or undesirable 1Password clients access your 1Password account",
         reference="https://1password.com/downloads/",
         runbook="Contact Admin to ensure this was sanctioned activity",
-        filters=(pre_filters or [])
-        + [
-            match_filters.deep_not_in("client.app_name", CLIENT_ALLOWLIST)
-        ],
+        filters=(pre_filters or []) + [match_filters.deep_not_in("client.app_name", CLIENT_ALLOWLIST)],
         alert_title=_title,
         alert_context=create_unusual_client_alert_context,
         summary_attrs=SHARED_SUMMARY_ATTRS,
@@ -60,4 +55,3 @@ def unusual_client(
             ),
         ],
     )
-

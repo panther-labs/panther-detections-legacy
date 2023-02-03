@@ -9,20 +9,15 @@ __all__ = [
     "SHARED_TAGS",
     "SHARED_SUMMARY_ATTRS",
     "create_unusual_client_alert_context",
-    "create_sensitive_item_access_alert_context"
+    "create_sensitive_item_access_alert_context",
 ]
 
 SYSTEM_LOG_TYPE = "OnePassword.SignInAttempt"
 
 
-SHARED_TAGS = [
-    "1Password"
-]
+SHARED_TAGS = ["1Password"]
 
-SHARED_SUMMARY_ATTRS = [
-    "p_any_ip_addresses",
-    "p_any_emails"
-]
+SHARED_SUMMARY_ATTRS = ["p_any_ip_addresses", "p_any_emails"]
 
 
 CLIENT_ALLOWLIST = [
@@ -36,9 +31,7 @@ CLIENT_ALLOWLIST = [
     "1Password for Android",
 ]
 
-SENSITIVE_ITEM_WATCHLIST = {
-    "ecd1d435c26440dc930ddfbbef201a11": "demo_item"
-}
+SENSITIVE_ITEM_WATCHLIST = {"ecd1d435c26440dc930ddfbbef201a11": "demo_item"}
 
 
 def rule_tags(*extra_tags: str) -> List[str]:
@@ -58,6 +51,7 @@ def create_unusual_client_alert_context(event: PantherEvent) -> Dict[str, Any]:
     context["time_seen"] = event.get("timestamp")
 
     return context
+
 
 def create_sensitive_item_access_alert_context(event: PantherEvent) -> Dict[str, Any]:
     """Returns 1Password Sensitive Item Access Context"""

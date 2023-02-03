@@ -10,12 +10,10 @@ from .._shared import (
     SYSTEM_LOG_TYPE,
     SENSITIVE_ITEM_WATCHLIST,
     create_sensitive_item_access_alert_context,
-    rule_tags
-    )
+    rule_tags,
+)
 
-__all__ = [
-    "sensitive_item_access"
-]
+__all__ = ["sensitive_item_access"]
 
 
 def sensitive_item_access(
@@ -32,19 +30,13 @@ def sensitive_item_access(
         name="Sensitive 1Password Item Accessed",
         rule_id="OnePassword.Sensitive.Item",
         log_types=[SYSTEM_LOG_TYPE],
-        tags=rule_tags(
-            "Credential Access:Unsecured Credentials",
-            "Configuration Required"
-        ),
+        tags=rule_tags("Credential Access:Unsecured Credentials", "Configuration Required"),
         reports={detection.ReportKeyMITRE: ["TA0006:T1552"]},
         severity=detection.SeverityLow,
         description="Alerts when a user defined list of sensitive items in 1Password is accessed",
         reference="https://1password.com/downloads/",
         runbook="Contact Admin to ensure this was sanctioned activity",
-        filters=(pre_filters or [])
-        + [
-            match_filters.deep_in("item_uuid", SENSITIVE_ITEM_WATCHLIST)
-        ],
+        filters=(pre_filters or []) + [match_filters.deep_in("item_uuid", SENSITIVE_ITEM_WATCHLIST)],
         alert_title=_title,
         alert_context=create_sensitive_item_access_alert_context,
         summary_attrs=SHARED_SUMMARY_ATTRS,
@@ -61,4 +53,3 @@ def sensitive_item_access(
             ),
         ],
     )
-

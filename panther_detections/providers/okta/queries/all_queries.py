@@ -23,7 +23,7 @@ def activity_audit(
 ) -> query.Query:
     """Audit user activity across your environment. Customize to filter on specfic users, time ranges, etc"""
 
-    sql = """
+    sql = """--sql
       SELECT actor:displayName AS actor_name, actor:alternateId AS actor_email, eventType, COUNT(*) AS activity_count
       FROM panther_logs.public.okta_systemlog
       WHERE p_occurs_since('7 days')
@@ -36,7 +36,7 @@ def activity_audit(
     """
 
     if datalake == "athena":
-        sql = """
+        sql = """--sql
           SELECT actor.displayName AS actor_name, actor.alternateId AS actor_email, eventType, COUNT(*) AS activity_count
           FROM panther_logs.okta_systemlog
           WHERE p_occurs_since('7 days')
@@ -66,7 +66,7 @@ def admin_access_granted(
 ) -> query.Query:
     """Audit instances of admin access granted in your okta tenant"""
 
-    sql = """
+    sql = """--sql
       SELECT 
       p_event_time as event_time,
       actor:alternateId as actor_email,
@@ -95,7 +95,7 @@ def admin_access_granted(
     """
 
     if datalake == "athena":
-        sql = """
+        sql = """--sql
           SELECT 
           p_event_time as event_time,
           actor.alternateid as actor_email,
@@ -138,7 +138,7 @@ def mfa_password_reset_audit(
 ) -> query.Query:
     """Investigate Password and MFA resets for the last 7 days"""
 
-    sql = """
+    sql = """--sql
       SELECT p_event_time,actor:alternateId as actor_user,target[0]:alternateId as target_user, eventType,client:ipAddress as ip_address
       FROM panther_logs.public.okta_systemlog
       WHERE eventType IN ('user.mfa.factor.reset_all', 'user.mfa.factor.deactivate', 'user.mfa.factor.suspend', 'user.account.reset_password', 'user.account.update_password','user.mfa.factor.update')
@@ -149,7 +149,7 @@ def mfa_password_reset_audit(
     """
 
     if datalake == "athena":
-        sql = """
+        sql = """--sql
           SELECT p_event_time,actor.alternateId as actor_user,target[1].alternateId as target_user, eventType,client.ipAddress as ip_address
           FROM panther_logs.okta_systemlog
           WHERE eventType IN ('user.mfa.factor.reset_all', 'user.mfa.factor.deactivate', 'user.mfa.factor.suspend', 'user.account.reset_password', 'user.account.update_password')
@@ -177,7 +177,7 @@ def session_id_audit(
 ) -> query.Query:
     """Search for activity releated to a specific SessionID in Okta panther_logs.okta_systemlog"""
 
-    sql = """
+    sql = """--sql
         SELECT  
           p_event_time as event_time,
           actor:alternateId as actor_email,
@@ -197,7 +197,7 @@ def session_id_audit(
     """
 
     if datalake == "athena":
-        sql = """
+        sql = """--sql
           SELECT  
             p_event_time as event_time,
             actor.alternateId as actor_email,
@@ -235,7 +235,7 @@ def support_access(
 ) -> query.Query:
     """Show instances that Okta support was granted to your account"""
 
-    sql = """
+    sql = """--sql
       SELECT 
       p_event_time as event_time,
       actor:alternateId as actor_email,
@@ -259,7 +259,7 @@ def support_access(
     """
 
     if datalake == "athena":
-        sql = """
+        sql = """--sql
           SELECT 
           p_event_time as event_time,
           actor.alternateid as actor_email,

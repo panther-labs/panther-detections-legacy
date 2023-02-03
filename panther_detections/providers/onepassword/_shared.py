@@ -2,7 +2,6 @@ from typing import Any, Dict, List
 
 from panther_sdk import PantherEvent
 
-
 __all__ = [
     "rule_tags",
     "SYSTEM_LOG_TYPE",

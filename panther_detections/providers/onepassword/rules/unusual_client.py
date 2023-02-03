@@ -6,9 +6,9 @@ from panther_detections.utils import match_filters
 
 from .. import sample_logs
 from .._shared import (
+    CLIENT_ALLOWLIST,
     SHARED_SUMMARY_ATTRS,
     SYSTEM_LOG_TYPE,
-    CLIENT_ALLOWLIST,
     create_unusual_client_alert_context,
     rule_tags,
 )

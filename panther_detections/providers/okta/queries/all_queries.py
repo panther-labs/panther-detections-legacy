@@ -19,6 +19,7 @@ default_query_schedule = query.IntervalSchedule(
 def activity_audit(
     datalake: Literal["athena", "snowflake"],
     overrides: query.QueryOverrides = query.QueryOverrides(),
+    extensions: query.QueryExtensions = query.QueryExtensions(),
 ) -> query.Query:
     """Audit user activity across your environment. Customize to filter on specfic users, time ranges, etc"""
 
@@ -48,20 +49,20 @@ def activity_audit(
         """
 
     return query.Query(
-        name=(overrides.name or "Okta Investigate User Activity"),
-        enabled=(overrides.enabled or True),
-        sql=(overrides.sql or sql),
-        description=(
-            overrides.description
-            or "Audit user activity across your environment. Customize to filter on specfic users, time ranges, etc"
-        ),
-        schedule=(overrides.schedule or default_query_schedule),
+        overrides=overrides,
+        extensions=extensions,
+        name="Okta Investigate User Activity",
+        enabled=True,
+        sql=sql,
+        description="Audit user activity across your environment. Customize to filter on specfic users, time ranges, etc",
+        schedule=default_query_schedule,
     )
 
 
 def admin_access_granted(
     datalake: Literal["athena", "snowflake"],
     overrides: query.QueryOverrides = query.QueryOverrides(),
+    extensions: query.QueryExtensions = query.QueryExtensions(),
 ) -> query.Query:
     """Audit instances of admin access granted in your okta tenant"""
 
@@ -120,17 +121,20 @@ def admin_access_granted(
         """
 
     return query.Query(
-        name=(overrides.name or "Okta Admin Access Granted"),
-        enabled=(overrides.enabled or True),
-        sql=(overrides.sql or sql),
-        description=(overrides.description or "Audit instances of admin access granted in your okta tenant"),
-        schedule=(overrides.schedule or default_query_schedule),
+        overrides=overrides,
+        extensions=extensions,
+        name="Okta Admin Access Granted",
+        enabled=True,
+        sql=sql,
+        description="Audit instances of admin access granted in your okta tenant",
+        schedule=default_query_schedule,
     )
 
 
 def mfa_password_reset_audit(
     datalake: Literal["athena", "snowflake"],
     overrides: query.QueryOverrides = query.QueryOverrides(),
+    extensions: query.QueryExtensions = query.QueryExtensions(),
 ) -> query.Query:
     """Investigate Password and MFA resets for the last 7 days"""
 
@@ -156,17 +160,20 @@ def mfa_password_reset_audit(
         """
 
     return query.Query(
-        name=(overrides.name or "Okta Investigate MFA and Password resets"),
-        enabled=(overrides.enabled or True),
-        sql=(overrides.sql or sql),
-        description=(overrides.description or "Investigate Password and MFA resets for the last 7 days"),
-        schedule=(overrides.schedule or default_query_schedule),
+        overrides=overrides,
+        extensions=extensions,
+        name="Okta Investigate MFA and Password resets",
+        enabled=True,
+        sql=sql,
+        description="Investigate Password and MFA resets for the last 7 days",
+        schedule=default_query_schedule,
     )
 
 
 def session_id_audit(
     datalake: Literal["athena", "snowflake"],
     overrides: query.QueryOverrides = query.QueryOverrides(),
+    extensions: query.QueryExtensions = query.QueryExtensions(),
 ) -> query.Query:
     """Search for activity releated to a specific SessionID in Okta panther_logs.okta_systemlog"""
 
@@ -211,20 +218,20 @@ def session_id_audit(
         """
 
     return query.Query(
-        name=(overrides.name or "Okta Investigate Session ID Activity"),
-        enabled=(overrides.enabled or True),
-        sql=(overrides.sql or sql),
-        description=(
-            overrides.description
-            or "Search for activity releated to a specific SessionID in Okta panther_logs.okta_systemlog"
-        ),
-        schedule=(overrides.schedule or default_query_schedule),
+        overrides=overrides,
+        extensions=extensions,
+        name="Okta Investigate Session ID Activity",
+        enabled=True,
+        sql=sql,
+        description="Search for activity releated to a specific SessionID in Okta panther_logs.okta_systemlog",
+        schedule=default_query_schedule,
     )
 
 
 def support_access(
     datalake: Literal["athena", "snowflake"],
     overrides: query.QueryOverrides = query.QueryOverrides(),
+    extensions: query.QueryExtensions = query.QueryExtensions(),
 ) -> query.Query:
     """Show instances that Okta support was granted to your account"""
 
@@ -275,9 +282,11 @@ def support_access(
         """
 
     return query.Query(
-        name=(overrides.name or "Okta Support Access"),
-        enabled=(overrides.enabled or True),
-        sql=(overrides.sql or sql),
-        description=(overrides.description or "Show instances that Okta support was granted to your account"),
-        schedule=(overrides.schedule or default_query_schedule),
+        overrides=overrides,
+        extensions=extensions,
+        name="Okta Support Access",
+        enabled=True,
+        sql=sql,
+        description="Show instances that Okta support was granted to your account",
+        schedule=default_query_schedule,
     )

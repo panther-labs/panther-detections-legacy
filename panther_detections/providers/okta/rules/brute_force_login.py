@@ -18,6 +18,7 @@ __all__ = ["brute_force_logins"]
 def brute_force_logins(
     pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
+    extensions: detection.RuleExtensions = detection.RuleExtensions(),
 ) -> detection.Rule:
     """A user has failed to login more than 5 times in 15 minutes"""
 
@@ -30,6 +31,7 @@ def brute_force_logins(
 
     return detection.Rule(
         overrides=overrides,
+        extensions=extensions,
         name="--DEPRECATED-- Okta Brute Force Logins",
         rule_id="Okta.BruteForceLogins",
         log_types=[SYSTEM_LOG_TYPE],
@@ -38,8 +40,7 @@ def brute_force_logins(
         description="A user has failed to login more than 5 times in 15 minutes",
         reference="https://developer.okta.com/docs/reference/api/system-log/#user-events",
         runbook="Reach out to the user if needed to validate the activity, and then block the IP",
-        filters=(pre_filters or [])
-        + [
+        filters=[
             match_filters.deep_equal("eventType", "user.session.start"),
             match_filters.deep_equal("outcome.result", "FAILURE"),
         ],

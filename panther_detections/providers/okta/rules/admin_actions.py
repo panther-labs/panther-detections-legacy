@@ -22,6 +22,7 @@ __all__ = [
 def admin_disabled_mfa(
     pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
+    extensions: detection.RuleExtensions = detection.RuleExtensions(),
 ) -> detection.Rule:
     """An admin user has disabled the MFA requirement for your Okta account"""
 
@@ -30,6 +31,7 @@ def admin_disabled_mfa(
 
     return detection.Rule(
         overrides=overrides,
+        extensions=extensions,
         name="Okta MFA Globally Disabled",
         rule_id="Okta.Global.MFA.Disabled",
         log_types=[SYSTEM_LOG_TYPE],
@@ -42,10 +44,7 @@ def admin_disabled_mfa(
         description="An admin user has disabled the MFA requirement for your Okta account",
         reference="https://developer.okta.com/docs/reference/api/event-types/?q=system.mfa.factor.deactivate",
         runbook="Contact Admin to ensure this was sanctioned activity",
-        filters=(pre_filters or [])
-        + [
-            match_filters.deep_equal("eventType", "system.mfa.factor.deactivate"),
-        ],
+        filters=match_filters.deep_equal("eventType", "system.mfa.factor.deactivate"),
         alert_title=_title,
         alert_context=create_alert_context,
         summary_attrs=SHARED_SUMMARY_ATTRS,
@@ -67,13 +66,18 @@ def admin_disabled_mfa(
 def admin_role_assigned(
     pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
+    extensions: detection.RuleExtensions = detection.RuleExtensions(),
 ) -> detection.Rule:
     """A user has been granted administrative privileges in Okta"""
 
     def _title(event: PantherEvent) -> str:
         target = event.get("target", [{}])
-        display_name = target[0].get("displayName", "MISSING DISPLAY NAME") if target else ""
-        alternate_id = target[0].get("alternateId", "MISSING ALTERNATE ID") if target else ""
+        display_name = (
+            target[0].get("displayName", "MISSING DISPLAY NAME") if target else ""
+        )
+        alternate_id = (
+            target[0].get("alternateId", "MISSING ALTERNATE ID") if target else ""
+        )
         privilege = event.deep_get(
             "debugContext",
             "debugData",
@@ -88,12 +92,16 @@ def admin_role_assigned(
         )
 
     def _severity(event: PantherEvent) -> str:
-        if event.deep_get("debugContext", "debugData", "privilegeGranted") == "Super administrator":
+        if (
+            event.deep_get("debugContext", "debugData", "privilegeGranted")
+            == "Super administrator"
+        ):
             return "HIGH"
         return "INFO"
 
     return detection.Rule(
         overrides=overrides,
+        extensions=extensions,
         name="Okta Admin Role Assigned",
         rule_id="Okta.AdminRoleAssigned",
         log_types=[SYSTEM_LOG_TYPE],
@@ -109,11 +117,12 @@ def admin_role_assigned(
         description="A user has been granted administrative privileges in Okta",
         reference="https://help.okta.com/en/prod/Content/Topics/Security/administrators-admin-comparison.htm",
         runbook="Reach out to the user if needed to validate the activity",
-        filters=(pre_filters or [])
-        + [
+        filters=[
             match_filters.deep_equal("eventType", "user.account.privilege.grant"),
             match_filters.deep_equal("outcome.result", "SUCCESS"),
-            match_filters.deep_equal_pattern("debugContext.debugData.privilegeGranted", r"[aA]dministrator"),
+            match_filters.deep_equal_pattern(
+                "debugContext.debugData.privilegeGranted", r"[aA]dministrator"
+            ),
         ],
         alert_title=_title,
         alert_context=create_alert_context,

@@ -22,12 +22,17 @@ __all__ = [
 def api_key_created(
     pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
+    extensions: detection.RuleExtensions = detection.RuleExtensions(),
 ) -> detection.Rule:
     """A user created an API Key in Okta"""
 
     def _title(event: PantherEvent) -> str:
         target = event.get("target", [{}])
-        key_name = target[0].get("displayName", "MISSING DISPLAY NAME") if target else "MISSING TARGET"
+        key_name = (
+            target[0].get("displayName", "MISSING DISPLAY NAME")
+            if target
+            else "MISSING TARGET"
+        )
 
         return (
             f"{event.deep_get('actor', 'displayName')} <{event.deep_get('actor', 'alternateId')}>"
@@ -36,6 +41,7 @@ def api_key_created(
 
     return detection.Rule(
         overrides=overrides,
+        extensions=extensions,
         name="Okta API Key Created",
         rule_id="Okta.APIKeyCreated",
         log_types=[SYSTEM_LOG_TYPE],
@@ -47,8 +53,7 @@ def api_key_created(
         description="A user created an API Key in Okta",
         reference="https://help.okta.com/en/prod/Content/Topics/Security/API.htm",
         runbook="Reach out to the user if needed to validate the activity.",
-        filters=(pre_filters or [])
-        + [
+        filters=[
             match_filters.deep_equal("eventType", "system.api_token.create"),
             match_filters.deep_equal("outcome.result", "SUCCESS"),
         ],
@@ -68,12 +73,17 @@ def api_key_created(
 def api_key_revoked(
     pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
+    extensions: detection.RuleExtensions = detection.RuleExtensions(),
 ) -> detection.Rule:
     """A user has revoked an API Key in Okta"""
 
     def _title(event: PantherEvent) -> str:
         target = event.get("target", [{}])
-        key_name = target[0].get("displayName", "MISSING DISPLAY NAME") if target else "MISSING TARGET"
+        key_name = (
+            target[0].get("displayName", "MISSING DISPLAY NAME")
+            if target
+            else "MISSING TARGET"
+        )
 
         return (
             f"{event.get('actor', {}).get('displayName')} <{event.get('actor', {}).get('alternateId')}>"
@@ -82,6 +92,7 @@ def api_key_revoked(
 
     return detection.Rule(
         overrides=overrides,
+        extensions=extensions,
         name="Okta API Key Revoked",
         rule_id="Okta.APIKeyRevoked",
         log_types=[SYSTEM_LOG_TYPE],
@@ -90,8 +101,7 @@ def api_key_revoked(
         description="A user has revoked an API Key in Okta",
         reference="https://help.okta.com/en/prod/Content/Topics/Security/API.htm",
         runbook="Validate this action was authorized.",
-        filters=(pre_filters or [])
-        + [
+        filters=[
             match_filters.deep_equal("eventType", "system.api_token.revoke"),
             match_filters.deep_equal("outcome.result", "SUCCESS"),
         ],

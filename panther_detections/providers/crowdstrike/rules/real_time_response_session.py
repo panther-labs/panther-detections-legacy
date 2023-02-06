@@ -9,6 +9,7 @@ from .._shared import rule_tags
 
 __all__ = ["real_time_response_session"]
 
+
 def real_time_response_session(
     pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),

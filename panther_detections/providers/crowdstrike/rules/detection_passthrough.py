@@ -29,11 +29,11 @@ def detection_passthrough(
         overrides=overrides,
         name="Crowdstrike Detection Passthrough",
         rule_id="Crowdstrike.Detection.Passthrough",
-        log_types=["Crowdstrike.DetectionSummary"],
+        log_types=["Crowdstrike.DetectionSummary", "Crowdstrike.FDREvent"],
         tags=rule_tags(),
         severity=detection.DynamicStringField(
             func=_severity,
-            fallback=detection.SeverityInfo,
+            fallback=detection.SeverityMedium,
         ),
         description="Crowdstrike Falcon has detected malicious activity on a host.",
         runbook="Follow the Falcon console link and follow the IR process as needed.",

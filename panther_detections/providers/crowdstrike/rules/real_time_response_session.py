@@ -7,6 +7,7 @@ from panther_detections.utils import match_filters
 from .. import sample_logs
 from .._shared import rule_tags
 
+__all__ = ["real_time_response_session"]
 
 def real_time_response_session(
     pre_filters: typing.List[detection.AnyFilter] = None,

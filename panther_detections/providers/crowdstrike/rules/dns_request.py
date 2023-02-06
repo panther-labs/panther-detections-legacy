@@ -32,7 +32,7 @@ def dns_request(
         severity=detection.SeverityCritical,
         description="A DNS request was made to a domain on an explicit denylist",
         reference="https://docs.runpanther.io/data-onboarding/supported-logs/crowdstrike#crowdstrike-dnsrequest",
-        runbook="Filter for host ID in title in Crowdstrike Host Management console to " \
+        runbook="Filter for host ID in title in Crowdstrike Host Management console to "
         "identify the system that queried the domain.",
         filters=(pre_filters or []) + [match_filters.deep_in("DomainName", DOMAIN_DENY_LIST)],
         alert_title=_title,

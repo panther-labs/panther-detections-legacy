@@ -13,7 +13,7 @@ def real_time_response_session(
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
 ) -> detection.Rule:
     """Alert when someone uses Crowdstrike’s RTR (real-time response)
-     capability to access a machine remotely to run commands."""
+    capability to access a machine remotely to run commands."""
 
     def _title(event: PantherEvent) -> str:
 

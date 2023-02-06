@@ -70,9 +70,5 @@ dist/
 #mac files
 .DS_Store
 
-<<<<<<< Updated upstream
-#panther dir
-.panther/
-=======
->>>>>>> Stashed changes
+.panther/*
 panther_content/

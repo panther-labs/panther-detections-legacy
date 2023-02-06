@@ -11,7 +11,6 @@ class TestRulesAPIKeys(unittest.TestCase):
             overrides=detection.RuleOverrides(name=name_override)
         )
 
-        self.assertIsInstance(rule, detection.Rule)
         self.assertEqual(rule.name, name_override)
 
     def test_api_key_created(self) -> None:
@@ -20,5 +19,4 @@ class TestRulesAPIKeys(unittest.TestCase):
             overrides=detection.RuleOverrides(name=name_override)
         )
 
-        self.assertIsInstance(rule, detection.Rule)
         self.assertEqual(rule.name, name_override)

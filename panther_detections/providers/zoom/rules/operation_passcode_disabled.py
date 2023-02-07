@@ -47,10 +47,14 @@ def operation_passcode_disabled(
         unit_tests=(
             [
                 detection.JSONUnitTest(
-                    name="Meeting Passcode Disabled", expect_match=True, data=sample_logs.meeting_passcode_disabled
+                    name="Meeting Passcode Disabled",
+                    expect_match=True,
+                    data=sample_logs.operation_passcode_disabled_meeting_passcode_disabled
                 ),
                 detection.JSONUnitTest(
-                    name="Meeting Passcode Enabled", expect_match=False, data=sample_logs.meeting_passcode_enabled
+                    name="Meeting Passcode Enabled",
+                    expect_match=False,
+                    data=sample_logs.operation_passcode_disabled_meeting_passcode_enabled
                 ),
             ]
         ),

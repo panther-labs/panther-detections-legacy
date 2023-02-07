@@ -1,13 +1,12 @@
 import typing
 
-from panther_sdk import PantherEvent, detection
+from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
 from .._shared import (
     SHARED_SUMMARY_ATTRS,
-    SYSTEM_LOG_TYPE,
     create_alert_context,
     rule_tags,
     standard_tags,
@@ -20,7 +19,6 @@ __all__ = [
 
 
 def admin_disabled_mfa(
-    pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
     extensions: detection.RuleExtensions = detection.RuleExtensions(),
 ) -> detection.Rule:
@@ -34,7 +32,7 @@ def admin_disabled_mfa(
         extensions=extensions,
         name="Okta MFA Globally Disabled",
         rule_id="Okta.Global.MFA.Disabled",
-        log_types=[SYSTEM_LOG_TYPE],
+        log_types=[schema.LogTypeOktaSystemLog],
         tags=rule_tags(
             standard_tags.DATA_MODEL,
             "Defense Evasion:Modify Authentication Process",
@@ -64,7 +62,6 @@ def admin_disabled_mfa(
 
 
 def admin_role_assigned(
-    pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
     extensions: detection.RuleExtensions = detection.RuleExtensions(),
 ) -> detection.Rule:
@@ -104,7 +101,7 @@ def admin_role_assigned(
         extensions=extensions,
         name="Okta Admin Role Assigned",
         rule_id="Okta.AdminRoleAssigned",
-        log_types=[SYSTEM_LOG_TYPE],
+        log_types=[schema.LogTypeOktaSystemLog],
         tags=rule_tags(
             standard_tags.DATA_MODEL,
             "Privilege Escalation:Valid Accounts",

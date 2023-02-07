@@ -1,12 +1,10 @@
 import typing
 
-from panther_core import PantherEvent
-from panther_sdk import detection
+from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.providers.okta import sample_logs
 from panther_detections.providers.okta._shared import (
     SHARED_SUMMARY_ATTRS,
-    SYSTEM_LOG_TYPE,
     create_alert_context,
     rule_tags,
 )
@@ -16,7 +14,6 @@ __all__ = ["brute_force_logins"]
 
 
 def brute_force_logins(
-    pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
     extensions: detection.RuleExtensions = detection.RuleExtensions(),
 ) -> detection.Rule:
@@ -34,7 +31,7 @@ def brute_force_logins(
         extensions=extensions,
         name="--DEPRECATED-- Okta Brute Force Logins",
         rule_id="Okta.BruteForceLogins",
-        log_types=[SYSTEM_LOG_TYPE],
+        log_types=[schema.LogTypeOktaSystemLog],
         tags=rule_tags(),
         severity=detection.SeverityMedium,
         description="A user has failed to login more than 5 times in 15 minutes",

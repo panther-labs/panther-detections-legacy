@@ -1,7 +1,6 @@
 import typing
 
-from panther_core import PantherEvent
-from panther_sdk import detection
+from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters
 
@@ -10,7 +9,6 @@ from .._shared import (
     SHARED_SUMMARY_ATTRS,
     SUPPORT_ACCESS_EVENTS,
     SUPPORT_RESET_EVENTS,
-    SYSTEM_LOG_TYPE,
     create_alert_context,
     rule_tags,
     standard_tags,
@@ -23,7 +21,6 @@ __all__ = [
 
 
 def account_support_access(
-    pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
     extensions: detection.RuleExtensions = detection.RuleExtensions(),
 ) -> detection.Rule:
@@ -37,7 +34,7 @@ def account_support_access(
         extensions=extensions,
         name="Okta Support Access Granted",
         rule_id="Okta.Support.Access",
-        log_types=[SYSTEM_LOG_TYPE],
+        log_types=[schema.LogTypeOktaSystemLog],
         tags=rule_tags(standard_tags.DATA_MODEL, "Initial Access:Trusted Relationship"),
         reports={detection.ReportKeyMITRE: ["TA0001:T1199"]},
         severity=detection.SeverityMedium,
@@ -66,7 +63,6 @@ def account_support_access(
 
 
 def support_reset(
-    pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
     extensions: detection.RuleExtensions = detection.RuleExtensions(),
 ) -> detection.Rule:
@@ -80,7 +76,7 @@ def support_reset(
         extensions=extensions,
         name="Okta Support Reset Credential",
         rule_id="Okta.Support.Reset",
-        log_types=[SYSTEM_LOG_TYPE],
+        log_types=[schema.LogTypeOktaSystemLog],
         tags=rule_tags(standard_tags.DATA_MODEL, "Initial Access:Trusted Relationship"),
         reports={detection.ReportKeyMITRE: ["TA0001:T1199"]},
         severity=detection.SeverityHigh,

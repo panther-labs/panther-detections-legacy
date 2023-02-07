@@ -23,6 +23,7 @@ install:
 
 test: 
 	pipenv run nosetests -v --with-coverage --cover-html --cover-html-dir=htmlcov
+	pipenv run panther_analysis_tool sdk test
 
 docker-build:
 	docker build -t panther-detections .

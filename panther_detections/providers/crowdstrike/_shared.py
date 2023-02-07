@@ -4,12 +4,10 @@ from panther_sdk import PantherEvent
 
 __all__ = [
     "rule_tags",
-    "SYSTEM_LOG_TYPE",
     "SHARED_TAGS",
+    "DOMAIN_DENY_LIST",
     "crowdstrike_alert_context",
 ]
-
-SYSTEM_LOG_TYPE = "Crowdstrike.FDREvent"
 
 DOMAIN_DENY_LIST = [
     "baddomain.com",

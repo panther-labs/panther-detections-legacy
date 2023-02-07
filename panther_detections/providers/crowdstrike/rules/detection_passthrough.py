@@ -1,11 +1,11 @@
 import typing
 
-from panther_sdk import PantherEvent, detection
+from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
-from .._shared import SYSTEM_LOG_TYPE, crowdstrike_alert_context, rule_tags
+from .._shared import crowdstrike_alert_context, rule_tags
 
 __all__ = ["detection_passthrough"]
 
@@ -29,7 +29,7 @@ def detection_passthrough(
         overrides=overrides,
         name="Crowdstrike Detection Passthrough",
         rule_id="Crowdstrike.Detection.Passthrough",
-        log_types=[SYSTEM_LOG_TYPE, "Crowdstrike.DetectionSummary"],
+        log_types=[schema.LogTypeCrowdstrikeFDREvent, schema.LogTypeCrowdstrikeDetectionSummary],
         tags=rule_tags(),
         severity=detection.DynamicStringField(
             func=_severity,

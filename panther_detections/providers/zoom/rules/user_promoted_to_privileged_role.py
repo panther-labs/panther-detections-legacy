@@ -5,7 +5,12 @@ from panther_sdk import PantherEvent, detection
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
-from .._shared import PRIVILEGED_ROLES, extract_values
+from .._shared import (
+    PRIVILEGED_ROLES, 
+    SYSTEM_LOG_TYPE,
+    extract_values,
+    rule_tags
+)
 
 __all__ = ["user_promoted_to_privileged_role"]
 
@@ -30,8 +35,9 @@ def user_promoted_to_privileged_role(
         overrides=overrides,
         name="Zoom User Promoted to Privileged Role",
         rule_id="Zoom.User.Promoted.to.Privileged.Role",
-        log_types=["Zoom.Operation"],
+        log_types=SYSTEM_LOG_TYPE,
         severity=detection.SeverityMedium,
+        tags=rule_tags(),
         description="A Zoom user was promoted to a privileged role.",
         alert_title=_title,
         threshold=1,

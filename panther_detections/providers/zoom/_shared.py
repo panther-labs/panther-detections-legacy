@@ -6,6 +6,7 @@ from panther_detections.utils import standard_tags
 
 __all__ = [
     "PRIVILEGED_ROLES",
+    "SYSTEM_LOG_TYPE",
     "get_zoom_user_context",
     "get_zoom_usergroup_context",
     "get_zoom_room_context",
@@ -14,6 +15,14 @@ __all__ = [
 
 PRIVILEGED_ROLES = ("Admin", "Co-Owner", "Owner", "Billing Admin")
 
+SYSTEM_LOG_TYPE = "Zoom.Operation"
+
+SHARED_TAGS = [
+    "Zoom",
+]
+
+def rule_tags(*extra_tags: str) -> List[str]:
+    return [*SHARED_TAGS, *extra_tags]
 
 def get_zoom_user_context(event: PantherEvent):
     """

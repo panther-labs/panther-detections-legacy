@@ -5,6 +5,10 @@ from panther_sdk import PantherEvent, detection
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
+from .._shared import (
+    rule_tags,
+    SYSTEM_LOG_TYPE
+)
 
 __all__ = ["automatic_sign_out_disabled"]
 
@@ -25,8 +29,9 @@ def automatic_sign_out_disabled(
         overrides=overrides,
         name="Zoom Automatic Sign Out Disabled",
         rule_id="Zoom.Automatic.Sign.Out.Disabled",
-        log_types=["Zoom.Operation"],
+        log_types=SYSTEM_LOG_TYPE,
         severity=detection.SeverityMedium,
+        tags=rule_tags(),
         description="A Zoom User turned off your organization's setting to automatically sign users out after a specified period of time.",
         reference="https://support.zoom.us/hc/en-us/articles/115005756143-Changing-account-security-settings#:~:text=Users%20need%20to%20sign%20in,of%205%20to%20120%20minutes",
         runbook="Confirm this user acted with valid business intent and determine whether this activity was authorized.",

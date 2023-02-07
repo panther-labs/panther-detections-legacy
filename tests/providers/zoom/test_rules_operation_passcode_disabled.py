@@ -20,6 +20,3 @@ class TestRulesOperationPasscodeDisabled(unittest.TestCase):
         title = rule.alert_title(evt) #type: ignore
 
         self.assertEqual(title, "Group Springfield passcode requirement disabled by homer@panther.io")
-    
-    
-    

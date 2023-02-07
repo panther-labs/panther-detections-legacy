@@ -20,4 +20,4 @@ class TestRulesAllMeetingsSecuredWithOneOptionDisabled(unittest.TestCase):
         title = rule.alert_title(evt) #type: ignore
 
         self.assertEqual(title, "Zoom User [example@example.io] turned off your organization's requirement to secure all meetings with one security option.")
-    
+

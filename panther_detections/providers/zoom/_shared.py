@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Dict, Any
 
 from panther_sdk import PantherEvent
 
@@ -21,7 +21,7 @@ def rule_tags(*extra_tags: str) -> List[str]:
     return [*SHARED_TAGS, *extra_tags]
 
 
-def get_zoom_user_context(event: PantherEvent):
+def get_zoom_user_context(event: PantherEvent) -> Dict[str, Any]:
     """
     Parses the operation_detail field of Zoom.Operation events related to Users
     to provide usable fields for use in detections
@@ -46,7 +46,7 @@ def get_zoom_user_context(event: PantherEvent):
     return operation_context
 
 
-def get_zoom_usergroup_context(event: PantherEvent):
+def get_zoom_usergroup_context(event: PantherEvent) -> Dict[str, Any]:
     """
     Parses the operation_detail field of Zoom.Operation events related to User Groups
     to provide usable fields for use in detections
@@ -72,7 +72,7 @@ def get_zoom_usergroup_context(event: PantherEvent):
     return operation_context
 
 
-def get_zoom_room_context(event: PantherEvent):
+def get_zoom_room_context(event: PantherEvent) -> Dict[str, Any]:
     """
     Parses the operation_detail field of Zoom.Operation events related to Zoom Meeting Rooms
     to provide usable fields for use in detections

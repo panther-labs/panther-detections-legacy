@@ -20,4 +20,4 @@ class TestRulesAutomaticSignOutDisabled(unittest.TestCase):
         title = rule.alert_title(evt) #type: ignore
 
         self.assertEqual(title, "Zoom User [example@example.io] turned off your organization's setting to automatically sign users out after a specified time.")
-    
+

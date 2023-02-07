@@ -20,5 +20,3 @@ class TestRulesUserPromotedToPrivilegedRole(unittest.TestCase):
         title = rule.alert_title(evt) #type: ignore
 
         self.assertEqual(title, "Zoom: [homer.simpson@duff.io]'s role was changed from [User] to [Co-Owner] by [admin@duff.io].")
-    
-#

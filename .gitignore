@@ -69,3 +69,6 @@ dist/
 
 #mac files
 .DS_Store
+
+.panther/*
+panther_content/

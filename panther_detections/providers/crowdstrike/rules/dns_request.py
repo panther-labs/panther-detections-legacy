@@ -5,11 +5,7 @@ from panther_sdk import PantherEvent, detection, schema
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
-from .._shared import (
-    DOMAIN_DENY_LIST,
-    crowdstrike_alert_context,
-    rule_tags,
-)
+from .._shared import DOMAIN_DENY_LIST, crowdstrike_alert_context, rule_tags
 
 __all__ = ["dns_request"]
 

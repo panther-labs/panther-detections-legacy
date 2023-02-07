@@ -17,8 +17,12 @@ def operation_passcode_disabled(
     def _title(event: PantherEvent) -> str:
         context = get_zoom_usergroup_context(event)
         return f"Group {context['GroupName']} passcode requirement disabled by {event.get('operator')}"
+        context = get_zoom_usergroup_context(event)
+        return f"Group {context['GroupName']} passcode requirement disabled by {event.get('operator')}"
 
-    def _filter_func(event: PantherEvent) -> bool:
+    def _filter(event: PantherEvent) -> bool:
+        from panther_detections.providers.zoom._shared import get_zoom_usergroup_context
+
         context = get_zoom_usergroup_context(event)
         return "Passcode" in context["Change"] and context["DisabledSetting"]
 
@@ -36,7 +40,10 @@ def operation_passcode_disabled(
         alert_title=_title,
         summary_attrs=["p_any_emails"],
         filters=(pre_filters or [])
-        + [match_filters.deep_equal("category_type", "User Group"), detection.PythonFilter(func=_filter_func)],
+        + [
+            match_filters.deep_equal("category_type", "User Group"),
+            detection.PythonFilter(func=_filter)
+        ],
         unit_tests=(
             [
                 detection.JSONUnitTest(

@@ -18,7 +18,8 @@ def operation_user_granted_admin_deprecated(
         context = get_zoom_user_context(event)
         return f"Zoom User {context['User']} was made an admin by {event.get('operator')}"
 
-    def _filter_func(event: PantherEvent) -> bool:
+    def _filter(event: PantherEvent) -> bool:
+        from panther_detections.providers.zoom._shared import get_zoom_user_context
         context = get_zoom_user_context(event)
         return "Member to Admin" in context["Change"]
 
@@ -38,9 +39,9 @@ def operation_user_granted_admin_deprecated(
         summary_attrs=["p_any_emails"],
         filters=(pre_filters or [])
         + [
-            match_filters.deep_equal("Action", "Update"),
+            match_filters.deep_equal("action", "Update"),
             match_filters.deep_equal("category_type", "User"),
-            detection.PythonFilter(func=_filter_func),
+            detection.PythonFilter(func=_filter)
         ],
         unit_tests=(
             [

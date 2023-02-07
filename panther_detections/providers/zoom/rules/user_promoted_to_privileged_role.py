@@ -5,13 +5,10 @@ from panther_sdk import PantherEvent, detection
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
-
-# from .._shared import (
-#     create_alert_context,
-#     rule_tags,
-#     standard_tags,
-# )
-
+from .._shared import (
+    extract_values,
+    PRIVILEGED_ROLES
+)
 
 def user_promoted_to_privileged_role(
     pre_filters: typing.List[detection.AnyFilter] = None,
@@ -19,25 +16,12 @@ def user_promoted_to_privileged_role(
 ) -> detection.Rule:
     """A Zoom user was promoted to a privileged role."""
 
-    import re
-
-    PRIVILEGED_ROLES = ("Admin", "Co-Owner", "Owner", "Billing Admin")
-
-    def extract_values(event: PantherEvent):
-        operator = event.get("operator", "<operator-not-found>")
-        operation_detail = event.get("operation_detail", "")
-        email = re.search(r"[\w.+-c]+@[\w-]+\.[\w.-]+", operation_detail)[0] or "<email-not-found>"
-        fromto = re.findall(r"from ([-\s\w]+) to ([-\s\w]+)", operation_detail) or [
-            ("<from-role-not-found>", "<to-role-not-found>")
-        ]
-        from_role, to_role = fromto[0] or ("<role-not-found>", "<role-not-found>")
-        return operator, email, from_role, to_role
-
     def _title(event: PantherEvent) -> str:
         operator, email, from_role, to_role = extract_values(event)
         return f"Zoom: [{email}]'s role was changed from [{from_role}] " f"to [{to_role}] by [{operator}]."
 
     def _filter(event: PantherEvent) -> bool:
+        from panther_detections.providers.zoom._shared import extract_values
         _, _, from_role, to_role = extract_values(event)
         return to_role in PRIVILEGED_ROLES and from_role not in PRIVILEGED_ROLES
 
@@ -53,8 +37,8 @@ def user_promoted_to_privileged_role(
         alert_grouping=detection.AlertGrouping(period_minutes=60),
         filters=(pre_filters or [])
         + [
-            match_filters.deep_equal_pattern("action", "Update"),
-            match_filters.deep_equal_pattern("operational_detail", "^Change Role"),
+            match_filters.deep_equal_pattern("action", pattern=".+Update"),
+            match_filters.deep_equal_pattern("operation_detail", pattern="Change Role.+"),
             match_filters.deep_equal("category_type", "User"),
             detection.PythonFilter(func=_filter)
         ],

@@ -17,7 +17,7 @@ class TestRulesAllMeetingsSecuredWithOneOptionDisabled(unittest.TestCase):
         rule = zoom.rules.all_meetings_secured_with_one_option_disabled()
         evt = PantherEvent(json.loads(zoom.sample_logs.all_meetings_secured_with_one_option_disabled_turn_off))
 
-        title = rule.alert_title(evt)
+        title = rule.alert_title(evt) #type: ignore
 
         self.assertEqual(title, "Zoom User [example@example.io] turned off your organization's requirement to secure all meetings with one security option.")
     

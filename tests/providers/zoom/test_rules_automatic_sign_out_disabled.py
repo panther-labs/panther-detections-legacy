@@ -17,7 +17,7 @@ class TestRulesAutomaticSignOutDisabled(unittest.TestCase):
         rule = zoom.rules.automatic_sign_out_disabled()
         evt = PantherEvent(json.loads(zoom.sample_logs.automatic_sign_out_disabled_automatic_signout_setting_disabled))
 
-        title = rule.alert_title(evt)
+        title = rule.alert_title(evt) #type: ignore
 
         self.assertEqual(title, "Zoom User [example@example.io] turned off your organization's setting to automatically sign users out after a specified time.")
     

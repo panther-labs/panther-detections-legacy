@@ -17,7 +17,7 @@ class TestRulesOperationPasscodeDisabled(unittest.TestCase):
         rule = zoom.rules.operation_passcode_disabled()
         evt = PantherEvent(json.loads(zoom.sample_logs.operation_passcode_disabled_meeting_passcode_disabled))
 
-        title = rule.alert_title(evt)
+        title = rule.alert_title(evt) #type: ignore
 
         self.assertEqual(title, "Group Springfield passcode requirement disabled by homer@panther.io")
     

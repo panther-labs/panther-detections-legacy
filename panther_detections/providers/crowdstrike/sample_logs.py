@@ -39,7 +39,7 @@ low_severity_finding = json.dumps(
         "PatternDispositionValue": 2176,
         "DetectId": "ldt:00000000000000000000000000000000:222222222222222222",
         "Severity": 2,
-        "PatternDispositionDescription": "Prevention/Quarantine, process was blocked from execution and quarantine was attempted.",
+        "PatternDispositionDescription": "Prevention/Quarantine, process was blocked from execution and quarantine was attempted.",  # pylint: disable=C0301
         "SeverityName": "Low",
         "MD5String": "33333333333333333333333333333333",
         "EventUUID": "33333333333333333333333333333333",
@@ -55,7 +55,7 @@ low_severity_finding = json.dumps(
         "GrandparentImageFileName": "/sbin/launchd",
         "MachineDomain": "",
         "ParentImageFileName": "/usr/libexec/runningboardd",
-        "FalconHostLink": "https://falcon.us-2.crowdstrike.com/activity/detections/detail/00000000000000000000000000000000/222222222222222222?",
+        "FalconHostLink": "https://falcon.us-2.crowdstrike.com/activity/detections/detail/00000000000000000000000000000000/222222222222222222?",  # pylint: disable=C0301
         "UTCTimestamp": "2021-09-18 20:38:52Z",
         "FileName": "pup app",
         "ParentProcessId": 376330001421757630,
@@ -64,7 +64,7 @@ low_severity_finding = json.dumps(
         "Tactic": "Malware",
         "SensorId": "00000000000000000000000000000000",
         "eid": 118,
-        "PatternDispositionFlags": '{\n  "BlockingUnsupportedOrDisabled": false,\n  "BootupSafeguardEnabled": false,\n  "CriticalProcessDisabled": false,\n  "Detect": false,\n  "FsOperationBlocked": false,\n  "HandleOperationDowngraded": false,\n  "InddetMask": false,\n  "Indicator": false,\n  "KillActionFailed": false,\n  "KillParent": false,\n  "KillProcess": false,\n  "KillSubProcess": false,\n  "OperationBlocked": false,\n  "PolicyDisabled": false,\n  "ProcessBlocked": true,\n  "QuarantineFile": true,\n  "QuarantineMachine": false,\n  "RegistryOperationBlocked": false,\n  "Rooting": false,\n  "SensorOnly": false,\n  "SuspendParent": false,\n  "SuspendProcess": false\n}',
+        "PatternDispositionFlags": '{\n  "BlockingUnsupportedOrDisabled": false,\n  "BootupSafeguardEnabled": false,\n  "CriticalProcessDisabled": false,\n  "Detect": false,\n  "FsOperationBlocked": false,\n  "HandleOperationDowngraded": false,\n  "InddetMask": false,\n  "Indicator": false,\n  "KillActionFailed": false,\n  "KillParent": false,\n  "KillProcess": false,\n  "KillSubProcess": false,\n  "OperationBlocked": false,\n  "PolicyDisabled": false,\n  "ProcessBlocked": true,\n  "QuarantineFile": true,\n  "QuarantineMachine": false,\n  "RegistryOperationBlocked": false,\n  "Rooting": false,\n  "SensorOnly": false,\n  "SuspendParent": false,\n  "SuspendProcess": false\n}',  # pylint: disable=C0301
     }
 )
 rts_session_not_started = json.dumps(
@@ -114,7 +114,10 @@ denylisted_domain = json.dumps(
         "p_source_label": "Crowdstrike",
         "p_any_ip_addresses": ["111.111.111.111"],
         "p_any_domain_names": ["baddomain.com"],
-        "p_any_trace_ids": ["00000000000000000000000000000001", "00000000000000000000000000000002"],
+        "p_any_trace_ids": [
+            "00000000000000000000000000000001",
+            "00000000000000000000000000000002",
+        ],
     }
 )
 non_denylisted_domain = json.dumps(
@@ -144,6 +147,9 @@ non_denylisted_domain = json.dumps(
         "p_source_label": "Crowdstrike",
         "p_any_ip_addresses": ["111.111.111.111"],
         "p_any_domain_names": ["gooddomain.com"],
-        "p_any_trace_ids": ["00000000000000000000000000000001", "00000000000000000000000000000002"],
+        "p_any_trace_ids": [
+            "00000000000000000000000000000001",
+            "00000000000000000000000000000002",
+        ],
     }
 )

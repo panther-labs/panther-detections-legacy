@@ -14,6 +14,7 @@ __all__ = [
 
 PRIVILEGED_ROLES = ("Admin", "Co-Owner", "Owner", "Billing Admin")
 
+
 def get_zoom_user_context(event: PantherEvent):
     """
     Parses the operation_detail field of Zoom.Operation events related to Users
@@ -88,6 +89,7 @@ def get_zoom_room_context(event: PantherEvent):
 
 def extract_values(event):
     import re
+
     operator = event.get("operator", "<operator-not-found>")
     operation_detail = event.get("operation_detail", "")
     email = re.search(r"[\w.+-c]+@[\w-]+\.[\w.-]+", operation_detail)[0] or "<email-not-found>"
@@ -96,5 +98,3 @@ def extract_values(event):
     ]
     from_role, to_role = fromto[0] or ("<role-not-found>", "<role-not-found>")
     return operator, email, from_role, to_role
-
-

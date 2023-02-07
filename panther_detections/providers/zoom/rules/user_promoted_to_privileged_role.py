@@ -5,14 +5,10 @@ from panther_sdk import PantherEvent, detection
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
-from .._shared import (
-    extract_values,
-    PRIVILEGED_ROLES
-)
+from .._shared import PRIVILEGED_ROLES, extract_values
 
-__all__ = [
-    "user_promoted_to_privileged_role"
-]
+__all__ = ["user_promoted_to_privileged_role"]
+
 
 def user_promoted_to_privileged_role(
     pre_filters: typing.List[detection.AnyFilter] = None,
@@ -21,13 +17,12 @@ def user_promoted_to_privileged_role(
     """A Zoom user was promoted to a privileged role."""
 
     def _title(event: PantherEvent) -> str:
-       operator, email, from_role, to_role = extract_values(event)
-       return (
-           f"Zoom: [{email}]'s role was changed from [{from_role}] to [{to_role}] by [{operator}]."
-       )
+        operator, email, from_role, to_role = extract_values(event)
+        return f"Zoom: [{email}]'s role was changed from [{from_role}] to [{to_role}] by [{operator}]."
 
     def _filter(event: PantherEvent) -> bool:
         from panther_detections.providers.zoom._shared import extract_values
+
         _, _, from_role, to_role = extract_values(event)
         return to_role in PRIVILEGED_ROLES and from_role not in PRIVILEGED_ROLES
 
@@ -46,46 +41,45 @@ def user_promoted_to_privileged_role(
             match_filters.deep_equal_pattern("action", pattern=".+Update"),
             match_filters.deep_equal_pattern("operation_detail", pattern="Change Role.+"),
             match_filters.deep_equal("category_type", "User"),
-            detection.PythonFilter(func=_filter)
+            detection.PythonFilter(func=_filter),
         ],
         unit_tests=(
             [
                 detection.JSONUnitTest(
                     name="Admin Promotion Event",
                     expect_match=True,
-                    data=sample_logs.user_promoted_to_privileged_role_admin_promotion_event
+                    data=sample_logs.user_promoted_to_privileged_role_admin_promotion_event,
                 ),
                 detection.JSONUnitTest(
                     name="Admin to Admin",
                     expect_match=False,
-                    data=sample_logs.user_promoted_to_privileged_role_admin_to_admin
+                    data=sample_logs.user_promoted_to_privileged_role_admin_to_admin,
                 ),
                 detection.JSONUnitTest(
                     name="Admin to Billing Admin",
                     expect_match=False,
-                    data=sample_logs.user_promoted_to_privileged_role_admin_to_billing_admin
+                    data=sample_logs.user_promoted_to_privileged_role_admin_to_billing_admin,
                 ),
                 detection.JSONUnitTest(
                     name="Member to Billing Admin Event",
                     expect_match=True,
-                    data=sample_logs.user_promoted_to_privileged_role_member_to_billing_admin_event
+                    data=sample_logs.user_promoted_to_privileged_role_member_to_billing_admin_event,
                 ),
                 detection.JSONUnitTest(
                     name="Admin to User",
                     expect_match=False,
-                    data=sample_logs.user_promoted_to_privileged_role_admin_to_user
+                    data=sample_logs.user_promoted_to_privileged_role_admin_to_user,
                 ),
                 detection.JSONUnitTest(
                     name="CoOwner to Admin",
                     expect_match=False,
-                    data=sample_logs.user_promoted_to_privileged_role_coowner_to_admin
+                    data=sample_logs.user_promoted_to_privileged_role_coowner_to_admin,
                 ),
                 detection.JSONUnitTest(
                     name="Other Event",
                     expect_match=False,
-                    data=sample_logs.user_promoted_to_privileged_role_other_event
+                    data=sample_logs.user_promoted_to_privileged_role_other_event,
                 ),
-                
             ]
         ),
     )

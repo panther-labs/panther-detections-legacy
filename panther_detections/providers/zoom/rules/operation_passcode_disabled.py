@@ -7,9 +7,8 @@ from panther_detections.utils import match_filters
 from .. import sample_logs
 from .._shared import get_zoom_usergroup_context
 
-__all__ = [
-    "operation_passcode_disabled"
-]
+__all__ = ["operation_passcode_disabled"]
+
 
 def operation_passcode_disabled(
     pre_filters: typing.List[detection.AnyFilter] = None,
@@ -41,21 +40,18 @@ def operation_passcode_disabled(
         alert_title=_title,
         summary_attrs=["p_any_emails"],
         filters=(pre_filters or [])
-        + [
-            match_filters.deep_equal("category_type", "User Group"),
-            detection.PythonFilter(func=_filter)
-        ],
+        + [match_filters.deep_equal("category_type", "User Group"), detection.PythonFilter(func=_filter)],
         unit_tests=(
             [
                 detection.JSONUnitTest(
                     name="Meeting Passcode Disabled",
                     expect_match=True,
-                    data=sample_logs.operation_passcode_disabled_meeting_passcode_disabled
+                    data=sample_logs.operation_passcode_disabled_meeting_passcode_disabled,
                 ),
                 detection.JSONUnitTest(
                     name="Meeting Passcode Enabled",
                     expect_match=False,
-                    data=sample_logs.operation_passcode_disabled_meeting_passcode_enabled
+                    data=sample_logs.operation_passcode_disabled_meeting_passcode_enabled,
                 ),
             ]
         ),

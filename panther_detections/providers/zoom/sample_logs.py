@@ -83,7 +83,7 @@ all_meetings_secured_with_one_option_disabled_turn_off = json.dumps(
     {
         "action": "Update",
         "category_type": "Account",
-        "operation_detail": "Security  - Require that all meetings are secured with one security option: from On to Off",
+        "operation_detail": "Security  - Require that all meetings are secured with one security option: from On to Off",  # pylint: disable=C0301
         "operator": "example@example.io",
         "time": "2022-12-16 18:15:38",
     }
@@ -92,7 +92,7 @@ all_meetings_secured_with_one_option_disabled_turn_on = json.dumps(
     {
         "action": "Update",
         "category_type": "Account",
-        "operation_detail": "Security  - Require that all meetings are secured with one security option: from Off to On",
+        "operation_detail": "Security  - Require that all meetings are secured with one security option: from Off to On",  # pylint: disable=C0301
         "operator": "example@example.io",
         "time": "2022-12-16 18:15:38",
     }
@@ -118,7 +118,7 @@ automatic_sign_out_disabled_meeting_setting_disabled = json.dumps(
     {
         "action": "Update",
         "category_type": "Account",
-        "operation_detail": "Security  - Require that all meetings are secured with one security option: from On to Off",
+        "operation_detail": "Security  - Require that all meetings are secured with one security option: from On to Off",  # pylint: disable=C0301
         "operator": "example@example.io",
         "time": "2022-12-16 18:15:38",
     }

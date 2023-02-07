@@ -29,8 +29,10 @@ def all_meetings_secured_with_one_option_disabled(
         log_types=SYSTEM_LOG_TYPE,
         severity=detection.SeverityMedium,
         tags=rule_tags(),
-        description="A Zoom User turned off your organization's requirement that all meetings are secured with one security option.",
-        runbook="Confirm this user acted with valid business intent and determine whether this activity was authorized.",
+        description="A Zoom User turned off your organization's requirement that all meetings"
+        " are secured with one security option.",
+        runbook="Confirm this user acted with valid business intent and determine whether this"
+        " activity was authorized.",
         alert_title=_title,
         threshold=1,
         alert_grouping=detection.AlertGrouping(period_minutes=60),

@@ -21,7 +21,9 @@ def user_promoted_to_privileged_role(
         return f"Zoom: [{email}]'s role was changed from [{from_role}] to [{to_role}] by [{operator}]."
 
     def _filter(event: PantherEvent) -> bool:
-        from panther_detections.providers.zoom._shared import extract_values
+        from panther_detections.providers.zoom._shared import (  # pylint: disable=W0621
+            extract_values,
+        )
 
         _, _, from_role, to_role = extract_values(event)
         return to_role in PRIVILEGED_ROLES and from_role not in PRIVILEGED_ROLES

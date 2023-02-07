@@ -14,7 +14,8 @@ def automatic_sign_out_disabled(
     pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
 ) -> detection.Rule:
-    """A Zoom User turned off your organization's setting to automatically sign users out after a specified period of time."""
+    """A Zoom User turned off your organization's setting to automatically
+    sign users out after a specified period of time."""
 
     def _title(event: PantherEvent) -> str:
         return (
@@ -29,9 +30,12 @@ def automatic_sign_out_disabled(
         log_types=SYSTEM_LOG_TYPE,
         severity=detection.SeverityMedium,
         tags=rule_tags(),
-        description="A Zoom User turned off your organization's setting to automatically sign users out after a specified period of time.",
-        reference="https://support.zoom.us/hc/en-us/articles/115005756143-Changing-account-security-settings#:~:text=Users%20need%20to%20sign%20in,of%205%20to%20120%20minutes",
-        runbook="Confirm this user acted with valid business intent and determine whether this activity was authorized.",
+        description="A Zoom User turned off your organization's setting to automatically sign users out "
+        "after a specified period of time.",
+        reference="https://support.zoom.us/hc/en-us/articles/115005756143-Changing-account-security-settings#"
+        ":~:text=Users%20need%20to%20sign%20in,of%205%20to%20120%20minutes",
+        runbook="Confirm this user acted with valid business intent and determine whether this activity "
+        "was authorized.",
         alert_title=_title,
         threshold=1,
         alert_grouping=detection.AlertGrouping(period_minutes=60),

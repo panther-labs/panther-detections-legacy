@@ -21,7 +21,9 @@ def operation_passcode_disabled(
         return f"Group {context['GroupName']} passcode requirement disabled by {event.get('operator')}"
 
     def _filter(event: PantherEvent) -> bool:
-        from panther_detections.providers.zoom._shared import get_zoom_usergroup_context
+        from panther_detections.providers.zoom._shared import (  # pylint: disable=W0621
+            get_zoom_usergroup_context,
+        )
 
         context = get_zoom_usergroup_context(event)
         return "Passcode" in context["Change"] and context["DisabledSetting"]

@@ -5,7 +5,7 @@ from panther_sdk import PantherEvent, detection
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
-from .._shared import rule_tags, SYSTEM_LOG_TYPE
+from .._shared import SYSTEM_LOG_TYPE, rule_tags
 
 __all__ = ["real_time_response_session"]
 

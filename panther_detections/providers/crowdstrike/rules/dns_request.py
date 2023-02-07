@@ -5,7 +5,12 @@ from panther_sdk import PantherEvent, detection
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
-from .._shared import DOMAIN_DENY_LIST, SYSTEM_LOG_TYPE, crowdstrike_alert_context, rule_tags
+from .._shared import (
+    DOMAIN_DENY_LIST,
+    SYSTEM_LOG_TYPE,
+    crowdstrike_alert_context,
+    rule_tags,
+)
 
 __all__ = ["dns_request"]
 

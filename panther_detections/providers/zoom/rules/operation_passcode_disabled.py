@@ -1,11 +1,11 @@
 import typing
 
-from panther_sdk import PantherEvent, detection
+from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
-from .._shared import SYSTEM_LOG_TYPE, get_zoom_usergroup_context, rule_tags
+from .._shared import get_zoom_usergroup_context, rule_tags
 
 __all__ = ["operation_passcode_disabled"]
 
@@ -32,7 +32,7 @@ def operation_passcode_disabled(
         overrides=overrides,
         name="Zoom Meeting Passcode Disabled",
         rule_id="Zoom.PasscodeDisabled",
-        log_types=SYSTEM_LOG_TYPE,
+        log_types=schema.LogTypeZoomOperation,
         severity=detection.SeverityLow,
         description="Meeting passcode requirement has been disabled from usergroup",
         tags=rule_tags("Collection:Video Capture"),

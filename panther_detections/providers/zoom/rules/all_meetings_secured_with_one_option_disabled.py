@@ -1,11 +1,11 @@
 import typing
 
-from panther_sdk import PantherEvent, detection
+from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
-from .._shared import SYSTEM_LOG_TYPE, rule_tags
+from .._shared import rule_tags
 
 __all__ = ["all_meetings_secured_with_one_option_disabled"]
 
@@ -26,7 +26,7 @@ def all_meetings_secured_with_one_option_disabled(
         overrides=overrides,
         name="Zoom All Meetings Secured With One Option Disabled",
         rule_id="Zoom.All.Meetings.Secured.With.One.Option.Disabled",
-        log_types=SYSTEM_LOG_TYPE,
+        log_types=schema.LogTypeZoomOperation,
         severity=detection.SeverityMedium,
         tags=rule_tags(),
         description="A Zoom User turned off your organization's requirement that all meetings"

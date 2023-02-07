@@ -4,7 +4,6 @@ from panther_sdk import PantherEvent
 
 __all__ = [
     "PRIVILEGED_ROLES",
-    "SYSTEM_LOG_TYPE",
     "get_zoom_user_context",
     "get_zoom_usergroup_context",
     "get_zoom_room_context",
@@ -12,8 +11,6 @@ __all__ = [
 ]
 
 PRIVILEGED_ROLES = ("Admin", "Co-Owner", "Owner", "Billing Admin")
-
-SYSTEM_LOG_TYPE = "Zoom.Operation"
 
 SHARED_TAGS = [
     "Zoom",

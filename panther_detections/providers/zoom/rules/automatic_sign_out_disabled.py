@@ -6,12 +6,6 @@ from panther_detections.utils import match_filters
 
 from .. import sample_logs
 
-# from .._shared import (
-#     create_alert_context,
-#     rule_tags,
-#     standard_tags,
-# )
-
 __all__ = ["automatic_sign_out_disabled"]
 
 

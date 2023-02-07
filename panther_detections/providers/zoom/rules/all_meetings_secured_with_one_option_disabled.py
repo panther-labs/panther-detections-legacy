@@ -6,12 +6,6 @@ from panther_detections.utils import match_filters
 
 from .. import sample_logs
 
-# from .._shared import (
-#     create_alert_context,
-#     rule_tags,
-#     standard_tags,
-# )
-
 __all__ = ["all_meetings_secured_with_one_option_disabled"]
 
 

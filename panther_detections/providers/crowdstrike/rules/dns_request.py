@@ -33,7 +33,7 @@ def dns_request(
         name="DNS request to denylisted domain",
         rule_id="Crowdstrike.DNS.Request",
         enabled=False,
-        log_types=SYSTEM_LOG_TYPE + ["Crowdstrike.DNSRequest"],
+        log_types=[SYSTEM_LOG_TYPE, "Crowdstrike.DNSRequest"],
         tags=rule_tags("Initial Access:Phishing"),
         reports={"MITRE ATT&CK": ["TA0001:T1566"]},
         severity=detection.SeverityCritical,

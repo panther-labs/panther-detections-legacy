@@ -35,7 +35,7 @@ def real_time_response_session(
         overrides=overrides,
         name="Crowdstrike Real Time Response (RTS) Session",
         rule_id="Crowdstrike.RealTimeResponse.Session",
-        log_types=SYSTEM_LOG_TYPE + ["Crowdstrike.Unknown"],
+        log_types=[SYSTEM_LOG_TYPE, "Crowdstrike.Unknown"],
         tags=rule_tags(),
         severity=detection.SeverityMedium,
         description="Alert when someone uses Crowdstrike’s RTR (real-time response) capability to access a machine "

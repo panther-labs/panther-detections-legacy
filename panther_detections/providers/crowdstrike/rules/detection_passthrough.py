@@ -29,7 +29,7 @@ def detection_passthrough(
         overrides=overrides,
         name="Crowdstrike Detection Passthrough",
         rule_id="Crowdstrike.Detection.Passthrough",
-        log_types=SYSTEM_LOG_TYPE + ["Crowdstrike.DetectionSummary"],
+        log_types=[SYSTEM_LOG_TYPE, "Crowdstrike.DetectionSummary"],
         tags=rule_tags(),
         severity=detection.DynamicStringField(
             func=_severity,

@@ -9,7 +9,7 @@ __all__ = [
     "crowdstrike_alert_context",
 ]
 
-SYSTEM_LOG_TYPE = ["Crowdstrike.FDREvent"]
+SYSTEM_LOG_TYPE = "Crowdstrike.FDREvent"
 
 DOMAIN_DENY_LIST = [
     "baddomain.com",

@@ -6,9 +6,12 @@ from panther_detections.utils import standard_tags
 
 __all__ = [
     "rule_tags",
+    "SYSTEM_LOG_TYPE",
     "SHARED_TAGS",
     "crowdstrike_alert_context",
 ]
+
+SYSTEM_LOG_TYPE = ["Crowdstrike.FDREvent"]
 
 DOMAIN_DENY_LIST = [
     "baddomain.com",

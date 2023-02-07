@@ -5,7 +5,7 @@ from panther_sdk import PantherEvent, detection
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
-from .._shared import DOMAIN_DENY_LIST, crowdstrike_alert_context, rule_tags
+from .._shared import DOMAIN_DENY_LIST, SYSTEM_LOG_TYPE, crowdstrike_alert_context, rule_tags
 
 __all__ = ["dns_request"]
 
@@ -28,7 +28,7 @@ def dns_request(
         name="DNS request to denylisted domain",
         rule_id="Crowdstrike.DNS.Request",
         enabled=False,
-        log_types=["Crowdstrike.DNSRequest", "Crowdstrike.FDREvent"],
+        log_types=SYSTEM_LOG_TYPE + ["Crowdstrike.DNSRequest"],
         tags=rule_tags("Initial Access:Phishing"),
         reports={"MITRE ATT&CK": ["TA0001:T1566"]},
         severity=detection.SeverityCritical,

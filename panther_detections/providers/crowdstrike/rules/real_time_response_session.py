@@ -5,7 +5,7 @@ from panther_sdk import PantherEvent, detection
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
-from .._shared import rule_tags
+from .._shared import rule_tags, SYSTEM_LOG_TYPE
 
 __all__ = ["real_time_response_session"]
 
@@ -35,7 +35,7 @@ def real_time_response_session(
         overrides=overrides,
         name="Crowdstrike Real Time Response (RTS) Session",
         rule_id="Crowdstrike.RealTimeResponse.Session",
-        log_types=["Crowdstrike.Unknown", "Crowdstrike.FDREvent"],
+        log_types=SYSTEM_LOG_TYPE + ["Crowdstrike.Unknown"],
         tags=rule_tags(),
         severity=detection.SeverityMedium,
         description="Alert when someone uses Crowdstrike’s RTR (real-time response) capability to access a machine "

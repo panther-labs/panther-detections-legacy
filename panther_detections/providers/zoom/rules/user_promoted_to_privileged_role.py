@@ -10,6 +10,10 @@ from .._shared import (
     PRIVILEGED_ROLES
 )
 
+__all__ = [
+    "user_promoted_to_privileged_role"
+]
+
 def user_promoted_to_privileged_role(
     pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
@@ -51,7 +55,6 @@ def user_promoted_to_privileged_role(
                     expect_match=True,
                     data=sample_logs.user_promoted_to_privileged_role_admin_promotion_event
                 ),
-                detection.JSONUnitTest(name="Admin to Admin", expect_match=False, data=sample_logs.admin_to_admin),
                 detection.JSONUnitTest(
                     name="Admin to Admin",
                     expect_match=False,

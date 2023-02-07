@@ -4,6 +4,15 @@ from panther_sdk import PantherEvent
 
 from panther_detections.utils import standard_tags
 
+__all__ = [
+    "PRIVILEGED_ROLES",
+    "get_zoom_user_context",
+    "get_zoom_usergroup_context",
+    "get_zoom_room_context",
+    "extract_values",
+]
+
+PRIVILEGED_ROLES = ("Admin", "Co-Owner", "Owner", "Billing Admin")
 
 def get_zoom_user_context(event: PantherEvent):
     """
@@ -77,53 +86,15 @@ def get_zoom_room_context(event: PantherEvent):
     return operation_context
 
 
-# __all__ = [
-#     "rule_tags",
-#     "SYSTEM_LOG_TYPE",
-#     "SUPPORT_ACCESS_EVENTS",
-#     "SUPPORT_RESET_EVENTS",
-#     "SHARED_TAGS",
-#     "SHARED_SUMMARY_ATTRS",
-#     "create_alert_context",
-# ]
-
-# SYSTEM_LOG_TYPE = "Okta.SystemLog"
-
-# SUPPORT_ACCESS_EVENTS = [
-#     "user.session.impersonation.grant",
-#     "user.session.impersonation.initiate",
-# ]
-
-# SUPPORT_RESET_EVENTS = [
-#     "user.account.reset_password",
-#     "user.mfa.factor.update",
-#     "system.mfa.factor.deactivate",
-#     "user.mfa.attempt_bypass",
-# ]
-
-# SHARED_TAGS = [
-#     "Okta",
-#     standard_tags.IDENTITY_AND_ACCESS_MGMT,
-# ]
-
-# SHARED_SUMMARY_ATTRS = [
-#     "eventType",
-#     "severity",
-#     "displayMessage",
-#     "p_any_ip_addresses",
-# ]
+def extract_values(event):
+    import re
+    operator = event.get("operator", "<operator-not-found>")
+    operation_detail = event.get("operation_detail", "")
+    email = re.search(r"[\w.+-c]+@[\w-]+\.[\w.-]+", operation_detail)[0] or "<email-not-found>"
+    fromto = re.findall(r"from ([-\s\w]+) to ([-\s\w]+)", operation_detail) or [
+        ("<from-role-not-found>", "<to-role-not-found>")
+    ]
+    from_role, to_role = fromto[0] or ("<role-not-found>", "<role-not-found>")
+    return operator, email, from_role, to_role
 
 
-# def rule_tags(*extra_tags: str) -> List[str]:
-#     return [*SHARED_TAGS, *extra_tags]
-
-
-# def create_alert_context(event: PantherEvent) -> Dict[str, Any]:
-#     """Returns common context for Okta alerts"""
-
-#     return {
-#         "ips": event.get("p_any_ip_addresses", []),
-#         "actor": event.get("actor", ""),
-#         "target": event.get("target", ""),
-#         "client": event.get("client", ""),
-#     }

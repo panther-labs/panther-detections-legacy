@@ -7,6 +7,9 @@ from panther_detections.utils import match_filters
 from .. import sample_logs
 from .._shared import get_zoom_usergroup_context
 
+__all__ = [
+    "operation_passcode_disabled"
+]
 
 def operation_passcode_disabled(
     pre_filters: typing.List[detection.AnyFilter] = None,
@@ -15,8 +18,6 @@ def operation_passcode_disabled(
     """Meeting passcode requirement has been disabled from usergroup"""
 
     def _title(event: PantherEvent) -> str:
-        context = get_zoom_usergroup_context(event)
-        return f"Group {context['GroupName']} passcode requirement disabled by {event.get('operator')}"
         context = get_zoom_usergroup_context(event)
         return f"Group {context['GroupName']} passcode requirement disabled by {event.get('operator')}"
 

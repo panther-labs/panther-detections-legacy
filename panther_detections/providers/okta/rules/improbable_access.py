@@ -36,9 +36,7 @@ def geo_improbable_access_filter() -> detection.PythonFilter:
             d_lat = lat2 - lat1
             d_lon = lon2 - lon1
 
-            distance_a = (
-                sin(d_lat / 2) ** 2 + cos(lat1) * cos(lat2) * sin(d_lon / 2) ** 2
-            )
+            distance_a = sin(d_lat / 2) ** 2 + cos(lat1) * cos(lat2) * sin(d_lon / 2) ** 2
             distance_c = 2 * asin(sqrt(distance_a))
 
             return radius * distance_c
@@ -50,15 +48,9 @@ def geo_improbable_access_filter() -> detection.PythonFilter:
                 [
                     dumps(
                         {
-                            "city": event.deep_get(
-                                "client", "geographicalContext", "city"
-                            ),
-                            "lon": event.deep_get(
-                                "client", "geographicalContext", "geolocation", "lon"
-                            ),
-                            "lat": event.deep_get(
-                                "client", "geographicalContext", "geolocation", "lat"
-                            ),
+                            "city": event.deep_get("client", "geographicalContext", "city"),
+                            "lon": event.deep_get("client", "geographicalContext", "geolocation", "lon"),
+                            "lat": event.deep_get("client", "geographicalContext", "geolocation", "lat"),
                             "time": event.get("p_event_time"),
                             "old_city": old_city,
                         }
@@ -66,21 +58,15 @@ def geo_improbable_access_filter() -> detection.PythonFilter:
                 ],
             )
             # Expire the entry after a week so the table doesn't fill up with past users
-            set_key_expiration(
-                key, str((datetime.now() + timedelta(days=7)).timestamp())
-            )
+            set_key_expiration(key, str((datetime.now() + timedelta(days=7)).timestamp()))
 
         panther_time_format = "%Y-%m-%d %H:%M:%S.%f"
         event_city_tracking = {}
 
         new_login_stats = {
             "city": event.deep_get("client", "geographicalContext", "city"),
-            "lon": event.deep_get(
-                "client", "geographicalContext", "geolocation", "lon"
-            ),
-            "lat": event.deep_get(
-                "client", "geographicalContext", "geolocation", "lat"
-            ),
+            "lon": event.deep_get("client", "geographicalContext", "geolocation", "lon"),
+            "lat": event.deep_get("client", "geographicalContext", "geolocation", "lat"),
         }
         # Bail out if we have a None value in set as it causes false positives
         if None in new_login_stats.values():
@@ -99,9 +85,7 @@ def geo_improbable_access_filter() -> detection.PythonFilter:
 
         distance = haversine_distance(old_login_stats, new_login_stats)
         old_time = datetime.strptime(old_login_stats["time"][:26], panther_time_format)
-        new_time = datetime.strptime(
-            event.get("p_event_time")[:26], panther_time_format
-        )
+        new_time = datetime.strptime(event.get("p_event_time")[:26], panther_time_format)
         time_delta = (new_time - old_time).total_seconds() / 3600  # seconds in an hour
 
         # Don't let time_delta be 0 (divide by zero error below)

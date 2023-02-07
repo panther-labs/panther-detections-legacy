@@ -5,11 +5,7 @@ from panther_sdk import PantherEvent, detection
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
-
-from .._shared import (
-    SYSTEM_LOG_TYPE,
-    rule_tags
-)
+from .._shared import SYSTEM_LOG_TYPE, rule_tags
 
 __all__ = ["all_meetings_secured_with_one_option_disabled"]
 

@@ -5,12 +5,7 @@ from panther_sdk import PantherEvent, detection
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
-from .._shared import (
-    PRIVILEGED_ROLES, 
-    SYSTEM_LOG_TYPE,
-    extract_values,
-    rule_tags
-)
+from .._shared import PRIVILEGED_ROLES, SYSTEM_LOG_TYPE, extract_values, rule_tags
 
 __all__ = ["user_promoted_to_privileged_role"]
 

@@ -21,8 +21,10 @@ SHARED_TAGS = [
     "Zoom",
 ]
 
+
 def rule_tags(*extra_tags: str) -> List[str]:
     return [*SHARED_TAGS, *extra_tags]
+
 
 def get_zoom_user_context(event: PantherEvent):
     """

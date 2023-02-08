@@ -5,14 +5,16 @@ from panther_sdk import PantherEvent
 
 __all__ = [
     "rule_tags",
-    "SYSTEM_LOG_TYPE",
+    "SIGN_IN_ATTEMPT_LOG_TYPE",
     "SHARED_TAGS",
     "SHARED_SUMMARY_ATTRS",
-    "create_unusual_client_alert_context",
-    "create_sensitive_item_access_alert_context",
+    "create_sign_in_attempt_alert_context",
+    "create_item_usage_alert_context"
 ]
 
-SYSTEM_LOG_TYPE = "OnePassword.SignInAttempt"
+SIGN_IN_ATTEMPT_LOG_TYPE = "OnePassword.SignInAttempt"
+
+ITEM_USAGE_LOG_TYPE = "OnePassword.ItemUsage"
 
 
 SHARED_TAGS = ["1Password"]
@@ -38,7 +40,7 @@ def rule_tags(*extra_tags: str) -> List[str]:
     return [*SHARED_TAGS, *extra_tags]
 
 
-def create_unusual_client_alert_context(event: PantherEvent) -> Dict[str, Any]:
+def create_sign_in_attempt_alert_context(event: PantherEvent) -> Dict[str, Any]:
     """Returns 1Password Unusual Client Context"""
 
     context = {}
@@ -53,7 +55,7 @@ def create_unusual_client_alert_context(event: PantherEvent) -> Dict[str, Any]:
     return context
 
 
-def create_sensitive_item_access_alert_context(event: PantherEvent) -> Dict[str, Any]:
+def create_item_usage_alert_context(event: PantherEvent) -> Dict[str, Any]:
     """Returns 1Password Sensitive Item Access Context"""
 
     context = {

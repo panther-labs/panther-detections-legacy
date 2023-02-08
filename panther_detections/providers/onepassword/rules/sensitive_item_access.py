@@ -7,9 +7,9 @@ from panther_detections.utils import match_filters
 from .. import sample_logs
 from .._shared import (
     SHARED_SUMMARY_ATTRS,
-    SYSTEM_LOG_TYPE,
+    ITEM_USAGE_LOG_TYPE,
     SENSITIVE_ITEM_WATCHLIST,
-    create_sensitive_item_access_alert_context,
+    create_item_usage_alert_context,
     rule_tags,
 )
 
@@ -29,7 +29,7 @@ def sensitive_item_access(
         overrides=overrides,
         name="Sensitive 1Password Item Accessed",
         rule_id="OnePassword.Sensitive.Item",
-        log_types=[SYSTEM_LOG_TYPE],
+        log_types=[ITEM_USAGE_LOG_TYPE],
         tags=rule_tags("Credential Access:Unsecured Credentials", "Configuration Required"),
         reports={detection.ReportKeyMITRE: ["TA0006:T1552"]},
         severity=detection.SeverityLow,
@@ -38,7 +38,7 @@ def sensitive_item_access(
         runbook="Contact Admin to ensure this was sanctioned activity",
         filters=(pre_filters or []) + [match_filters.deep_in("item_uuid", SENSITIVE_ITEM_WATCHLIST)],
         alert_title=_title,
-        alert_context=create_sensitive_item_access_alert_context,
+        alert_context=create_item_usage_alert_context,
         summary_attrs=SHARED_SUMMARY_ATTRS,
         unit_tests=[
             detection.JSONUnitTest(

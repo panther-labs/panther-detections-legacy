@@ -21,7 +21,7 @@ def user_permission_updates(
 
     def _title(event: PantherEvent) -> str:
         return (
-            f"User [{event.deep_get('created_by.login', default='<UNKNOWN_USER>')}]"
+            f"User [{event.deep_get('created_by', 'login', default='<UNKNOWN_USER>')}]"
             f" exceeded threshold for number of permission changes in the configured time frame."
         )
 
@@ -31,7 +31,8 @@ def user_permission_updates(
         rule_id="Box.Large.Number.Permission.Updates",
         log_types=["Box.Event"],
         severity=detection.SeverityLow,
-        description="A user has exceeded the threshold for number of folder permission changes within a single time frame.",
+        description="A user has exceeded the threshold for number of folder " \
+            "permission changes within a single time frame.",
         tags=["Box", "Privilege Escalation:Abuse Elevation Control Mechanism"],
         reports={"MITRE ATT&CK": ["TA0004:T1548"]},
         reference="https://developer.box.com/reference/resources/event/",

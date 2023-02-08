@@ -29,7 +29,8 @@ def brute_force_login(
         description="A Box user was denied access more times than the configured threshold.",
         tags=["Box"],
         reference="https://developer.box.com/reference/resources/event/",
-        runbook="Analyze the IP they came from, and other actions taken before/after.  Check if this user eventually authenticated successfully.",
+        runbook="Analyze the IP they came from, and other actions taken before/after. " \
+            "Check if this user eventually authenticated successfully.",
         alert_title=_title,
         summary_attrs=["event_type", "ip_address"],
         threshold=10,

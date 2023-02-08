@@ -2,16 +2,7 @@ import typing
 
 from panther_sdk import PantherEvent, detection
 
-from panther_detections.utils import match_filters
-
 from .. import sample_logs
-
-# from .._shared import (
-#     create_alert_context,
-#     rule_tags,
-#     standard_tags,
-# )
-
 
 def event_triggered_externally(
     pre_filters: typing.List[detection.AnyFilter] = None,
@@ -35,7 +26,6 @@ def event_triggered_externally(
             # user id 2 indicates an anonymous user
             if user.get("id", "") == "2":
                 return True
-            print(user.get("login"))
             return bool(user.get("login") and not any(user.get("login", "").endswith(x) for x in DOMAINS))
         return False
 

@@ -20,7 +20,7 @@ def policy_violation(
 
     def _title(event: PantherEvent) -> str:
         return (
-            f"User [{event.deep_get('created_by.name', default='<UNKNOWN_USER>')}] "
+            f"User [{event.deep_get('created_by', 'name', default='<UNKNOWN_USER>')}] "
             f"violated a content workflow policy."
         )
 
@@ -33,7 +33,8 @@ def policy_violation(
         description="A user violated the content workflow policy.",
         tags=["Box"],
         reference="https://developer.box.com/reference/resources/event/",
-        runbook="Investigate whether the user continues to violate the policy and take measure to ensure they understand policy.",
+        runbook="Investigate whether the user continues to violate the policy " \
+            " and take measure to ensure they understand policy.",
         alert_title=_title,
         summary_attrs=["event_type"],
         filters=(pre_filters or []) + [match_filters.deep_in("event_type", POLICY_VIOLATIONS)],

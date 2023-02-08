@@ -2,8 +2,7 @@ import typing
 
 from panther_sdk import PantherEvent, detection
 
-from panther_detections.utils import match_filters
-from panther_detections.utils.legacy_filters import deep_get
+from panther_detections.utils.legacy_utils import deep_get
 
 from .. import sample_logs
 from .._shared import box_parse_additional_details
@@ -23,7 +22,6 @@ def malicious_content(
                 f"was marked malicious."
             )
         alert_details = box_parse_additional_details(event).get("shield_alert", {})
-        #  pylint: disable=line-too-long
         return (
             f"File [{deep_get(alert_details, 'user', 'email', default='<UNKNOWN_USER>')}], owned by "
             f"[{deep_get(alert_details, 'alert_summary', 'upload_activity', 'item_name', default='<UNKNOWN_FILE>')}], "
@@ -31,7 +29,7 @@ def malicious_content(
         )
 
     def _filter(event: PantherEvent) -> bool:
-        from panther_detections.providers.box._shared import (
+        from panther_detections.providers.box._shared import ( # pylint: disable=W0621
             box_parse_additional_details,
         )
 
@@ -56,7 +54,7 @@ def malicious_content(
         description="Box has detect malicious content, such as a virus.",
         tags=["Box", "Execution:User Execution"],
         reports={"MITRE ATT&CK": ["TA0002:T1204"]},
-        reference="https://developer.box.com/guides/events/shield-alert-events/,  https://developer.box.com/reference/resources/event/",
+        reference="https://developer.box.com/guides/events/shield-alert-events/,  https://developer.box.com/reference/resources/event/", # pylint: disable=C0301
         runbook="Investigate whether this is a false positive or if the virus needs to be contained appropriately.",
         alert_title=_title,
         summary_attrs=["event_type"],

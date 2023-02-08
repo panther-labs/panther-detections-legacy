@@ -1,6 +1,6 @@
 import unittest
-
-from panther_sdk import detection
+import json
+from panther_sdk import detection, PantherEvent
 from panther_detections.providers import box
 
 
@@ -13,12 +13,14 @@ class TestRulesAccessGranted(unittest.TestCase):
 
         self.assertEqual(rule.name, name_override)
 
-    def test_my_box_reference(self) -> None:
+    def test_access_granted_title(self) -> None:
+        rule = box.rules.access_granted()
+        evt = PantherEvent(json.loads(box.sample_logs.access_granted))
 
-        rule = box.rules.access_granted(
-           overrides=detection.RuleOverrides(reference="MyNewReference"))
-        
-        self.assertEqual(rule.reference, "MyNewReference")
+        title = rule.alert_title(evt) #type: ignore
 
-
+        self.assertEqual(title, "User [Bob Cat]" \
+            " granted access to their account")
+    
+    
     

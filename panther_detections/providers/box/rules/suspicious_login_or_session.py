@@ -2,8 +2,7 @@ import typing
 
 from panther_sdk import PantherEvent, detection
 
-from panther_detections.utils import match_filters
-from panther_detections.utils.legacy_filters import deep_get
+from panther_detections.utils.legacy_utils import deep_get
 
 from .. import sample_logs
 from .._shared import box_parse_additional_details
@@ -14,7 +13,6 @@ def suspicious_login_or_session(
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
 ) -> detection.Rule:
     """A user login event or session event was tagged as medium to high severity by Box Shield."""
-    # from panther_base_helpers import box_parse_additional_details, deep_get
     SUSPICIOUS_EVENT_TYPES = {
         "Suspicious Locations",
         "Suspicious Sessions",
@@ -31,7 +29,7 @@ def suspicious_login_or_session(
         )
 
     def _filter(event: PantherEvent) -> bool:
-        from panther_detections.providers.box._shared import (
+        from panther_detections.providers.box._shared import ( # pylint: disable=W0621
             box_parse_additional_details,
         )
 

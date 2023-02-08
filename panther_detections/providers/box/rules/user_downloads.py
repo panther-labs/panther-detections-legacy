@@ -29,7 +29,7 @@ def user_downloads(
         tags=["Box", "Exfiltration:Exfiltration Over Web Service"],
         reports={"MITRE ATT&CK": ["TA0010:T1567"]},
         reference="https://developer.box.com/reference/resources/event/",
-        runbook="Investigate whether this user's download activity is expected. " \
+        runbook="Investigate whether this user's download activity is expected. "
         "Investigate the cause of this download activity.",
         alert_title=_title,
         summary_attrs=["ip_address"],

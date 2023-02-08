@@ -26,7 +26,7 @@ def anomalous_download(
         )
 
     def _filter(event: PantherEvent) -> bool:
-        from panther_detections.providers.box._shared import ( # pylint: disable=W0621
+        from panther_detections.providers.box._shared import (  # pylint: disable=W0621
             box_parse_additional_details,
         )
 

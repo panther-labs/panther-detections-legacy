@@ -11,7 +11,7 @@ previewed_anonymously = json.dumps(
 suspicious_session_event = json.dumps(
     {
         "type": "event",
-        "additional_details": '{"shield_alert":{"rule_category":"Suspicious Sessions","risk_score":70,"alert_summary":{"description":"First time in prior month user connected from ip 1.2.3.4."},"user":{"email":"bob@example"}}}', # pylint: disable=C0301
+        "additional_details": '{"shield_alert":{"rule_category":"Suspicious Sessions","risk_score":70,"alert_summary":{"description":"First time in prior month user connected from ip 1.2.3.4."},"user":{"email":"bob@example"}}}',  # pylint: disable=C0301
         "created_by": {"id": "12345678", "type": "user", "login": "bob@example", "name": "Bob Cat"},
         "event_type": "SHIELD_ALERT",
         "source": {"id": "12345678", "type": "user"},
@@ -21,7 +21,7 @@ missing_created_by = json.dumps({"event_type": "PREVIEW", "type": "event", "ip_a
 malicious_content = json.dumps(
     {
         "type": "event",
-        "additional_details": '{"shield_alert":{"rule_category":"Malicious Content","risk_score":100,"alert_summary":{"upload_activity":{"item_name":"malware.exe"}},"user":{"email":"cat@example"}}}', # pylint: disable=C0301
+        "additional_details": '{"shield_alert":{"rule_category":"Malicious Content","risk_score":100,"alert_summary":{"upload_activity":{"item_name":"malware.exe"}},"user":{"email":"cat@example"}}}',  # pylint: disable=C0301
         "created_by": {"id": 12345678, "type": "user", "login": "bob@example", "name": "Bob Cat"},
         "event_type": "SHIELD_ALERT",
         "source": {"id": 12345678, "type": "user", "login": "bob@example"},
@@ -70,7 +70,7 @@ regular_event = json.dumps(
 anomalous_download_event = json.dumps(
     {
         "type": "event",
-        "additional_details": '{"shield_alert":{"rule_category":"Anomalous Download","risk_score":77,"alert_summary":{"description":"Significant increase in download content week over week, 9999% (50.00 MB) more than last week."}}}', # pylint: disable=C0301
+        "additional_details": '{"shield_alert":{"rule_category":"Anomalous Download","risk_score":77,"alert_summary":{"description":"Significant increase in download content week over week, 9999% (50.00 MB) more than last week."}}}',  # pylint: disable=C0301
         "created_by": {"id": "12345678", "type": "user", "login": "bob@example", "name": "Bob Cat"},
         "event_type": "SHIELD_ALERT",
         "source": {"id": "12345678", "type": "user", "login": "bob@example", "name": "Bob Cat"},
@@ -121,7 +121,7 @@ user_shares_item = json.dumps(
 suspicious_session_event___low_risk = json.dumps(
     {
         "type": "event",
-        "additional_details": '{"shield_alert":{"rule_category":"Suspicious Sessions","risk_score":10,"alert_summary":{"description":"First time in prior month user connected from ip 1.2.3.4."},"user":{"email":"bob@example"}}}', # pylint: disable=C0301
+        "additional_details": '{"shield_alert":{"rule_category":"Suspicious Sessions","risk_score":10,"alert_summary":{"description":"First time in prior month user connected from ip 1.2.3.4."},"user":{"email":"bob@example"}}}',  # pylint: disable=C0301
         "created_by": {"id": "12345678", "type": "user", "login": "bob@example", "name": "Bob Cat"},
         "event_type": "SHIELD_ALERT",
         "source": {"id": "12345678", "type": "user"},

@@ -4,6 +4,7 @@ from panther_sdk import PantherEvent, detection
 
 from .. import sample_logs
 
+
 def event_triggered_externally(
     pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),

@@ -29,7 +29,7 @@ def malicious_content(
         )
 
     def _filter(event: PantherEvent) -> bool:
-        from panther_detections.providers.box._shared import ( # pylint: disable=W0621
+        from panther_detections.providers.box._shared import (  # pylint: disable=W0621
             box_parse_additional_details,
         )
 
@@ -54,7 +54,7 @@ def malicious_content(
         description="Box has detect malicious content, such as a virus.",
         tags=["Box", "Execution:User Execution"],
         reports={"MITRE ATT&CK": ["TA0002:T1204"]},
-        reference="https://developer.box.com/guides/events/shield-alert-events/,  https://developer.box.com/reference/resources/event/", # pylint: disable=C0301
+        reference="https://developer.box.com/guides/events/shield-alert-events/,  https://developer.box.com/reference/resources/event/",  # pylint: disable=C0301
         runbook="Investigate whether this is a false positive or if the virus needs to be contained appropriately.",
         alert_title=_title,
         summary_attrs=["event_type"],

@@ -58,8 +58,8 @@ def item_shared_externally(
         rule_id="Box.Item.Shared.Externally",
         log_types=["Box.Event"],
         severity=detection.SeverityMedium,
-        description="A user has shared an item and it is accessible to anyone with the share link (internal or " \
-            "external to the company). This rule requires that the boxsdk[jwt] be installed in the environment.",
+        description="A user has shared an item and it is accessible to anyone with the share link (internal or "
+        "external to the company). This rule requires that the boxsdk[jwt] be installed in the environment.",
         tags=["Box", "Exfiltration:Exfiltration Over Web Service", "Configuration Required"],
         reports={"MITRE ATT&CK": ["TA0010:T1567"]},
         reference="https://developer.box.com/reference/resources/event/",

@@ -1,10 +1,11 @@
 import typing
 
-from panther_sdk import PantherEvent, detection
+from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
+from .._shared import rule_tags
 
 
 def access_granted(
@@ -23,10 +24,10 @@ def access_granted(
         overrides=overrides,
         name="Box Access Granted",
         rule_id="Box.Access.Granted",
-        log_types=["Box.Event"],
+        log_types=[schema.LogTypeBoxEvent],
         severity=detection.SeverityLow,
         description="A user granted access to their box account to Box technical support from account settings.",
-        tags=["Box"],
+        tags=rule_tags(),
         reference="https://developer.box.com/reference/resources/event/",
         runbook="Investigate whether the user purposefully granted access to their account.",
         alert_title=_title,

@@ -1,28 +1,26 @@
 import typing
 
-from panther_sdk import PantherEvent, detection
+from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils.legacy_utils import deep_get
 
 from .. import sample_logs
-from .._shared import is_box_sdk_enabled, lookup_box_file, lookup_box_folder
+from .._shared import (
+    ALLOWED_SHARED_ACCESS,
+    SHARE_EVENTS,
+    is_box_sdk_enabled,
+    lookup_box_file,
+    lookup_box_folder,
+    rule_tags,
+)
 
 
 def item_shared_externally(
     pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
 ) -> detection.Rule:
-    """A user has shared an item and it is accessible to anyone with the share link (internal or external to the company). This rule requires that the boxsdk[jwt] be installed in the environment."""
-
-    ALLOWED_SHARED_ACCESS = {"collaborators", "company"}
-
-    SHARE_EVENTS = {
-        "CHANGE_FOLDER_PERMISSION",
-        "ITEM_SHARED",
-        "ITEM_SHARED_CREATE",
-        "ITEM_SHARED_UPDATE",
-        "SHARE",
-    }
+    """A user has shared an item and it is accessible to anyone with the share link (internal or external to the
+    company). This rule requires that the boxsdk[jwt] be installed in the environment."""
 
     def _title(event: PantherEvent) -> str:
         return (
@@ -56,11 +54,11 @@ def item_shared_externally(
         enabled=False,
         name="Box item shared externally",
         rule_id="Box.Item.Shared.Externally",
-        log_types=["Box.Event"],
+        log_types=[schema.LogTypeBoxEvent],
         severity=detection.SeverityMedium,
         description="A user has shared an item and it is accessible to anyone with the share link (internal or "
         "external to the company). This rule requires that the boxsdk[jwt] be installed in the environment.",
-        tags=["Box", "Exfiltration:Exfiltration Over Web Service", "Configuration Required"],
+        tags=rule_tags("Exfiltration:Exfiltration Over Web Service", "Configuration Required"),
         reports={"MITRE ATT&CK": ["TA0010:T1567"]},
         reference="https://developer.box.com/reference/resources/event/",
         runbook="Investigate whether this user's activity is expected.",

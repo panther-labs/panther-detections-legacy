@@ -1,10 +1,11 @@
 import typing
 
-from panther_sdk import PantherEvent, detection
+from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
+from .._shared import POLICY_VIOLATIONS, rule_tags
 
 
 def policy_violation(
@@ -12,11 +13,6 @@ def policy_violation(
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
 ) -> detection.Rule:
     """A user violated the content workflow policy."""
-
-    POLICY_VIOLATIONS = [
-        "CONTENT_WORKFLOW_UPLOAD_POLICY_VIOLATION",
-        "CONTENT_WORKFLOW_SHARING_POLICY_VIOLATION",
-    ]
 
     def _title(event: PantherEvent) -> str:
         return (
@@ -28,10 +24,10 @@ def policy_violation(
         overrides=overrides,
         name="Box Content Workflow Policy Violation",
         rule_id="Box.Content.Workflow.Policy.Violation",
-        log_types=["Box.Event"],
+        log_types=[schema.LogTypeBoxEvent],
         severity=detection.SeverityLow,
         description="A user violated the content workflow policy.",
-        tags=["Box"],
+        tags=rule_tags(),
         reference="https://developer.box.com/reference/resources/event/",
         runbook="Investigate whether the user continues to violate the policy "
         " and take measure to ensure they understand policy.",

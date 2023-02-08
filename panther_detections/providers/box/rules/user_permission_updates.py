@@ -1,10 +1,11 @@
 import typing
 
-from panther_sdk import PantherEvent, detection
+from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
+from .._shared import PERMISSION_UPDATE_EVENT_TYPES, rule_tags
 
 
 def user_permission_updates(
@@ -12,12 +13,6 @@ def user_permission_updates(
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
 ) -> detection.Rule:
     """A user has exceeded the threshold for number of folder permission changes within a single time frame."""
-    PERMISSION_UPDATE_EVENT_TYPES = [
-        "CHANGE_FOLDER_PERMISSION",
-        "ITEM_SHARED_CREATE",
-        "ITEM_SHARED",
-        "SHARE",
-    ]
 
     def _title(event: PantherEvent) -> str:
         return (
@@ -29,11 +24,11 @@ def user_permission_updates(
         overrides=overrides,
         name="Box Large Number of Permission Changes",
         rule_id="Box.Large.Number.Permission.Updates",
-        log_types=["Box.Event"],
+        log_types=[schema.LogTypeBoxEvent],
         severity=detection.SeverityLow,
         description="A user has exceeded the threshold for number of folder "
         "permission changes within a single time frame.",
-        tags=["Box", "Privilege Escalation:Abuse Elevation Control Mechanism"],
+        tags=rule_tags("Privilege Escalation:Abuse Elevation Control Mechanism"),
         reports={"MITRE ATT&CK": ["TA0004:T1548"]},
         reference="https://developer.box.com/reference/resources/event/",
         runbook="Investigate whether this user's activity is expected.",

@@ -1,8 +1,10 @@
 import typing
 
-from panther_sdk import PantherEvent, detection
+from panther_sdk import PantherEvent, detection, schema
 
 from .. import sample_logs
+from .._shared import DOMAINS, rule_tags
+
 
 
 def event_triggered_externally(
@@ -10,9 +12,6 @@ def event_triggered_externally(
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
 ) -> detection.Rule:
     """An external user has triggered a box enterprise event."""
-    DOMAINS = [
-        "@example.com",
-    ]
 
     def _title(event: PantherEvent) -> str:
         return (
@@ -35,10 +34,10 @@ def event_triggered_externally(
         enabled=False,
         name="Box event triggered by unknown or external user",
         rule_id="Box.Event.Triggered.Externally",
-        log_types=["Box.Event"],
+        log_types=[schema.LogTypeBoxEvent],
         severity=detection.SeverityMedium,
         description="An external user has triggered a box enterprise event.",
-        tags=["Box", "Exfiltration:Exfiltration Over Web Service", "Configuration Required"],
+        tags=rule_tags("Exfiltration:Exfiltration Over Web Service", "Configuration Required"),
         reports={"MITRE ATT&CK": ["TA0010:T1567"]},
         reference="https://developer.box.com/reference/resources/event/",
         runbook="Investigate whether this user's activity is expected.",

@@ -1,11 +1,11 @@
 import typing
 
-from panther_sdk import PantherEvent, detection
+from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils.legacy_utils import deep_get
 
 from .. import sample_logs
-from .._shared import box_parse_additional_details
+from .._shared import box_parse_additional_details, rule_tags
 
 
 def anomalous_download(
@@ -42,10 +42,10 @@ def anomalous_download(
         overrides=overrides,
         name="Box Shield Detected Anomalous Download Activity",
         rule_id="Box.Shield.Anomalous.Download",
-        log_types=["Box.Event"],
+        log_types=[schema.LogTypeBoxEvent],
         severity=detection.SeverityHigh,
         description="A user's download activity has altered significantly.",
-        tags=["Box", "Exfiltration:Exfiltration Over Web Service"],
+        tags=rule_tags("Exfiltration:Exfiltration Over Web Service"),
         reports={"MITRE ATT&CK": ["TA0010:T1567"]},
         reference="https://developer.box.com/guides/events/shield-alert-events/",
         runbook="Investigate whether this was triggered by expected user download activity.",

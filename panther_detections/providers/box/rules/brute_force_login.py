@@ -1,10 +1,11 @@
 import typing
 
-from panther_sdk import PantherEvent, detection
+from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
+from .._shared import rule_tags
 
 
 def brute_force_login(
@@ -24,10 +25,10 @@ def brute_force_login(
         enabled=False,
         name="--DEPRECATED -- Box Brute Force Login",
         rule_id="Box.Brute.Force.Login",
-        log_types=["Box.Event"],
+        log_types=[schema.LogTypeBoxEvent],
         severity=detection.SeverityMedium,
         description="A Box user was denied access more times than the configured threshold.",
-        tags=["Box"],
+        tags=rule_tags(),
         reference="https://developer.box.com/reference/resources/event/",
         runbook="Analyze the IP they came from, and other actions taken before/after. "
         "Check if this user eventually authenticated successfully.",

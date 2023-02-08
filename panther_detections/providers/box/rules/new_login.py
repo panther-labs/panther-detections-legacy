@@ -1,10 +1,11 @@
 import typing
 
-from panther_sdk import PantherEvent, detection
+from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
+from .._shared import rule_tags
 
 
 def new_login(
@@ -22,10 +23,10 @@ def new_login(
         overrides=overrides,
         name="Box New Login",
         rule_id="Box.New.Login",
-        log_types=["Box.Event"],
+        log_types=[schema.LogTypeBoxEvent],
         severity=detection.SeverityInfo,
         description="A user logged in from a new device.",
-        tags=["Box", "Initial Access:Valid Accounts"],
+        tags=rule_tags("Initial Access:Valid Accounts"),
         reports={"MITRE ATT&CK": ["TA0001:T1078"]},
         reference="https://developer.box.com/reference/resources/event/",
         runbook="Investigate whether this is a valid user login.",

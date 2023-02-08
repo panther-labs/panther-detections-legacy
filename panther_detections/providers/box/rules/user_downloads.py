@@ -1,10 +1,11 @@
 import typing
 
-from panther_sdk import PantherEvent, detection
+from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
+from .._shared import rule_tags
 
 
 def user_downloads(
@@ -23,10 +24,10 @@ def user_downloads(
         overrides=overrides,
         name="Box Large Number of Downloads",
         rule_id="Box.Large.Number.Downloads",
-        log_types=["Box.Event"],
+        log_types=[schema.LogTypeBoxEvent],
         severity=detection.SeverityLow,
         description="A user has exceeded the threshold for number of downloads within a single time frame.",
-        tags=["Box", "Exfiltration:Exfiltration Over Web Service"],
+        tags=rule_tags("Exfiltration:Exfiltration Over Web Service"),
         reports={"MITRE ATT&CK": ["TA0010:T1567"]},
         reference="https://developer.box.com/reference/resources/event/",
         runbook="Investigate whether this user's download activity is expected. "

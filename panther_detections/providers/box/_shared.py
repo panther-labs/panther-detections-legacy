@@ -8,7 +8,54 @@ from typing import Any, Dict, List
 import boto3
 from panther_sdk import PantherEvent
 
-from panther_detections.utils import standard_tags
+__all__ = [
+    "rule_tags",
+    "POLICY_VIOLATIONS",
+    "PERMISSION_UPDATE_EVENT_TYPES",
+    "SUSPICIOUS_EVENT_TYPES",
+    "ALLOWED_SHARED_ACCESS",
+    "SHARE_EVENTS",
+]
+
+SHARED_TAGS = [
+    "Box",
+]
+
+
+def rule_tags(*extra_tags: str) -> List[str]:
+    return [*SHARED_TAGS, *extra_tags]
+
+
+POLICY_VIOLATIONS = [
+    "CONTENT_WORKFLOW_UPLOAD_POLICY_VIOLATION",
+    "CONTENT_WORKFLOW_SHARING_POLICY_VIOLATION",
+]
+
+PERMISSION_UPDATE_EVENT_TYPES = [
+    "CHANGE_FOLDER_PERMISSION",
+    "ITEM_SHARED_CREATE",
+    "ITEM_SHARED",
+    "SHARE",
+]
+
+SUSPICIOUS_EVENT_TYPES = {
+    "Suspicious Locations",
+    "Suspicious Sessions",
+}
+
+DOMAINS = [
+    "@example.com",
+]
+
+ALLOWED_SHARED_ACCESS = {"collaborators", "company"}
+
+SHARE_EVENTS = {
+    "CHANGE_FOLDER_PERMISSION",
+    "ITEM_SHARED",
+    "ITEM_SHARED_CREATE",
+    "ITEM_SHARED_UPDATE",
+    "SHARE",
+}
 
 try:
     # boxsdk will only be available if `boxapi[jwt]` is
@@ -137,7 +184,7 @@ def build_jwt_settings(response: dict) -> dict:
         },
         "enterpriseID": data[BOX_ENTERPRISE_ID],
     }
-    return
+    return settings
 
 
 def box_parse_additional_details(event: PantherEvent) -> Dict[str, Any]:

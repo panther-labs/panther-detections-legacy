@@ -1,11 +1,11 @@
 import typing
 
-from panther_sdk import PantherEvent, detection
+from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils.legacy_utils import deep_get
 
 from .. import sample_logs
-from .._shared import box_parse_additional_details
+from .._shared import box_parse_additional_details, rule_tags
 
 
 def malicious_content(
@@ -49,10 +49,10 @@ def malicious_content(
         overrides=overrides,
         name="Malicious Content Detected",
         rule_id="Box.Malicious.Content",
-        log_types=["Box.Event"],
+        log_types=[schema.LogTypeBoxEvent],
         severity=detection.SeverityHigh,
         description="Box has detect malicious content, such as a virus.",
-        tags=["Box", "Execution:User Execution"],
+        tags=rule_tags("Execution:User Execution"),
         reports={"MITRE ATT&CK": ["TA0002:T1204"]},
         reference="https://developer.box.com/guides/events/shield-alert-events/,  https://developer.box.com/reference/resources/event/",  # pylint: disable=C0301
         runbook="Investigate whether this is a false positive or if the virus needs to be contained appropriately.",

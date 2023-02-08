@@ -1,11 +1,11 @@
 import typing
 
-from panther_sdk import PantherEvent, detection
+from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils.legacy_utils import deep_get
 
 from .. import sample_logs
-from .._shared import box_parse_additional_details
+from .._shared import SUSPICIOUS_EVENT_TYPES, box_parse_additional_details, rule_tags
 
 
 def suspicious_login_or_session(
@@ -13,10 +13,6 @@ def suspicious_login_or_session(
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
 ) -> detection.Rule:
     """A user login event or session event was tagged as medium to high severity by Box Shield."""
-    SUSPICIOUS_EVENT_TYPES = {
-        "Suspicious Locations",
-        "Suspicious Sessions",
-    }
 
     def _title(event: PantherEvent) -> str:
         details = box_parse_additional_details(event)
@@ -45,10 +41,10 @@ def suspicious_login_or_session(
         overrides=overrides,
         name="Box Shield Suspicious Alert Triggered",
         rule_id="Box.Shield.Suspicious.Alert",
-        log_types=["Box.Event"],
+        log_types=[schema.LogTypeBoxEvent],
         severity=detection.SeverityHigh,
         description="A user login event or session event was tagged as medium to high severity by Box Shield.",
-        tags=["Box", "Initial Access:Valid Accounts"],
+        tags=rule_tags("Initial Access:Valid Accounts"),
         reports={"MITRE ATT&CK": ["TA0001:T1078"]},
         reference="https://developer.box.com/guides/events/shield-alert-events/",
         runbook="Investigate whether this was triggered by an expected user event.",

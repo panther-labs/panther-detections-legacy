@@ -1,6 +1,6 @@
 import typing
 
-from panther_sdk import PantherEvent, detection
+from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters
 
@@ -14,13 +14,13 @@ def auth_errors(
     """A high volume of SSH errors could indicate a brute-force attack"""
 
     def _title(event: PantherEvent) -> str:
-        return f"A high volume of SSH errors was detected from user " f"[{event.get('user', '<UNKNOWN_USER>')}]"
+        return f"A high volume of SSH errors was detected from user [{event.get('user', '<UNKNOWN_USER>')}]"
 
     return detection.Rule(
         overrides=overrides,
         name="Teleport SSH Auth Errors",
         rule_id="Teleport.AuthErrors",
-        log_types=["Gravitational.TeleportAudit"],
+        log_types=[schema.LogTypeGravitationalTeleportAudit],
         severity=detection.SeverityMedium,
         description="A high volume of SSH errors could indicate a brute-force attack",
         tags=["SSH", "Credential Access:Brute Force"],

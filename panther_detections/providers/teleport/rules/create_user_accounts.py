@@ -1,17 +1,10 @@
 import typing
 
-from panther_sdk import PantherEvent, detection
+from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
-
-# from .._shared import (
-#     create_alert_context,
-#     rule_tags,
-#     standard_tags,
-# )
-
 
 def create_user_accounts(
     pre_filters: typing.List[detection.AnyFilter] = None,
@@ -43,7 +36,7 @@ def create_user_accounts(
         overrides=overrides,
         name="Teleport Create User Accounts",
         rule_id="Teleport.CreateUserAccounts",
-        log_types=["Gravitational.TeleportAudit"],
+        log_types=[schema.LogTypeGravitationalTeleportAudit],
         severity=detection.SeverityHigh,
         description="A user has been manually created, modified, or deleted",
         tags=["SSH", "Persistence:Create Account"],

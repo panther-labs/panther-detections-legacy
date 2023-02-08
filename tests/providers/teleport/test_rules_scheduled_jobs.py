@@ -1,6 +1,6 @@
 import unittest
-
-from panther_sdk import detection
+import json
+from panther_sdk import detection, PantherEvent
 from panther_detections.providers import teleport
 
 
@@ -12,4 +12,14 @@ class TestRulesScheduledJobs(unittest.TestCase):
         )
 
         self.assertEqual(rule.name, name_override)
+
+    def test_scheduled_jobs_title(self) -> None:
+        rule = teleport.rules.scheduled_jobs()
+        evt = PantherEvent(json.loads(teleport.sample_logs.crontab_no_args))
+
+        title = rule.alert_title(evt) #type: ignore
+
+        self.assertEqual(title, "User [panther] has modified scheduled jobs")
+    
+    
     

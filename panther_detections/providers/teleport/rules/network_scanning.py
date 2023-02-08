@@ -1,8 +1,7 @@
 import typing
 
-from panther_sdk import PantherEvent, detection
+from panther_sdk import PantherEvent, detection, schema
 
-from panther_detections.utils import match_filters
 
 from .. import sample_logs
 
@@ -30,13 +29,14 @@ def network_scanning(
         overrides=overrides,
         name="Teleport Network Scan Initiated",
         rule_id="Teleport.NetworkScanning",
-        log_types=["Gravitational.TeleportAudit"],
+        log_types=[schema.LogTypeGravitationalTeleportAudit],
         severity=detection.SeverityMedium,
         description="A user has invoked a network scan that could potentially indicate enumeration of the network.",
         tags=["SSH", "Discovery:Network Service Discovery"],
         reports={"MITRE ATT&CK": ["TA0007:T1046"]},
         reference="https://gravitational.com/teleport/docs/admin-guide/",
-        runbook="Find related commands within the time window and determine if the command was invoked legitimately. Examine the arguments to determine how the command was used.",
+        runbook="Find related commands within the time window and determine if the command was invoked legitimately. " \
+            "Examine the arguments to determine how the command was used.",
         alert_title=_title,
         summary_attrs=["event", "code", "user", "program", "path", "return_code", "login", "server_id", "sid"],
         alert_grouping=detection.AlertGrouping(period_minutes=60),

@@ -1,17 +1,8 @@
 import typing
 
-from panther_sdk import PantherEvent, detection
-
-from panther_detections.utils import match_filters
+from panther_sdk import PantherEvent, detection, schema
 
 from .. import sample_logs
-
-# from .._shared import (
-#     create_alert_context,
-#     rule_tags,
-#     standard_tags,
-# )
-
 
 def suspicious_commands(
     pre_filters: typing.List[detection.AnyFilter] = None,
@@ -36,13 +27,15 @@ def suspicious_commands(
         overrides=overrides,
         name="Teleport Suspicious Commands Executed",
         rule_id="Teleport.SuspiciousCommands",
-        log_types=["Gravitational.TeleportAudit"],
+        log_types=[schema.LogTypeGravitationalTeleportAudit],
         severity=detection.SeverityMedium,
         description="A user has invoked a suspicious command that could lead to a host compromise",
         tags=["SSH", "Execution:Command and Scripting Interpreter"],
         reports={"MITRE ATT&CK": ["TA0002:T1059"]},
         reference="https://gravitational.com/teleport/docs/admin-guide/",
-        runbook="Find related commands within the time window and determine if the command was invoked legitimately. Examine the arguments to determine how the command was used and reach out to the user to verify the intentions.",
+        runbook="Find related commands within the time window and determine if the command " \
+            "was invoked legitimately. Examine the arguments to determine how the command was used and reach out to " \
+            "the user to verify the intentions.",
         alert_title=_title,
         summary_attrs=["event", "code", "user", "program", "path", "return_code", "login", "server_id", "sid"],
         alert_grouping=detection.AlertGrouping(period_minutes=60),

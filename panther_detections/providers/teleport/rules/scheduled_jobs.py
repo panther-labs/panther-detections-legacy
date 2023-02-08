@@ -1,6 +1,6 @@
 import typing
 
-from panther_sdk import PantherEvent, detection
+from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters
 
@@ -25,7 +25,7 @@ def scheduled_jobs(
         overrides=overrides,
         name="Teleport Scheduled Jobs",
         rule_id="Teleport.ScheduledJobs",
-        log_types=["Gravitational.TeleportAudit"],
+        log_types=[schema.LogTypeGravitationalTeleportAudit],
         severity=detection.SeverityMedium,
         description="A user has manually edited the Linux crontab",
         tags=["SSH", "Execution:Scheduled Task/Job"],

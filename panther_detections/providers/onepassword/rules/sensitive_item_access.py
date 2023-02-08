@@ -6,10 +6,10 @@ from panther_detections.utils import match_filters
 
 from .. import sample_logs
 from .._shared import (
-    SHARED_SUMMARY_ATTRS,
-    ITEM_USAGE_LOG_TYPE,
     SENSITIVE_ITEM_WATCHLIST,
-    create_item_usage_alert_context,
+    SHARED_SUMMARY_ATTRS,
+    SYSTEM_LOG_TYPE,
+    create_sensitive_item_access_alert_context,
     rule_tags,
 )
 

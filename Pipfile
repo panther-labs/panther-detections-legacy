@@ -15,7 +15,7 @@ nose = "~=1.3.7"
 twine = "*"
 
 [packages]
-panther-sdk = "~=0.0.21"
+panther-sdk = "~=0.0.24"
 
 [requires]
 python_version = "3.9"

@@ -19,8 +19,7 @@ class TestRulesEventTriggeredExternally(unittest.TestCase):
 
         title = rule.alert_title(evt) #type: ignore
 
-        self.assertEqual(title, "External user [{event.deep_get('created_by', 'login', default='<UNKNOWN_USER>')}] "\
-            "triggered a box event.")
+        self.assertEqual(title, "External user [<UNKNOWN_USER>] triggered a box event.")
     
     
     

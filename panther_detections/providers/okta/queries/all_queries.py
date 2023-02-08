@@ -54,7 +54,8 @@ def activity_audit(
         name="Okta Investigate User Activity",
         enabled=True,
         sql=sql,
-        description="Audit user activity across your environment. Customize to filter on specfic users, time ranges, etc",
+        description="Audit user activity across your environment. "
+        "Customize to filter on specfic users, time ranges, etc",
         schedule=default_query_schedule,
     )
 

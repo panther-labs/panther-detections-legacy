@@ -1,5 +1,3 @@
-import typing
-
 from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.providers.okta import sample_logs

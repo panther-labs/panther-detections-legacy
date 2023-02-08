@@ -17,31 +17,29 @@ class TestQueries(unittest.TestCase):
         ]
 
         for datalake in datalakes:
-<<<<<<< HEAD
-            q = okta.queries.activity_audit(datalake=datalake)
-            self.assertNotEqual(q.sql, "")
-            q = okta.queries.session_id_audit(datalake=datalake)
-            self.assertNotEqual(q.sql, "")
-            q = okta.queries.admin_access_granted(datalake=datalake)
-            self.assertNotEqual(q.sql, "")
-            q = okta.queries.mfa_password_reset_audit(datalake=datalake)
-            self.assertNotEqual(q.sql, "")
-            q = okta.queries.support_access(datalake=datalake)
-            self.assertNotEqual(q.sql, "")
-=======
             self.assertEqual(
-                okta.queries.activity_audit(datalake=datalake, overrides=override).name, name_override
+                okta.queries.activity_audit(datalake=datalake, overrides=override).name,
+                name_override,
             )
             self.assertEqual(
-                okta.queries.session_id_audit(datalake=datalake, overrides=override).name, name_override
+                okta.queries.session_id_audit(
+                    datalake=datalake, overrides=override
+                ).name,
+                name_override,
             )
             self.assertEqual(
-                okta.queries.admin_access_granted(datalake=datalake, overrides=override).name, name_override
+                okta.queries.admin_access_granted(
+                    datalake=datalake, overrides=override
+                ).name,
+                name_override,
             )
             self.assertEqual(
-                okta.queries.mfa_password_reset_audit(datalake=datalake, overrides=override).name, name_override
+                okta.queries.mfa_password_reset_audit(
+                    datalake=datalake, overrides=override
+                ).name,
+                name_override,
             )
             self.assertEqual(
-                okta.queries.support_access(datalake=datalake, overrides=override).name, name_override
+                okta.queries.support_access(datalake=datalake, overrides=override).name,
+                name_override,
             )
->>>>>>> main

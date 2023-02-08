@@ -4,6 +4,7 @@ from panther_sdk import PantherEvent
 
 __all__ = [
     "PRIVILEGED_ROLES",
+    "SHARED_TAGS",
     "get_zoom_user_context",
     "get_zoom_usergroup_context",
     "get_zoom_room_context",

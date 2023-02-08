@@ -32,8 +32,7 @@ def automatic_sign_out_disabled(
         tags=rule_tags(),
         description="A Zoom User turned off your organization's setting to automatically sign users out "
         "after a specified period of time.",
-        reference="https://support.zoom.us/hc/en-us/articles/115005756143-Changing-account-security-settings#"
-        ":~:text=Users%20need%20to%20sign%20in,of%205%20to%20120%20minutes",
+        reference="https://support.zoom.us/hc/en-us/articles/115005756143-Changing-account-security-settings#:~:text=Users%20need%20to%20sign%20in,of%205%20to%20120%20minutes",  # pylint: disable=C0301
         runbook="Confirm this user acted with valid business intent and determine whether this activity "
         "was authorized.",
         alert_title=_title,

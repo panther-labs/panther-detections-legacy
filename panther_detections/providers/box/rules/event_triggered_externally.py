@@ -6,7 +6,6 @@ from .. import sample_logs
 from .._shared import DOMAINS, rule_tags
 
 
-
 def event_triggered_externally(
     pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),

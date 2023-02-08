@@ -21,11 +21,7 @@ def api_key_created(
 
     def _title(event: PantherEvent) -> str:
         target = event.get("target", [{}])
-        key_name = (
-            target[0].get("displayName", "MISSING DISPLAY NAME")
-            if target
-            else "MISSING TARGET"
-        )
+        key_name = target[0].get("displayName", "MISSING DISPLAY NAME") if target else "MISSING TARGET"
 
         return (
             f"{event.deep_get('actor', 'displayName')} <{event.deep_get('actor', 'alternateId')}>"
@@ -71,11 +67,7 @@ def api_key_revoked(
 
     def _title(event: PantherEvent) -> str:
         target = event.get("target", [{}])
-        key_name = (
-            target[0].get("displayName", "MISSING DISPLAY NAME")
-            if target
-            else "MISSING TARGET"
-        )
+        key_name = target[0].get("displayName", "MISSING DISPLAY NAME") if target else "MISSING TARGET"
 
         return (
             f"{event.get('actor', {}).get('displayName')} <{event.get('actor', {}).get('alternateId')}>"

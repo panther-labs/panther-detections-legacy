@@ -69,12 +69,8 @@ def admin_role_assigned(
 
     def _title(event: PantherEvent) -> str:
         target = event.get("target", [{}])
-        display_name = (
-            target[0].get("displayName", "MISSING DISPLAY NAME") if target else ""
-        )
-        alternate_id = (
-            target[0].get("alternateId", "MISSING ALTERNATE ID") if target else ""
-        )
+        display_name = target[0].get("displayName", "MISSING DISPLAY NAME") if target else ""
+        alternate_id = target[0].get("alternateId", "MISSING ALTERNATE ID") if target else ""
         privilege = event.deep_get(
             "debugContext",
             "debugData",
@@ -89,10 +85,7 @@ def admin_role_assigned(
         )
 
     def _severity(event: PantherEvent) -> str:
-        if (
-            event.deep_get("debugContext", "debugData", "privilegeGranted")
-            == "Super administrator"
-        ):
+        if event.deep_get("debugContext", "debugData", "privilegeGranted") == "Super administrator":
             return "HIGH"
         return "INFO"
 
@@ -117,9 +110,7 @@ def admin_role_assigned(
         filters=[
             match_filters.deep_equal("eventType", "user.account.privilege.grant"),
             match_filters.deep_equal("outcome.result", "SUCCESS"),
-            match_filters.deep_equal_pattern(
-                "debugContext.debugData.privilegeGranted", r"[aA]dministrator"
-            ),
+            match_filters.deep_equal_pattern("debugContext.debugData.privilegeGranted", r"[aA]dministrator"),
         ],
         alert_title=_title,
         alert_context=create_alert_context,

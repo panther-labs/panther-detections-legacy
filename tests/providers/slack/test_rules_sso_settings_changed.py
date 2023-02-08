@@ -12,14 +12,3 @@ class TestRulesSsoSettingsChanged(unittest.TestCase):
         )
 
         self.assertEqual(rule.name, name_override)
-
-    def test_sso_settings_changed_title(self) -> None:
-        rule = slack.rules.sso_settings_changed()
-        evt = PantherEvent(json.loads(slack.sample_logs.SAMPLEEVENT))
-
-        title = rule.alert_title(evt) #type: ignore
-
-        #self.assertEqual(title, "ADD TITLE")
-    
-    
-    

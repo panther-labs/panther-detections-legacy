@@ -15,18 +15,16 @@ class TestRulesDlpModified(unittest.TestCase):
 
     def test_dlp_modified_title(self) -> None:
         rule = slack.rules.dlp_modified()
-        evt = PantherEvent(json.loads(slack.sample_logs.SAMPLEEVENT))
+        evt = PantherEvent(json.loads(slack.sample_logs.dlp_modified_native_dlp_rule_deactivated))
 
         title = rule.alert_title(evt) #type: ignore
 
-        #self.assertEqual(title, "ADD TITLE")
+        self.assertEqual(title, "Slack DLP Rule Deactivated")
     
     
     def test_dlp_modified_severity(self) -> None:
         rule = slack.rules.dlp_modified()
-        evt = PantherEvent(json.loads(slack.sample_logs.SAMPLEEVENT))
-        sev = rule.severity.func(evt)
+        evt = PantherEvent(json.loads(slack.sample_logs.dlp_modified_native_dlp_violation_deleted))
+        sev = rule.severity.func(evt) #type: ignore
 
-        # self.assertEqual(sev, "Low")        
-        
-    
+        self.assertEqual(sev, "Medium") 

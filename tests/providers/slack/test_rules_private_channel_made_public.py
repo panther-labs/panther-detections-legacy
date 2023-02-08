@@ -12,14 +12,3 @@ class TestRulesPrivateChannelMadePublic(unittest.TestCase):
         )
 
         self.assertEqual(rule.name, name_override)
-
-    def test_private_channel_made_public_title(self) -> None:
-        rule = slack.rules.private_channel_made_public()
-        evt = PantherEvent(json.loads(slack.sample_logs.SAMPLEEVENT))
-
-        title = rule.alert_title(evt) #type: ignore
-
-        #self.assertEqual(title, "ADD TITLE")
-    
-    
-    

@@ -15,18 +15,18 @@ class TestRulesUserPrivilegeEscalation(unittest.TestCase):
 
     def test_user_privilege_escalation_title(self) -> None:
         rule = slack.rules.user_privilege_escalation()
-        evt = PantherEvent(json.loads(slack.sample_logs.SAMPLEEVENT))
+        evt = PantherEvent(json.loads(slack.sample_logs.user_privilege_escalation_role_changed_to_owner))
 
         title = rule.alert_title(evt) #type: ignore
 
-        #self.assertEqual(title, "ADD TITLE")
+        self.assertEqual(title, "Slack User Made Owner")
     
     
     def test_user_privilege_escalation_severity(self) -> None:
         rule = slack.rules.user_privilege_escalation()
-        evt = PantherEvent(json.loads(slack.sample_logs.SAMPLEEVENT))
-        sev = rule.severity.func(evt)
+        evt = PantherEvent(json.loads(slack.sample_logs.user_privilege_escalation_permissions_assigned))
+        sev = rule.severity.func(evt) #type: ignore
 
-        # self.assertEqual(sev, "Low")        
+        self.assertEqual(sev, "Medium")        
         
     

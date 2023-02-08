@@ -15,11 +15,11 @@ class TestRulesIdpConfigurationChange(unittest.TestCase):
 
     def test_idp_configuration_change_title(self) -> None:
         rule = slack.rules.idp_configuration_change()
-        evt = PantherEvent(json.loads(slack.sample_logs.SAMPLEEVENT))
+        evt = PantherEvent(json.loads(slack.sample_logs.idp_configuration_change_idp_configuration_added))
 
         title = rule.alert_title(evt) #type: ignore
 
-        #self.assertEqual(title, "ADD TITLE")
+        self.assertEqual(title, "Slack IDP Configuration Added")
     
     
     

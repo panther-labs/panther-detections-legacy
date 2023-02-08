@@ -15,11 +15,11 @@ class TestRulesAppRemoved(unittest.TestCase):
 
     def test_app_removed_title(self) -> None:
         rule = slack.rules.app_removed()
-        evt = PantherEvent(json.loads(slack.sample_logs.SAMPLEEVENT))
+        evt = PantherEvent(json.loads(slack.sample_logs.app_removed_app_uninstalled))
 
         title = rule.alert_title(evt) #type: ignore
 
-        #self.assertEqual(title, "ADD TITLE")
+        self.assertEqual(title, "Slack App [app-name] Removed by [primary-owner]")
     
     
     

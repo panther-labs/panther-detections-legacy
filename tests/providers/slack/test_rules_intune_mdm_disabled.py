@@ -12,14 +12,3 @@ class TestRulesIntuneMdmDisabled(unittest.TestCase):
         )
 
         self.assertEqual(rule.name, name_override)
-
-    def test_intune_mdm_disabled_title(self) -> None:
-        rule = slack.rules.intune_mdm_disabled()
-        evt = PantherEvent(json.loads(slack.sample_logs.SAMPLEEVENT))
-
-        title = rule.alert_title(evt) #type: ignore
-
-        #self.assertEqual(title, "ADD TITLE")
-    
-    
-    

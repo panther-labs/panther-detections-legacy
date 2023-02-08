@@ -15,11 +15,11 @@ class TestRulesLegalHoldPolicyModified(unittest.TestCase):
 
     def test_legal_hold_policy_modified_title(self) -> None:
         rule = slack.rules.legal_hold_policy_modified()
-        evt = PantherEvent(json.loads(slack.sample_logs.SAMPLEEVENT))
+        evt = PantherEvent(json.loads(slack.sample_logs.legal_hold_policy_modified_legal_hold___exclusions_added))
 
         title = rule.alert_title(evt) #type: ignore
 
-        #self.assertEqual(title, "ADD TITLE")
+        self.assertEqual(title, "Slack Exclusions Added to Legal Hold Policy")
     
     
     

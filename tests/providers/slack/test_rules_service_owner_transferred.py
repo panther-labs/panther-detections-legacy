@@ -13,13 +13,6 @@ class TestRulesServiceOwnerTransferred(unittest.TestCase):
 
         self.assertEqual(rule.name, name_override)
 
-    def test_service_owner_transferred_title(self) -> None:
-        rule = slack.rules.service_owner_transferred()
-        evt = PantherEvent(json.loads(slack.sample_logs.SAMPLEEVENT))
-
-        title = rule.alert_title(evt) #type: ignore
-
-        #self.assertEqual(title, "ADD TITLE")
     
     
     

@@ -15,18 +15,16 @@ class TestRulesAppAdded(unittest.TestCase):
 
     def test_app_added_title(self) -> None:
         rule = slack.rules.app_added()
-        evt = PantherEvent(json.loads(slack.sample_logs.SAMPLEEVENT))
+        evt = PantherEvent(json.loads(slack.sample_logs.app_added_app_approved))
 
         title = rule.alert_title(evt) #type: ignore
 
-        #self.assertEqual(title, "ADD TITLE")
+        self.assertEqual(title, "Slack App [app-name] Added by [primary-owner]")
     
     
     def test_app_added_severity(self) -> None:
         rule = slack.rules.app_added()
-        evt = PantherEvent(json.loads(slack.sample_logs.SAMPLEEVENT))
-        sev = rule.severity.func(evt)
+        evt = PantherEvent(json.loads(slack.sample_logs.app_added_app_approved))
+        sev = rule.severity.func(evt) #type: ignore
 
-        # self.assertEqual(sev, "Low")        
-        
-    
+        self.assertEqual(sev, "High")        

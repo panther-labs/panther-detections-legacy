@@ -15,11 +15,11 @@ class TestRulesInformationBarrierModified(unittest.TestCase):
 
     def test_information_barrier_modified_title(self) -> None:
         rule = slack.rules.information_barrier_modified()
-        evt = PantherEvent(json.loads(slack.sample_logs.SAMPLEEVENT))
+        evt = PantherEvent(json.loads(slack.sample_logs.information_barrier_modified_information_barrier_deleted))
 
         title = rule.alert_title(evt) #type: ignore
 
-        #self.assertEqual(title, "ADD TITLE")
+        self.assertEqual(title, "Slack Information Barrier Deleted")
     
     
     

@@ -15,18 +15,19 @@ class TestRulesAppAccessExpanded(unittest.TestCase):
 
     def test_app_access_expanded_title(self) -> None:
         rule = slack.rules.app_access_expanded()
-        evt = PantherEvent(json.loads(slack.sample_logs.SAMPLEEVENT))
+        evt = PantherEvent(json.loads(slack.sample_logs.app_access_expanded_app_scopes_expanded
+))
 
         title = rule.alert_title(evt) #type: ignore
 
-        #self.assertEqual(title, "ADD TITLE")
+        self.assertEqual(title, "Slack App [None] Access Expanded by [username]")
     
     
     def test_app_access_expanded_severity(self) -> None:
         rule = slack.rules.app_access_expanded()
-        evt = PantherEvent(json.loads(slack.sample_logs.SAMPLEEVENT))
-        sev = rule.severity.func(evt)
+        evt = PantherEvent(json.loads(slack.sample_logs.app_access_expanded_app_scopes_expanded))
+        sev = rule.severity.func(evt) #type: ignore
 
-        # self.assertEqual(sev, "Low")        
+        self.assertEqual(sev, "Medium")        
         
     

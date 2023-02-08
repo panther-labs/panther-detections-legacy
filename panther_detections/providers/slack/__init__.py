@@ -1,6 +1,6 @@
 from typing import Literal
 
-from . import queries, rules, sample_logs
+from . import rules, sample_logs
 from ._shared import *
 
 
@@ -25,4 +25,4 @@ def use_all_with_defaults() -> None:
     rules.app_removed()
     rules.app_added()
     rules.dlp_modified()
-    rules.application_dos()
+    # rules.application_dos()

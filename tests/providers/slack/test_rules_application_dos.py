@@ -12,14 +12,3 @@ class TestRulesApplicationDos(unittest.TestCase):
         )
 
         self.assertEqual(rule.name, name_override)
-
-    def test_application_dos_title(self) -> None:
-        rule = slack.rules.application_dos()
-        evt = PantherEvent(json.loads(slack.sample_logs.SAMPLEEVENT))
-
-        title = rule.alert_title(evt) #type: ignore
-
-        #self.assertEqual(title, "ADD TITLE")
-    
-    
-    

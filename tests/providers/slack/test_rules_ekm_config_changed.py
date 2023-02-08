@@ -12,14 +12,3 @@ class TestRulesEkmConfigChanged(unittest.TestCase):
         )
 
         self.assertEqual(rule.name, name_override)
-
-    def test_ekm_config_changed_title(self) -> None:
-        rule = slack.rules.ekm_config_changed()
-        evt = PantherEvent(json.loads(slack.sample_logs.SAMPLEEVENT))
-
-        title = rule.alert_title(evt) #type: ignore
-
-        #self.assertEqual(title, "ADD TITLE")
-    
-    
-    

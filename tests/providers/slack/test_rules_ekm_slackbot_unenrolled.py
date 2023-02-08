@@ -12,14 +12,3 @@ class TestRulesEkmSlackbotUnenrolled(unittest.TestCase):
         )
 
         self.assertEqual(rule.name, name_override)
-
-    def test_ekm_slackbot_unenrolled_title(self) -> None:
-        rule = slack.rules.ekm_slackbot_unenrolled()
-        evt = PantherEvent(json.loads(slack.sample_logs.SAMPLEEVENT))
-
-        title = rule.alert_title(evt) #type: ignore
-
-        #self.assertEqual(title, "ADD TITLE")
-    
-    
-    

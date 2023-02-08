@@ -6,9 +6,9 @@ from panther_detections.utils import match_filters
 
 from .. import sample_logs
 from .._shared import (
-    SHARED_SUMMARY_ATTRS,
-    ITEM_USAGE_LOG_TYPE,
     CLIENT_ALLOWLIST,
+    ITEM_USAGE_LOG_TYPE,
+    SHARED_SUMMARY_ATTRS,
     create_item_usage_alert_context,
     rule_tags,
 )
@@ -30,12 +30,7 @@ def lut_sensitive_item_access(
         name="BETA - Sensitive 1Password Item Accessed",
         rule_id="OnePassword.Lut.Sensitive.Item",
         log_types=[ITEM_USAGE_LOG_TYPE],
-        tags=rule_tags(
-            "Credential Access:Unsecured Credentials",
-            "BETA",
-            "Lookup Table",
-            "Configuration Required"
-        ),
+        tags=rule_tags("Credential Access:Unsecured Credentials", "BETA", "Lookup Table", "Configuration Required"),
         reports={detection.ReportKeyMITRE: ["TA0006:T1552"]},
         severity=detection.SeverityLow,
         description="Alerts when a user defined list of sensitive items in 1Password is accessed",

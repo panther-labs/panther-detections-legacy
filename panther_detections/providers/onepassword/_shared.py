@@ -8,7 +8,7 @@ __all__ = [
     "SHARED_TAGS",
     "SHARED_SUMMARY_ATTRS",
     "create_sign_in_attempt_alert_context",
-    "create_item_usage_alert_context"
+    "create_item_usage_alert_context",
 ]
 
 SIGN_IN_ATTEMPT_LOG_TYPE = "OnePassword.SignInAttempt"

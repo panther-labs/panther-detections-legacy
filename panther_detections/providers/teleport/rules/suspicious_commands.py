@@ -3,6 +3,7 @@ import typing
 from panther_sdk import PantherEvent, detection, schema
 
 from .. import sample_logs
+from .._shared import SUSPICIOUS_COMMANDS, rule_tags
 
 
 def suspicious_commands(
@@ -10,7 +11,6 @@ def suspicious_commands(
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
 ) -> detection.Rule:
     """A user has invoked a suspicious command that could lead to a host compromise"""
-    SUSPICIOUS_COMMANDS = ["nc", "wget"]
 
     def _title(event: PantherEvent) -> str:
         return (
@@ -31,7 +31,7 @@ def suspicious_commands(
         log_types=[schema.LogTypeGravitationalTeleportAudit],
         severity=detection.SeverityMedium,
         description="A user has invoked a suspicious command that could lead to a host compromise",
-        tags=["SSH", "Execution:Command and Scripting Interpreter"],
+        tags=rule_tags("SSH", "Execution:Command and Scripting Interpreter"),
         reports={"MITRE ATT&CK": ["TA0002:T1059"]},
         reference="https://gravitational.com/teleport/docs/admin-guide/",
         runbook="Find related commands within the time window and determine if the command "

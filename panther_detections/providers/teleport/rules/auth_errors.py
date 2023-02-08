@@ -5,6 +5,7 @@ from panther_sdk import PantherEvent, detection, schema
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
+from .._shared import rule_tags
 
 
 def auth_errors(
@@ -23,7 +24,7 @@ def auth_errors(
         log_types=[schema.LogTypeGravitationalTeleportAudit],
         severity=detection.SeverityMedium,
         description="A high volume of SSH errors could indicate a brute-force attack",
-        tags=["SSH", "Credential Access:Brute Force"],
+        tags=rule_tags("SSH", "Credential Access:Brute Force"),
         reports={"MITRE ATT&CK": ["TA0006:T1110"]},
         reference="https://gravitational.com/teleport/docs/admin-guide/",
         runbook="Check that the user making the failed requests legitimately tried logging in that many times.",

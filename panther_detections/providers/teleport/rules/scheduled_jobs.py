@@ -5,6 +5,7 @@ from panther_sdk import PantherEvent, detection, schema
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
+from .._shared import rule_tags
 
 
 def scheduled_jobs(
@@ -28,7 +29,7 @@ def scheduled_jobs(
         log_types=[schema.LogTypeGravitationalTeleportAudit],
         severity=detection.SeverityMedium,
         description="A user has manually edited the Linux crontab",
-        tags=["SSH", "Execution:Scheduled Task/Job"],
+        tags=rule_tags("SSH", "Execution:Scheduled Task/Job"),
         reports={"MITRE ATT&CK": ["TA0002:T1053"]},
         reference="https://gravitational.com/teleport/docs/admin-guide/",
         runbook="Validate the user behavior and rotate the host if necessary.",

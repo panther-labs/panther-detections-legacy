@@ -5,6 +5,7 @@ from panther_sdk import PantherEvent, detection, schema
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
+from .._shared import USER_CREATE_PATTERNS, rule_tags
 
 
 def create_user_accounts(
@@ -12,24 +13,12 @@ def create_user_accounts(
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
 ) -> detection.Rule:
     """A user has been manually created, modified, or deleted"""
-    # from panther_base_helpers import pattern_match_list
-
-    USER_CREATE_PATTERNS = [
-        "chage",  # user password expiry
-        "passwd",  # change passwords for users
-        "user*",  # create, modify, and delete users
-    ]
 
     def _title(event: PantherEvent) -> str:
         return f"User [{event.get('user', '<UNKNOWN_USER>')}] has manually modified system users"
 
     def _filter(event: PantherEvent) -> bool:
-        from fnmatch import fnmatch
-        from typing import Sequence
-
-        def pattern_match_list(string_to_match: str, patterns: Sequence[str]):
-            """Check that a string matches any pattern in a given list"""
-            return any(fnmatch(string_to_match, p) for p in patterns)
+        from panther_detections.utils.legacy_utils import pattern_match_list
 
         return pattern_match_list(event.get("program"), USER_CREATE_PATTERNS)
 
@@ -40,7 +29,7 @@ def create_user_accounts(
         log_types=[schema.LogTypeGravitationalTeleportAudit],
         severity=detection.SeverityHigh,
         description="A user has been manually created, modified, or deleted",
-        tags=["SSH", "Persistence:Create Account"],
+        tags=rule_tags("SSH", "Persistence:Create Account"),
         reports={"MITRE ATT&CK": ["TA0003:T1136"]},
         reference="https://gravitational.com/teleport/docs/admin-guide/",
         runbook="Analyze why it was manually created and delete it if necessary.",

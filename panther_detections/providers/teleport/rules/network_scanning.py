@@ -3,6 +3,7 @@ import typing
 from panther_sdk import PantherEvent, detection, schema
 
 from .. import sample_logs
+from .._shared import SCAN_COMMANDS, rule_tags
 
 
 def network_scanning(
@@ -10,7 +11,6 @@ def network_scanning(
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
 ) -> detection.Rule:
     """A user has invoked a network scan that could potentially indicate enumeration of the network."""
-    SCAN_COMMANDS = ["arp", "arp-scan", "fping", "nmap"]
 
     def _title(event: PantherEvent) -> str:
         return (
@@ -31,7 +31,7 @@ def network_scanning(
         log_types=[schema.LogTypeGravitationalTeleportAudit],
         severity=detection.SeverityMedium,
         description="A user has invoked a network scan that could potentially indicate enumeration of the network.",
-        tags=["SSH", "Discovery:Network Service Discovery"],
+        tags=rule_tags("SSH", "Discovery:Network Service Discovery"),
         reports={"MITRE ATT&CK": ["TA0007:T1046"]},
         reference="https://gravitational.com/teleport/docs/admin-guide/",
         runbook="Find related commands within the time window and determine if the command was invoked legitimately. "

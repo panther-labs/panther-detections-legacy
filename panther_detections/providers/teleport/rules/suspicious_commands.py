@@ -4,6 +4,7 @@ from panther_sdk import PantherEvent, detection, schema
 
 from .. import sample_logs
 
+
 def suspicious_commands(
     pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
@@ -33,9 +34,9 @@ def suspicious_commands(
         tags=["SSH", "Execution:Command and Scripting Interpreter"],
         reports={"MITRE ATT&CK": ["TA0002:T1059"]},
         reference="https://gravitational.com/teleport/docs/admin-guide/",
-        runbook="Find related commands within the time window and determine if the command " \
-            "was invoked legitimately. Examine the arguments to determine how the command was used and reach out to " \
-            "the user to verify the intentions.",
+        runbook="Find related commands within the time window and determine if the command "
+        "was invoked legitimately. Examine the arguments to determine how the command was used and reach out to "
+        "the user to verify the intentions.",
         alert_title=_title,
         summary_attrs=["event", "code", "user", "program", "path", "return_code", "login", "server_id", "sid"],
         alert_grouping=detection.AlertGrouping(period_minutes=60),

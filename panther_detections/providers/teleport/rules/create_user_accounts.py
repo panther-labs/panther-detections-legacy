@@ -6,6 +6,7 @@ from panther_detections.utils import match_filters
 
 from .. import sample_logs
 
+
 def create_user_accounts(
     pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),

@@ -1,8 +1,6 @@
 import typing
 
-
 from panther_sdk import PantherEvent, detection
-
 
 from panther_detections.utils import match_filters
 

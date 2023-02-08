@@ -1,5 +1,3 @@
-import typing
-
 from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters
@@ -11,8 +9,8 @@ __all__ = ["real_time_response_session"]
 
 
 def real_time_response_session(
-    pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
+    extensions: detection.RuleExtensions = detection.RuleExtensions(),
 ) -> detection.Rule:
     """Alert when someone uses Crowdstrike’s RTR (real-time response)
     capability to access a machine remotely to run commands."""
@@ -33,6 +31,7 @@ def real_time_response_session(
 
     return detection.Rule(
         overrides=overrides,
+        extensions=extensions,
         name="Crowdstrike Real Time Response (RTS) Session",
         rule_id="Crowdstrike.RealTimeResponse.Session",
         log_types=[schema.LogTypeCrowdstrikeFDREvent, schema.LogTypeCrowdstrikeUnknown],
@@ -43,17 +42,25 @@ def real_time_response_session(
         reference="https://falcon.us-2.crowdstrike.com/documentation/71/real-time-response-and-network-containment#"
         "reviewing-real-time-response-audit-logs",
         runbook="Validate the real-time response session started by the Actor.",
-        filters=(pre_filters or [])
-        + [match_filters.deep_equal("unknown_payload.ExternalApiType", "Event_RemoteResponseSessionStartEvent")],
+        filters=[
+            match_filters.deep_equal(
+                "unknown_payload.ExternalApiType",
+                "Event_RemoteResponseSessionStartEvent",
+            )
+        ],
         alert_title=_title,
         alert_context=_alert_context,
         unit_tests=(
             [
                 detection.JSONUnitTest(
-                    name="RTS session start event", expect_match=True, data=sample_logs.rts_session_start_event
+                    name="RTS session start event",
+                    expect_match=True,
+                    data=sample_logs.rts_session_start_event,
                 ),
                 detection.JSONUnitTest(
-                    name="RTS session not started", expect_match=False, data=sample_logs.rts_session_not_started
+                    name="RTS session not started",
+                    expect_match=False,
+                    data=sample_logs.rts_session_not_started,
                 ),
             ]
         ),

@@ -2,6 +2,7 @@ import typing
 import unittest
 
 from panther_sdk import query
+
 from panther_detections.providers import okta
 
 
@@ -17,17 +18,28 @@ class TestQueries(unittest.TestCase):
 
         for datalake in datalakes:
             self.assertEqual(
-                okta.queries.activity_audit(datalake=datalake, overrides=override).name, name_override
+                okta.queries.activity_audit(datalake=datalake, overrides=override).name,
+                name_override,
             )
             self.assertEqual(
-                okta.queries.session_id_audit(datalake=datalake, overrides=override).name, name_override
+                okta.queries.session_id_audit(
+                    datalake=datalake, overrides=override
+                ).name,
+                name_override,
             )
             self.assertEqual(
-                okta.queries.admin_access_granted(datalake=datalake, overrides=override).name, name_override
+                okta.queries.admin_access_granted(
+                    datalake=datalake, overrides=override
+                ).name,
+                name_override,
             )
             self.assertEqual(
-                okta.queries.mfa_password_reset_audit(datalake=datalake, overrides=override).name, name_override
+                okta.queries.mfa_password_reset_audit(
+                    datalake=datalake, overrides=override
+                ).name,
+                name_override,
             )
             self.assertEqual(
-                okta.queries.support_access(datalake=datalake, overrides=override).name, name_override
+                okta.queries.support_access(datalake=datalake, overrides=override).name,
+                name_override,
             )

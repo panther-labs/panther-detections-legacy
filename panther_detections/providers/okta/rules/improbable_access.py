@@ -1,17 +1,11 @@
 import typing
 
-from panther_core import PantherEvent
-from panther_sdk import detection
+from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
-from .._shared import (
-    SHARED_SUMMARY_ATTRS,
-    SYSTEM_LOG_TYPE,
-    create_alert_context,
-    rule_tags,
-)
+from .._shared import SHARED_SUMMARY_ATTRS, create_alert_context, rule_tags
 
 __all__ = ["geo_improbable_access", "geo_improbable_access_filter"]
 
@@ -112,8 +106,8 @@ def geo_improbable_access_filter() -> detection.PythonFilter:
 
 
 def geo_improbable_access(
-    pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
+    extensions: detection.RuleExtensions = detection.RuleExtensions(),
 ) -> detection.Rule:
     """A user has subsequent logins from two geographic locations that are very far apart"""
 
@@ -139,17 +133,17 @@ def geo_improbable_access(
 
     return detection.Rule(
         overrides=overrides,
+        extensions=extensions,
         name="Geographically Improbable Okta Login",
         rule_id="Okta.GeographicallyImprobableAccess",
-        log_types=[SYSTEM_LOG_TYPE],
+        log_types=[schema.LogTypeOktaSystemLog],
         tags=rule_tags("Initial Access:Valid Accounts"),
         reports={detection.ReportKeyMITRE: ["TA0001:T1078"]},
         severity=detection.SeverityHigh,
         description="",
         reference="",
         runbook="Reach out to the user if needed to validate the activity, then lock the account",
-        filters=(pre_filters or [])
-        + [
+        filters=[
             match_filters.deep_equal("eventType", "user.session.start"),
             match_filters.deep_equal("outcome.result", "FAILURE"),
             geo_improbable_access_filter(),

@@ -1,17 +1,9 @@
-import typing
-
-from panther_core import PantherEvent
-from panther_sdk import detection
+from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
-from .._shared import (
-    SHARED_SUMMARY_ATTRS,
-    SYSTEM_LOG_TYPE,
-    create_alert_context,
-    rule_tags,
-)
+from .._shared import SHARED_SUMMARY_ATTRS, create_alert_context, rule_tags
 
 __all__ = [
     "api_key_created",
@@ -20,8 +12,8 @@ __all__ = [
 
 
 def api_key_created(
-    pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
+    extensions: detection.RuleExtensions = detection.RuleExtensions(),
 ) -> detection.Rule:
     """A user created an API Key in Okta"""
 
@@ -36,9 +28,10 @@ def api_key_created(
 
     return detection.Rule(
         overrides=overrides,
+        extensions=extensions,
         name="Okta API Key Created",
         rule_id="Okta.APIKeyCreated",
-        log_types=[SYSTEM_LOG_TYPE],
+        log_types=[schema.LogTypeOktaSystemLog],
         tags=rule_tags(
             "Credential Access:Steal Application Access Token",
         ),
@@ -47,8 +40,7 @@ def api_key_created(
         description="A user created an API Key in Okta",
         reference="https://help.okta.com/en/prod/Content/Topics/Security/API.htm",
         runbook="Reach out to the user if needed to validate the activity.",
-        filters=(pre_filters or [])
-        + [
+        filters=[
             match_filters.deep_equal("eventType", "system.api_token.create"),
             match_filters.deep_equal("outcome.result", "SUCCESS"),
         ],
@@ -66,8 +58,8 @@ def api_key_created(
 
 
 def api_key_revoked(
-    pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
+    extensions: detection.RuleExtensions = detection.RuleExtensions(),
 ) -> detection.Rule:
     """A user has revoked an API Key in Okta"""
 
@@ -82,16 +74,16 @@ def api_key_revoked(
 
     return detection.Rule(
         overrides=overrides,
+        extensions=extensions,
         name="Okta API Key Revoked",
         rule_id="Okta.APIKeyRevoked",
-        log_types=[SYSTEM_LOG_TYPE],
+        log_types=[schema.LogTypeOktaSystemLog],
         tags=rule_tags(),
         severity=detection.SeverityInfo,
         description="A user has revoked an API Key in Okta",
         reference="https://help.okta.com/en/prod/Content/Topics/Security/API.htm",
         runbook="Validate this action was authorized.",
-        filters=(pre_filters or [])
-        + [
+        filters=[
             match_filters.deep_equal("eventType", "system.api_token.revoke"),
             match_filters.deep_equal("outcome.result", "SUCCESS"),
         ],

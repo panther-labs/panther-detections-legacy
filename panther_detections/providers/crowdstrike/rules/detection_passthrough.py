@@ -1,5 +1,3 @@
-import typing
-
 from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters
@@ -11,8 +9,8 @@ __all__ = ["detection_passthrough"]
 
 
 def detection_passthrough(
-    pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
+    extensions: detection.RuleExtensions = detection.RuleExtensions(),
 ) -> detection.Rule:
     """Crowdstrike Falcon has detected malicious activity on a host."""
 
@@ -27,9 +25,13 @@ def detection_passthrough(
 
     return detection.Rule(
         overrides=overrides,
+        extensions=extensions,
         name="Crowdstrike Detection Passthrough",
         rule_id="Crowdstrike.Detection.Passthrough",
-        log_types=[schema.LogTypeCrowdstrikeFDREvent, schema.LogTypeCrowdstrikeDetectionSummary],
+        log_types=[
+            schema.LogTypeCrowdstrikeFDREvent,
+            schema.LogTypeCrowdstrikeDetectionSummary,
+        ],
         tags=rule_tags(),
         severity=detection.DynamicStringField(
             func=_severity,
@@ -37,7 +39,7 @@ def detection_passthrough(
         ),
         description="Crowdstrike Falcon has detected malicious activity on a host.",
         runbook="Follow the Falcon console link and follow the IR process as needed.",
-        filters=(pre_filters or []) + [match_filters.deep_equal("ExternalApiType", "Event_DetectionSummaryEvent")],
+        filters=[match_filters.deep_equal("ExternalApiType", "Event_DetectionSummaryEvent")],
         alert_title=_title,
         alert_context=crowdstrike_alert_context,
         summary_attrs=["p_any_ip_addresses"],

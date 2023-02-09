@@ -1,13 +1,10 @@
-import typing
-
-from panther_sdk import PantherEvent, detection
+from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
 from .._shared import (
     SHARED_SUMMARY_ATTRS,
-    SYSTEM_LOG_TYPE,
     create_alert_context,
     rule_tags,
     standard_tags,
@@ -20,8 +17,8 @@ __all__ = [
 
 
 def admin_disabled_mfa(
-    pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
+    extensions: detection.RuleExtensions = detection.RuleExtensions(),
 ) -> detection.Rule:
     """An admin user has disabled the MFA requirement for your Okta account"""
 
@@ -30,9 +27,10 @@ def admin_disabled_mfa(
 
     return detection.Rule(
         overrides=overrides,
+        extensions=extensions,
         name="Okta MFA Globally Disabled",
         rule_id="Okta.Global.MFA.Disabled",
-        log_types=[SYSTEM_LOG_TYPE],
+        log_types=[schema.LogTypeOktaSystemLog],
         tags=rule_tags(
             standard_tags.DATA_MODEL,
             "Defense Evasion:Modify Authentication Process",
@@ -42,10 +40,7 @@ def admin_disabled_mfa(
         description="An admin user has disabled the MFA requirement for your Okta account",
         reference="https://developer.okta.com/docs/reference/api/event-types/?q=system.mfa.factor.deactivate",
         runbook="Contact Admin to ensure this was sanctioned activity",
-        filters=(pre_filters or [])
-        + [
-            match_filters.deep_equal("eventType", "system.mfa.factor.deactivate"),
-        ],
+        filters=match_filters.deep_equal("eventType", "system.mfa.factor.deactivate"),
         alert_title=_title,
         alert_context=create_alert_context,
         summary_attrs=SHARED_SUMMARY_ATTRS,
@@ -65,8 +60,8 @@ def admin_disabled_mfa(
 
 
 def admin_role_assigned(
-    pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
+    extensions: detection.RuleExtensions = detection.RuleExtensions(),
 ) -> detection.Rule:
     """A user has been granted administrative privileges in Okta"""
 
@@ -94,9 +89,10 @@ def admin_role_assigned(
 
     return detection.Rule(
         overrides=overrides,
+        extensions=extensions,
         name="Okta Admin Role Assigned",
         rule_id="Okta.AdminRoleAssigned",
-        log_types=[SYSTEM_LOG_TYPE],
+        log_types=[schema.LogTypeOktaSystemLog],
         tags=rule_tags(
             standard_tags.DATA_MODEL,
             "Privilege Escalation:Valid Accounts",
@@ -109,8 +105,7 @@ def admin_role_assigned(
         description="A user has been granted administrative privileges in Okta",
         reference="https://help.okta.com/en/prod/Content/Topics/Security/administrators-admin-comparison.htm",
         runbook="Reach out to the user if needed to validate the activity",
-        filters=(pre_filters or [])
-        + [
+        filters=[
             match_filters.deep_equal("eventType", "user.account.privilege.grant"),
             match_filters.deep_equal("outcome.result", "SUCCESS"),
             match_filters.deep_equal_pattern("debugContext.debugData.privilegeGranted", r"[aA]dministrator"),

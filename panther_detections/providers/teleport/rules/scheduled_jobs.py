@@ -9,8 +9,9 @@ from .._shared import rule_tags
 
 
 def scheduled_jobs(
-    pre_filters: typing.List[detection.AnyFilter] = None,
+    
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
+    extensions: detection.RuleExtensions = detection.RuleExtensions(),
 ) -> detection.Rule:
     """A user has manually edited the Linux crontab"""
 
@@ -24,6 +25,7 @@ def scheduled_jobs(
 
     return detection.Rule(
         overrides=overrides,
+        extensions=extensions,
         name="Teleport Scheduled Jobs",
         rule_id="Teleport.ScheduledJobs",
         log_types=[schema.LogTypeGravitationalTeleportAudit],
@@ -37,8 +39,7 @@ def scheduled_jobs(
         summary_attrs=["event", "code", "user", "program", "path", "return_code", "login", "server_id", "sid"],
         threshold=10,
         alert_grouping=detection.AlertGrouping(period_minutes=15),
-        filters=(pre_filters or [])
-        + [
+        filters=[
             match_filters.deep_equal("event", "session.command"),
             match_filters.deep_equal("program", "crontab"),
             detection.PythonFilter(func=_filter),

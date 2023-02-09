@@ -7,8 +7,9 @@ from .._shared import SCAN_COMMANDS, rule_tags
 
 
 def network_scanning(
-    pre_filters: typing.List[detection.AnyFilter] = None,
+    
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
+    extensions: detection.RuleExtensions = detection.RuleExtensions(),
 ) -> detection.Rule:
     """A user has invoked a network scan that could potentially indicate enumeration of the network."""
 
@@ -26,6 +27,7 @@ def network_scanning(
 
     return detection.Rule(
         overrides=overrides,
+        extensions=extensions,
         name="Teleport Network Scan Initiated",
         rule_id="Teleport.NetworkScanning",
         log_types=[schema.LogTypeGravitationalTeleportAudit],
@@ -39,7 +41,7 @@ def network_scanning(
         alert_title=_title,
         summary_attrs=["event", "code", "user", "program", "path", "return_code", "login", "server_id", "sid"],
         alert_grouping=detection.AlertGrouping(period_minutes=60),
-        filters=(pre_filters or []) + [detection.PythonFilter(func=_filter)],
+        filters=detection.PythonFilter(func=_filter),
         unit_tests=(
             [
                 detection.JSONUnitTest(name="Echo command", expect_match=False, data=sample_logs.echo_command),

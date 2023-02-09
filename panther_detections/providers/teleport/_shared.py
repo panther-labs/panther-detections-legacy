@@ -16,7 +16,6 @@ SHARED_TAGS = [
 def rule_tags(*extra_tags: str) -> List[str]:
     return [*SHARED_TAGS, *extra_tags]
 
-
 SUSPICIOUS_COMMANDS = ["nc", "wget"]
 
 SCAN_COMMANDS = ["arp", "arp-scan", "fping", "nmap"]

@@ -7,8 +7,9 @@ from .._shared import SUSPICIOUS_COMMANDS, rule_tags
 
 
 def suspicious_commands(
-    pre_filters: typing.List[detection.AnyFilter] = None,
+    
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
+    extensions: detection.RuleExtensions = detection.RuleExtensions(),
 ) -> detection.Rule:
     """A user has invoked a suspicious command that could lead to a host compromise"""
 
@@ -26,6 +27,7 @@ def suspicious_commands(
 
     return detection.Rule(
         overrides=overrides,
+        extensions=extensions,
         name="Teleport Suspicious Commands Executed",
         rule_id="Teleport.SuspiciousCommands",
         log_types=[schema.LogTypeGravitationalTeleportAudit],
@@ -40,7 +42,7 @@ def suspicious_commands(
         alert_title=_title,
         summary_attrs=["event", "code", "user", "program", "path", "return_code", "login", "server_id", "sid"],
         alert_grouping=detection.AlertGrouping(period_minutes=60),
-        filters=(pre_filters or []) + [detection.PythonFilter(func=_filter)],
+        filters=detection.PythonFilter(func=_filter),
         unit_tests=(
             [
                 detection.JSONUnitTest(name="Echo command", expect_match=False, data=sample_logs.echo_command),

@@ -9,8 +9,8 @@ from .._shared import USER_CREATE_PATTERNS, rule_tags
 
 
 def create_user_accounts(
-    pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
+    extensions: detection.RuleExtensions = detection.RuleExtensions(),
 ) -> detection.Rule:
     """A user has been manually created, modified, or deleted"""
 
@@ -24,6 +24,7 @@ def create_user_accounts(
 
     return detection.Rule(
         overrides=overrides,
+        extensions=extensions,
         name="Teleport Create User Accounts",
         rule_id="Teleport.CreateUserAccounts",
         log_types=[schema.LogTypeGravitationalTeleportAudit],
@@ -36,8 +37,7 @@ def create_user_accounts(
         alert_title=_title,
         summary_attrs=["event", "code", "user", "program", "path", "return_code", "login", "server_id", "sid"],
         alert_grouping=detection.AlertGrouping(period_minutes=15),
-        filters=(pre_filters or [])
-        + [match_filters.deep_equal("event", "session.command"), detection.PythonFilter(func=_filter)],
+        filters=[match_filters.deep_equal("event", "session.command"), detection.PythonFilter(func=_filter)],
         unit_tests=(
             [
                 detection.JSONUnitTest(name="Echo command", expect_match=False, data=sample_logs.echo_command),

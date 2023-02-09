@@ -7,7 +7,6 @@ from .._shared import SCAN_COMMANDS, rule_tags
 
 
 def network_scanning(
-    
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
     extensions: detection.RuleExtensions = detection.RuleExtensions(),
 ) -> detection.Rule:

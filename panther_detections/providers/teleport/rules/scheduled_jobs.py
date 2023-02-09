@@ -9,7 +9,6 @@ from .._shared import rule_tags
 
 
 def scheduled_jobs(
-    
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
     extensions: detection.RuleExtensions = detection.RuleExtensions(),
 ) -> detection.Rule:

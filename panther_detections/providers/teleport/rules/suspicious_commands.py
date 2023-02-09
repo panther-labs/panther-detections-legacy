@@ -7,7 +7,6 @@ from .._shared import SUSPICIOUS_COMMANDS, rule_tags
 
 
 def suspicious_commands(
-    
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
     extensions: detection.RuleExtensions = detection.RuleExtensions(),
 ) -> detection.Rule:

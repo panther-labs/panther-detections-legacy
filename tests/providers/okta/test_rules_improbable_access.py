@@ -1,32 +1,34 @@
-import unittest
-from panther_detections.providers import okta
+# TODO: uncomment this file once panther_oss_helpers have been converted
 
-from panther_sdk import testing, detection, PantherEvent
-from panther_detections.providers.okta.rules.improbable_access import geo_improbable_access_filter
+# import unittest
+# from panther_detections.providers import okta
 
-
-class TestGIAFilters(testing.PantherPythonFilterTestCase):
-    def test_geo_improbable_access_filter_valid(self) -> None:
-        f = geo_improbable_access_filter()
-        self.assertFilterIsValid(f)
+# from panther_sdk import testing, detection, PantherEvent
+# from panther_detections.providers.okta.rules.improbable_access import geo_improbable_access_filter
 
 
-class TestRulesImprobableAccess(unittest.TestCase):
-    def test_improbable_access(self) -> None:
-        name_override = "Override Name"
-        rule = okta.rules.geo_improbable_access(
-            overrides=detection.RuleOverrides(name=name_override)
-        )
+# class TestGIAFilters(testing.PantherPythonFilterTestCase):
+#     def test_geo_improbable_access_filter_valid(self) -> None:
+#         f = geo_improbable_access_filter()
+#         self.assertFilterIsValid(f)
 
-        self.assertEqual(rule.name, name_override)
 
-    def test_improbable_access_group_by(self) -> None:
-        name_override = "Override Name"
-        rule = okta.rules.geo_improbable_access(
-            overrides=detection.RuleOverrides(name=name_override)
-        )
+# class TestRulesImprobableAccess(unittest.TestCase):
+#     def test_improbable_access(self) -> None:
+#         name_override = "Override Name"
+#         rule = okta.rules.geo_improbable_access(
+#             overrides=detection.RuleOverrides(name=name_override)
+#         )
 
-        test_evt = PantherEvent({"actor": {"alternateId": "alt-id"}}, data_model=None)
-        key = rule.alert_grouping.group_by(test_evt)  # type: ignore
+#         self.assertEqual(rule.name, name_override)
 
-        self.assertEqual(key, "alt-id")
+#     def test_improbable_access_group_by(self) -> None:
+#         name_override = "Override Name"
+#         rule = okta.rules.geo_improbable_access(
+#             overrides=detection.RuleOverrides(name=name_override)
+#         )
+
+#         test_evt = PantherEvent({"actor": {"alternateId": "alt-id"}}, data_model=None)
+#         key = rule.alert_grouping.group_by(test_evt)  # type: ignore
+
+#         self.assertEqual(key, "alt-id")

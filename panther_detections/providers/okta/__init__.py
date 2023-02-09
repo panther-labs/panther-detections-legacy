@@ -12,7 +12,7 @@ def use_all_with_defaults(datalake: Literal["athena", "snowflake"] = "snowflake"
     rules.brute_force_logins()
     rules.account_support_access()
     rules.support_reset()
-    rules.geo_improbable_access()
+    # rules.geo_improbable_access()
 
     queries.activity_audit(datalake=datalake)
     queries.session_id_audit(datalake=datalake)

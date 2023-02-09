@@ -1,16 +1,9 @@
 import typing
 
-from panther_sdk import PantherEvent, detection
-
-from panther_detections.utils import match_filters
+from panther_sdk import PantherEvent, detection, schema
 
 from .. import sample_logs
-
-# from .._shared import (
-#     create_alert_context,
-#     rule_tags,
-#     standard_tags,
-# )
+from .._shared import rule_tags
 
 __all__ = ["passthrough_rule"]
 
@@ -47,10 +40,10 @@ def passthrough_rule(
         # enabled=,
         name="GSuite Passthrough Rule Triggered",
         rule_id="GSuite.Rule",
-        log_types=["GSuite.ActivityEvent"],
+        log_types=schema.LogTypeGSuiteActivityEvent,
         severity=detection.DynamicStringField(func=_severity, fallback=detection.SeverityInfo),
         description="A GSuite rule was triggered.",
-        tags=["GSuite"],
+        tags=rule_tags(),
         # reports=,
         reference="https://support.google.com/a/answer/9420866",
         runbook="Investigate what triggered the rule.",

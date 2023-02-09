@@ -1,17 +1,12 @@
 import typing
 
 from panther_core import PantherEvent
-from panther_sdk import detection
+from panther_sdk import detection, schema
 
 from panther_detections.providers.gsuite import sample_logs
-from panther_detections.providers.gsuite._shared import (
-    ACTIVITY_LOG_TYPE,
-    REPORTS_LOG_TYPE,
-    SHARED_SUMMARY_ATTRS,
-    create_alert_context,
-    rule_tags,
-)
-from panther_detections.utils import match_filters, standard_tags
+from panther_detections.utils import match_filters
+
+from .._shared import rule_tags
 
 __all__ = ["calendar_made_public"]
 
@@ -23,13 +18,16 @@ def calendar_made_public(
     """GSuite Calendar Made Public"""
 
     def _title(event: PantherEvent) -> str:
-        return f"GSuite calendar [{event.deep_get('parameters', 'calendar_id', default='<NO_CALENDAR_ID>')}] made public by [{event.deep_get('actor', 'email', default='<NO_ACTOR_FOUND>')}]"
+        return (
+            f"GSuite calendar [{event.deep_get('parameters', 'calendar_id', default='<NO_CALENDAR_ID>')}]"
+            f"made public by [{event.deep_get('actor', 'email', default='<NO_ACTOR_FOUND>')}]"
+        )
 
     return detection.Rule(
         overrides=overrides,
         name="GSuite Calendar Made Public",
         rule_id="GSuite.CalendarMadePublic",
-        log_types=[ACTIVITY_LOG_TYPE],
+        log_types=schema.LogTypeGSuiteActivityEvent,
         tags=rule_tags(),
         severity=detection.SeverityMedium,
         description="A user or admin has modified a calendar to be public",
@@ -38,11 +36,19 @@ def calendar_made_public(
         filters=(pre_filters or [])
         + [
             match_filters.deep_equal("name", "change_calendar_acls"),
-            match_filters.deep_equal("parameters.grantee_email", "__public_principal__@public.calendar.google.com"),
+            match_filters.deep_equal(
+                "parameters.grantee_email",
+                "__public_principal__@public.calendar.google.com",
+            ),
         ],
         alert_title=_title,
-        alert_context=create_alert_context,
-        summary_attrs=SHARED_SUMMARY_ATTRS,
+        # alert_context=,
+        summary_attrs=[
+            "eventType",
+            "severity",
+            "displayMessage",
+            "p_any_ip_addresses",
+        ],
         unit_tests=[
             detection.JSONUnitTest(
                 name="User publicly shared calendar",

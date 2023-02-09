@@ -1,16 +1,11 @@
 import typing
 
-from panther_sdk import PantherEvent, detection
+from panther_sdk import PantherEvent, detection, schema
 
-from panther_detections.utils import match_filters, standard_tags
+from panther_detections.utils import match_filters
 
 from .. import sample_logs
-
-# from .._shared import (
-#     create_alert_context,
-#     rule_tags,
-#     standard_tags,
-# )
+from .._shared import rule_tags
 
 __all__ = ["advanced_protection"]
 
@@ -31,11 +26,12 @@ def advanced_protection(
         overrides=overrides,
         name="GSuite User Advanced Protection Change",
         rule_id="GSuite.AdvancedProtection",
-        log_types=["GSuite.ActivityEvent"],
+        log_types=schema.LogTypeGSuiteActivityEvent,
         severity=detection.SeverityLow,
         description="A user disabled advanced protection for themselves.",
-        tags=["GSuite", "Defense Evasion:Impair Defenses"],
+        tags=rule_tags("Defense Evasion:Impair Defenses"),
         reports={"MITRE ATT&CK": ["TA0005:T1562"]},
+        # pylint: disable=line-too-long
         reference="https://developers.google.com/admin-sdk/reports/v1/appendix/activity/user-accounts#titanium_change",
         runbook="Have the user re-enable Google Advanced Protection",
         alert_title=_title,

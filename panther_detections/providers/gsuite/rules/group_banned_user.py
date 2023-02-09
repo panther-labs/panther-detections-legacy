@@ -1,16 +1,11 @@
 import typing
 
-from panther_sdk import PantherEvent, detection
+from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
-
-# from .._shared import (
-#     create_alert_context,
-#     rule_tags,
-#     standard_tags,
-# )
+from .._shared import rule_tags
 
 __all__ = ["group_banned_user"]
 
@@ -20,13 +15,6 @@ def group_banned_user(
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
 ) -> detection.Rule:
     """A GSuite user was banned from an enterprise group by moderator action."""
-
-    def rule_filter() -> detection.PythonFilter:
-        def _rule_filter(event: PantherEvent) -> bool:
-            if event.get("type") == "moderator_action":
-                return bool(event.get("name") == "ban_user_with_moderation")
-
-        return detection.PythonFilter(func=_rule_filter)
 
     def _title(event: PantherEvent) -> str:
         return (
@@ -39,11 +27,12 @@ def group_banned_user(
         # enabled=,
         name="GSuite User Banned from Group",
         rule_id="GSuite.GroupBannedUser",
-        log_types=["GSuite.ActivityEvent"],
+        log_types=schema.LogTypeGSuiteActivityEvent,
         severity=detection.SeverityLow,
         description="A GSuite user was banned from an enterprise group by moderator action.",
-        tags=["GSuite"],
+        tags=rule_tags(),
         # reports=,
+        # pylint: disable=line-too-long
         reference="https://developers.google.com/admin-sdk/reports/v1/appendix/activity/groups-enterprise#ban_user_with_moderation",
         runbook="Investigate the banned user to see if further disciplinary action needs to be taken.",
         alert_title=_title,
@@ -52,11 +41,17 @@ def group_banned_user(
         # alert_context=,
         # alert_grouping=,
         filters=(pre_filters or [])
-        + [match_filters.deep_equal("id.applicationName", "groups_enterprise"), rule_filter()],
+        + [
+            match_filters.deep_equal("id.applicationName", "groups_enterprise"),
+            match_filters.deep_equal("type", "moderator_action"),
+            match_filters.deep_equal("name", "ban_user_with_moderation"),
+        ],
         unit_tests=(
             [
                 detection.JSONUnitTest(
-                    name="User Added", expect_match=False, data=sample_logs.group_banned_user_user_added
+                    name="User Added",
+                    expect_match=False,
+                    data=sample_logs.group_banned_user_user_added,
                 ),
                 detection.JSONUnitTest(
                     name="User Banned from Group",

@@ -1,16 +1,14 @@
+# pylint: disable-all
+# WIP rule
+
 import typing
 
-from panther_sdk import PantherEvent, detection
+from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
-
-# from .._shared import (
-#     create_alert_context,
-#     rule_tags,
-#     standard_tags,
-# )
+from .._shared import rule_tags
 
 
 def drive_visibility_change(
@@ -107,7 +105,7 @@ def drive_visibility_change(
         enabled=False,
         name="GSuite External Drive Document",
         rule_id="GSuite.DriveVisibilityChanged",
-        log_types=["GSuite.Reports"],
+        log_types=schema.LogTypeGSuiteReports,
         severity=detection.DynamicStringField(func=_severity, fallback=detection.SeverityLow),
         description="A Google drive resource became externally accessible.",
         tags=["GSuite", "Collection:Data from Information Repositories", "Configuration Required"],

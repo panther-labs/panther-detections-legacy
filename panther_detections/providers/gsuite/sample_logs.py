@@ -1,3 +1,5 @@
+# pylint: disable=too-many-lines
+
 import json
 
 workspace_apps_marketplace_allowlist_parameters_json_key_set_to_null_value = json.dumps(
@@ -566,7 +568,7 @@ mobile_device_screen_unlock_fail_multiple_failed_login_attempts_with_string_type
         "parameters": {"USER_EMAIL": "homer.simpson@example.io", "FAILED_PASSWD_ATTEMPTS": "100"},
     }
 )
-workspace_gmail_default_routing_rule_workspace_admin_creates_default_routing_rule = json.dumps(
+workspace_admin_creates_default_routing_rule = json.dumps(
     {
         "actor": {"callerType": "USER", "email": "user@example.io", "profileId": "110555555555555555555"},
         "id": {
@@ -582,7 +584,7 @@ workspace_gmail_default_routing_rule_workspace_admin_creates_default_routing_rul
         "type": "EMAIL_SETTINGS",
     }
 )
-workspace_gmail_default_routing_rule_workspace_admin_deletes_default_routing_rule = json.dumps(
+workspace_admin_deletes_default_routing_rule = json.dumps(
     {
         "actor": {"callerType": "USER", "email": "user@example.io", "profileId": "110555555555555555555"},
         "id": {
@@ -598,31 +600,29 @@ workspace_gmail_default_routing_rule_workspace_admin_deletes_default_routing_rul
         "type": "EMAIL_SETTINGS",
     }
 )
-workspace_gmail_default_routing_rule_admin_set_default_calendar_sharing_outside_domain_setting_to_read_only_access = (
-    json.dumps(
-        {
-            "actor": {"callerType": "USER", "email": "example@example.io", "profileId": "12345"},
-            "id": {
-                "applicationName": "admin",
-                "customerId": "D12345",
-                "time": "2022-12-11 01:06:26.303000000",
-                "uniqueQualifier": "-12345",
-            },
-            "ipAddress": "12.12.12.12",
-            "kind": "admin#reports#activity",
-            "name": "CHANGE_CALENDAR_SETTING",
-            "parameters": {
-                "DOMAIN_NAME": "example.io",
-                "NEW_VALUE": "READ_ONLY_ACCESS",
-                "OLD_VALUE": "DEFAULT",
-                "ORG_UNIT_NAME": "Example IO",
-                "SETTING_NAME": "SHARING_OUTSIDE_DOMAIN",
-            },
-            "type": "CALENDAR_SETTINGS",
-        }
-    )
+admin_set_default_calendar_sharing_outside_domain_setting_to_read_only_access = json.dumps(
+    {
+        "actor": {"callerType": "USER", "email": "example@example.io", "profileId": "12345"},
+        "id": {
+            "applicationName": "admin",
+            "customerId": "D12345",
+            "time": "2022-12-11 01:06:26.303000000",
+            "uniqueQualifier": "-12345",
+        },
+        "ipAddress": "12.12.12.12",
+        "kind": "admin#reports#activity",
+        "name": "CHANGE_CALENDAR_SETTING",
+        "parameters": {
+            "DOMAIN_NAME": "example.io",
+            "NEW_VALUE": "READ_ONLY_ACCESS",
+            "OLD_VALUE": "DEFAULT",
+            "ORG_UNIT_NAME": "Example IO",
+            "SETTING_NAME": "SHARING_OUTSIDE_DOMAIN",
+        },
+        "type": "CALENDAR_SETTINGS",
+    }
 )
-workspace_gmail_default_routing_rule_listobject_type = json.dumps(
+listobject_type = json.dumps(
     {
         "actor": {"email": "user@example.io", "profileId": "118111111111111111111"},
         "id": {
@@ -819,7 +819,7 @@ doc_ownership_transfer_document_transferred_to_external_user = json.dumps(
         "parameters": {"NEW_VALUE": "monty.burns@badguy.com"},
     }
 )
-workspace_password_enforce_strong_disabled_workspace_admin_disabled_strong_password_enforcement = json.dumps(
+workspace_admin_disabled_strong_password_enforcement = json.dumps(
     {
         "actor": {"callerType": "USER", "email": "user@example.io", "profileId": "110111111111111111111"},
         "id": {
@@ -842,7 +842,7 @@ workspace_password_enforce_strong_disabled_workspace_admin_disabled_strong_passw
         "type": "APPLICATION_SETTINGS",
     }
 )
-workspace_password_enforce_strong_disabled_admin_set_default_calendar_sharing_outside_domain_setting_to_read_only_access = json.dumps(
+admin_set_default_calendar_sharing_outside_domain_setting_to_read_only_access = json.dumps(
     {
         "actor": {"callerType": "USER", "email": "example@example.io", "profileId": "12345"},
         "id": {
@@ -864,7 +864,7 @@ workspace_password_enforce_strong_disabled_admin_set_default_calendar_sharing_ou
         "type": "CALENDAR_SETTINGS",
     }
 )
-workspace_password_enforce_strong_disabled_listobject_type = json.dumps(
+listobject_type = json.dumps(
     {
         "actor": {"email": "user@example.io", "profileId": "118111111111111111111"},
         "id": {
@@ -1446,7 +1446,7 @@ advanced_protection_advanced_protection_disabled = json.dumps(
         "name": "titanium_unenroll",
     }
 )
-workspace_password_reuse_enabled_workspace_admin_enabled_password_reuse = json.dumps(
+workspace_admin_enabled_password_reuse = json.dumps(
     {
         "actor": {"callerType": "USER", "email": "example@example.io", "profileId": "12345"},
         "id": {
@@ -1469,168 +1469,7 @@ workspace_password_reuse_enabled_workspace_admin_enabled_password_reuse = json.d
         "type": "APPLICATION_SETTINGS",
     }
 )
-workspace_password_reuse_enabled_admin_set_default_calendar_sharing_outside_domain_setting_to_read_only_access = (
-    json.dumps(
-        {
-            "actor": {"callerType": "USER", "email": "example@example.io", "profileId": "12345"},
-            "id": {
-                "applicationName": "admin",
-                "customerId": "D12345",
-                "time": "2022-12-11 01:06:26.303000000",
-                "uniqueQualifier": "-12345",
-            },
-            "ipAddress": "12.12.12.12",
-            "kind": "admin#reports#activity",
-            "name": "CHANGE_CALENDAR_SETTING",
-            "parameters": {
-                "DOMAIN_NAME": "example.io",
-                "NEW_VALUE": "READ_ONLY_ACCESS",
-                "OLD_VALUE": "DEFAULT",
-                "ORG_UNIT_NAME": "Example IO",
-                "SETTING_NAME": "SHARING_OUTSIDE_DOMAIN",
-            },
-            "type": "CALENDAR_SETTINGS",
-        }
-    )
-)
-workspace_password_reuse_enabled_listobject_type = json.dumps(
-    {
-        "actor": {"email": "user@example.io", "profileId": "118111111111111111111"},
-        "id": {
-            "applicationName": "drive",
-            "customerId": "D12345",
-            "time": "2022-12-20 17:27:47.080000000",
-            "uniqueQualifier": "-7312729053723258069",
-        },
-        "ipAddress": "12.12.12.12",
-        "kind": "admin#reports#activity",
-        "name": "rename",
-        "parameters": {
-            "actor_is_collaborator_account": None,
-            "billable": True,
-            "doc_id": "1GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG",
-            "doc_title": "Document Title- Found Here",
-            "doc_type": "presentation",
-            "is_encrypted": None,
-            "new_value": ["Document Title- Found Here"],
-            "old_value": ["Document Title- Old"],
-            "owner": "user@example.io",
-            "owner_is_shared_drive": None,
-            "owner_is_team_drive": None,
-            "primary_event": True,
-            "visibility": "private",
-        },
-        "type": "access",
-    }
-)
-workspace_trusted_domains_allowlist_workspace_admin_remove_trusted_domain = json.dumps(
-    {
-        "actor": {"callerType": "USER", "email": "user@example.io", "profileId": "110506209185950390992"},
-        "id": {
-            "applicationName": "admin",
-            "customerId": "D12345",
-            "time": "2022-12-11 00:01:34.643000000",
-            "uniqueQualifier": "-2972206985263071668",
-        },
-        "kind": "admin#reports#activity",
-        "name": "REMOVE_TRUSTED_DOMAINS",
-        "p_source_label": "Staging",
-        "parameters": {"DOMAIN_NAME": "evilexample.com"},
-        "type": "DOMAIN_SETTINGS",
-    }
-)
-workspace_trusted_domains_allowlist_workspace_admin_add_trusted_domain = json.dumps(
-    {
-        "actor": {"callerType": "USER", "email": "user@example.io", "profileId": "110506209185950390992"},
-        "id": {
-            "applicationName": "admin",
-            "customerId": "D12345",
-            "time": "2022-12-10 23:59:24.470000000",
-            "uniqueQualifier": "-334478670839567761",
-        },
-        "kind": "admin#reports#activity",
-        "name": "ADD_TRUSTED_DOMAINS",
-        "parameters": {"DOMAIN_NAME": "evilexample.com"},
-        "type": "DOMAIN_SETTINGS",
-    }
-)
-workspace_trusted_domains_allowlist_admin_set_default_calendar_sharing_outside_domain_setting_to_manage_access = (
-    json.dumps(
-        {
-            "actor": {"callerType": "USER", "email": "example@example.io", "profileId": "12345"},
-            "id": {
-                "applicationName": "admin",
-                "customerId": "D12345",
-                "time": "2022-12-11 01:06:26.303000000",
-                "uniqueQualifier": "-12345",
-            },
-            "ipAddress": "12.12.12.12",
-            "kind": "admin#reports#activity",
-            "name": "CHANGE_CALENDAR_SETTING",
-            "parameters": {
-                "DOMAIN_NAME": "example.io",
-                "NEW_VALUE": "MANAGE_ACCESS",
-                "OLD_VALUE": "READ_WRITE_ACCESS",
-                "ORG_UNIT_NAME": "Example IO",
-                "SETTING_NAME": "SHARING_OUTSIDE_DOMAIN",
-            },
-            "type": "CALENDAR_SETTINGS",
-        }
-    )
-)
-workspace_trusted_domains_allowlist_listobject_type = json.dumps(
-    {
-        "actor": {"email": "user@example.io", "profileId": "118111111111111111111"},
-        "id": {
-            "applicationName": "drive",
-            "customerId": "D12345",
-            "time": "2022-12-20 17:27:47.080000000",
-            "uniqueQualifier": "-7312729053723258069",
-        },
-        "ipAddress": "12.12.12.12",
-        "kind": "admin#reports#activity",
-        "name": "rename",
-        "parameters": {
-            "actor_is_collaborator_account": None,
-            "billable": True,
-            "doc_id": "1GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG",
-            "doc_title": "Document Title- Found Here",
-            "doc_type": "presentation",
-            "is_encrypted": None,
-            "new_value": ["Document Title- Found Here"],
-            "old_value": ["Document Title- Old"],
-            "owner": "user@example.io",
-            "owner_is_shared_drive": None,
-            "owner_is_team_drive": None,
-            "primary_event": True,
-            "visibility": "private",
-        },
-        "type": "access",
-    }
-)
-workspace_gmail_security_sandbox_disabled_workspace_admin_disables_security_sandbox = json.dumps(
-    {
-        "actor": {"callerType": "USER", "email": "example@example.io", "profileId": "12345"},
-        "id": {
-            "applicationName": "admin",
-            "customerId": "D12345",
-            "time": "2022-12-11 03:31:41.212000000",
-            "uniqueQualifier": "-12345",
-        },
-        "ipAddress": "12.12.12.12",
-        "kind": "admin#reports#activity",
-        "name": "CHANGE_APPLICATION_SETTING",
-        "parameters": {
-            "APPLICATION_EDITION": "enterprise",
-            "APPLICATION_NAME": "Gmail",
-            "NEW_VALUE": "False",
-            "ORG_UNIT_NAME": "Example IO",
-            "SETTING_NAME": "AttachmentDeepScanningSettingsProto deep_scanning_enabled",
-        },
-        "type": "APPLICATION_SETTINGS",
-    }
-)
-workspace_gmail_security_sandbox_disabled_admin_set_default_calendar_sharing_outside_domain_setting_to_read_only_access = json.dumps(
+admin_set_default_calendar_sharing_outside_domain_setting_to_read_only_access = json.dumps(
     {
         "actor": {"callerType": "USER", "email": "example@example.io", "profileId": "12345"},
         "id": {
@@ -1652,7 +1491,7 @@ workspace_gmail_security_sandbox_disabled_admin_set_default_calendar_sharing_out
         "type": "CALENDAR_SETTINGS",
     }
 )
-workspace_gmail_security_sandbox_disabled_listobject_type = json.dumps(
+listobject_type = json.dumps(
     {
         "actor": {"email": "user@example.io", "profileId": "118111111111111111111"},
         "id": {
@@ -1682,37 +1521,38 @@ workspace_gmail_security_sandbox_disabled_listobject_type = json.dumps(
         "type": "access",
     }
 )
-workspace_data_export_created_workspace_admin_data_export_created = json.dumps(
+workspace_admin_remove_trusted_domain = json.dumps(
     {
-        "actor": {"callerType": "USER", "email": "admin@example.io", "profileId": "11011111111111111111111"},
+        "actor": {"callerType": "USER", "email": "user@example.io", "profileId": "110506209185950390992"},
         "id": {
             "applicationName": "admin",
             "customerId": "D12345",
-            "time": "2022-12-10 22:21:40.079000000",
-            "uniqueQualifier": "-2833899999999999999",
+            "time": "2022-12-11 00:01:34.643000000",
+            "uniqueQualifier": "-2972206985263071668",
         },
         "kind": "admin#reports#activity",
-        "name": "CUSTOMER_TAKEOUT_CREATED",
-        "parameters": {"OBFUSCATED_CUSTOMER_TAKEOUT_REQUEST_ID": "00mmmmmmmmmmmmm"},
-        "type": "CUSTOMER_TAKEOUT",
+        "name": "REMOVE_TRUSTED_DOMAINS",
+        "p_source_label": "Staging",
+        "parameters": {"DOMAIN_NAME": "evilexample.com"},
+        "type": "DOMAIN_SETTINGS",
     }
 )
-workspace_data_export_created_workspace_admin_data_export_succeeded = json.dumps(
+workspace_admin_add_trusted_domain = json.dumps(
     {
-        "actor": {"callerType": "USER", "email": "admin@example.io", "profileId": "11011111111111111111111"},
+        "actor": {"callerType": "USER", "email": "user@example.io", "profileId": "110506209185950390992"},
         "id": {
             "applicationName": "admin",
             "customerId": "D12345",
-            "time": "2022-12-12 22:21:40.106000000",
-            "uniqueQualifier": "3005999999999999999",
+            "time": "2022-12-10 23:59:24.470000000",
+            "uniqueQualifier": "-334478670839567761",
         },
         "kind": "admin#reports#activity",
-        "name": "CUSTOMER_TAKEOUT_SUCCEEDED",
-        "parameters": {"OBFUSCATED_CUSTOMER_TAKEOUT_REQUEST_ID": "00mmmmmmmmmmmmm"},
-        "type": "CUSTOMER_TAKEOUT",
+        "name": "ADD_TRUSTED_DOMAINS",
+        "parameters": {"DOMAIN_NAME": "evilexample.com"},
+        "type": "DOMAIN_SETTINGS",
     }
 )
-workspace_data_export_created_admin_set_default_calendar_sharing_outside_domain_setting_to_manage_access = json.dumps(
+admin_set_default_calendar_sharing_outside_domain_setting_to_manage_access = json.dumps(
     {
         "actor": {"callerType": "USER", "email": "example@example.io", "profileId": "12345"},
         "id": {
@@ -1734,7 +1574,163 @@ workspace_data_export_created_admin_set_default_calendar_sharing_outside_domain_
         "type": "CALENDAR_SETTINGS",
     }
 )
-workspace_data_export_created_listobject_type = json.dumps(
+listobject_type = json.dumps(
+    {
+        "actor": {"email": "user@example.io", "profileId": "118111111111111111111"},
+        "id": {
+            "applicationName": "drive",
+            "customerId": "D12345",
+            "time": "2022-12-20 17:27:47.080000000",
+            "uniqueQualifier": "-7312729053723258069",
+        },
+        "ipAddress": "12.12.12.12",
+        "kind": "admin#reports#activity",
+        "name": "rename",
+        "parameters": {
+            "actor_is_collaborator_account": None,
+            "billable": True,
+            "doc_id": "1GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG",
+            "doc_title": "Document Title- Found Here",
+            "doc_type": "presentation",
+            "is_encrypted": None,
+            "new_value": ["Document Title- Found Here"],
+            "old_value": ["Document Title- Old"],
+            "owner": "user@example.io",
+            "owner_is_shared_drive": None,
+            "owner_is_team_drive": None,
+            "primary_event": True,
+            "visibility": "private",
+        },
+        "type": "access",
+    }
+)
+workspace_admin_disables_security_sandbox = json.dumps(
+    {
+        "actor": {"callerType": "USER", "email": "example@example.io", "profileId": "12345"},
+        "id": {
+            "applicationName": "admin",
+            "customerId": "D12345",
+            "time": "2022-12-11 03:31:41.212000000",
+            "uniqueQualifier": "-12345",
+        },
+        "ipAddress": "12.12.12.12",
+        "kind": "admin#reports#activity",
+        "name": "CHANGE_APPLICATION_SETTING",
+        "parameters": {
+            "APPLICATION_EDITION": "enterprise",
+            "APPLICATION_NAME": "Gmail",
+            "NEW_VALUE": "False",
+            "ORG_UNIT_NAME": "Example IO",
+            "SETTING_NAME": "AttachmentDeepScanningSettingsProto deep_scanning_enabled",
+        },
+        "type": "APPLICATION_SETTINGS",
+    }
+)
+admin_set_default_calendar_sharing_outside_domain_setting_to_read_only_access = json.dumps(
+    {
+        "actor": {"callerType": "USER", "email": "example@example.io", "profileId": "12345"},
+        "id": {
+            "applicationName": "admin",
+            "customerId": "D12345",
+            "time": "2022-12-11 01:06:26.303000000",
+            "uniqueQualifier": "-12345",
+        },
+        "ipAddress": "12.12.12.12",
+        "kind": "admin#reports#activity",
+        "name": "CHANGE_CALENDAR_SETTING",
+        "parameters": {
+            "DOMAIN_NAME": "example.io",
+            "NEW_VALUE": "READ_ONLY_ACCESS",
+            "OLD_VALUE": "DEFAULT",
+            "ORG_UNIT_NAME": "Example IO",
+            "SETTING_NAME": "SHARING_OUTSIDE_DOMAIN",
+        },
+        "type": "CALENDAR_SETTINGS",
+    }
+)
+listobject_type = json.dumps(
+    {
+        "actor": {"email": "user@example.io", "profileId": "118111111111111111111"},
+        "id": {
+            "applicationName": "drive",
+            "customerId": "D12345",
+            "time": "2022-12-20 17:27:47.080000000",
+            "uniqueQualifier": "-7312729053723258069",
+        },
+        "ipAddress": "12.12.12.12",
+        "kind": "admin#reports#activity",
+        "name": "rename",
+        "parameters": {
+            "actor_is_collaborator_account": None,
+            "billable": True,
+            "doc_id": "1GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG",
+            "doc_title": "Document Title- Found Here",
+            "doc_type": "presentation",
+            "is_encrypted": None,
+            "new_value": ["Document Title- Found Here"],
+            "old_value": ["Document Title- Old"],
+            "owner": "user@example.io",
+            "owner_is_shared_drive": None,
+            "owner_is_team_drive": None,
+            "primary_event": True,
+            "visibility": "private",
+        },
+        "type": "access",
+    }
+)
+workspace_admin_data_export_created = json.dumps(
+    {
+        "actor": {"callerType": "USER", "email": "admin@example.io", "profileId": "11011111111111111111111"},
+        "id": {
+            "applicationName": "admin",
+            "customerId": "D12345",
+            "time": "2022-12-10 22:21:40.079000000",
+            "uniqueQualifier": "-2833899999999999999",
+        },
+        "kind": "admin#reports#activity",
+        "name": "CUSTOMER_TAKEOUT_CREATED",
+        "parameters": {"OBFUSCATED_CUSTOMER_TAKEOUT_REQUEST_ID": "00mmmmmmmmmmmmm"},
+        "type": "CUSTOMER_TAKEOUT",
+    }
+)
+workspace_admin_data_export_succeeded = json.dumps(
+    {
+        "actor": {"callerType": "USER", "email": "admin@example.io", "profileId": "11011111111111111111111"},
+        "id": {
+            "applicationName": "admin",
+            "customerId": "D12345",
+            "time": "2022-12-12 22:21:40.106000000",
+            "uniqueQualifier": "3005999999999999999",
+        },
+        "kind": "admin#reports#activity",
+        "name": "CUSTOMER_TAKEOUT_SUCCEEDED",
+        "parameters": {"OBFUSCATED_CUSTOMER_TAKEOUT_REQUEST_ID": "00mmmmmmmmmmmmm"},
+        "type": "CUSTOMER_TAKEOUT",
+    }
+)
+admin_set_default_calendar_sharing_outside_domain_setting_to_manage_access = json.dumps(
+    {
+        "actor": {"callerType": "USER", "email": "example@example.io", "profileId": "12345"},
+        "id": {
+            "applicationName": "admin",
+            "customerId": "D12345",
+            "time": "2022-12-11 01:06:26.303000000",
+            "uniqueQualifier": "-12345",
+        },
+        "ipAddress": "12.12.12.12",
+        "kind": "admin#reports#activity",
+        "name": "CHANGE_CALENDAR_SETTING",
+        "parameters": {
+            "DOMAIN_NAME": "example.io",
+            "NEW_VALUE": "MANAGE_ACCESS",
+            "OLD_VALUE": "READ_WRITE_ACCESS",
+            "ORG_UNIT_NAME": "Example IO",
+            "SETTING_NAME": "SHARING_OUTSIDE_DOMAIN",
+        },
+        "type": "CALENDAR_SETTINGS",
+    }
+)
+listobject_type = json.dumps(
     {
         "actor": {"email": "user@example.io", "profileId": "118111111111111111111"},
         "id": {
@@ -1801,79 +1797,73 @@ leaked_password_account_warning_for_password_leaked = json.dumps(
         "parameters": {"affected_email_address": "homer.simpson@example.com"},
     }
 )
-workspace_calendar_external_sharing_admin_set_default_calendar_sharing_outside_domain_setting_to_read_only_access = (
-    json.dumps(
-        {
-            "actor": {"callerType": "USER", "email": "example@example.io", "profileId": "12345"},
-            "id": {
-                "applicationName": "admin",
-                "customerId": "D12345",
-                "time": "2022-12-11 01:06:26.303000000",
-                "uniqueQualifier": "-12345",
-            },
-            "ipAddress": "12.12.12.12",
-            "kind": "admin#reports#activity",
-            "name": "CHANGE_CALENDAR_SETTING",
-            "parameters": {
-                "DOMAIN_NAME": "example.io",
-                "NEW_VALUE": "READ_ONLY_ACCESS",
-                "OLD_VALUE": "DEFAULT",
-                "ORG_UNIT_NAME": "Example IO",
-                "SETTING_NAME": "SHARING_OUTSIDE_DOMAIN",
-            },
-            "type": "CALENDAR_SETTINGS",
-        }
-    )
+admin_set_default_calendar_sharing_outside_domain_setting_to_read_only_access = json.dumps(
+    {
+        "actor": {"callerType": "USER", "email": "example@example.io", "profileId": "12345"},
+        "id": {
+            "applicationName": "admin",
+            "customerId": "D12345",
+            "time": "2022-12-11 01:06:26.303000000",
+            "uniqueQualifier": "-12345",
+        },
+        "ipAddress": "12.12.12.12",
+        "kind": "admin#reports#activity",
+        "name": "CHANGE_CALENDAR_SETTING",
+        "parameters": {
+            "DOMAIN_NAME": "example.io",
+            "NEW_VALUE": "READ_ONLY_ACCESS",
+            "OLD_VALUE": "DEFAULT",
+            "ORG_UNIT_NAME": "Example IO",
+            "SETTING_NAME": "SHARING_OUTSIDE_DOMAIN",
+        },
+        "type": "CALENDAR_SETTINGS",
+    }
 )
-workspace_calendar_external_sharing_admin_set_default_calendar_sharing_outside_domain_setting_to_read_write_access = (
-    json.dumps(
-        {
-            "actor": {"callerType": "USER", "email": "example@example.io", "profileId": "12345"},
-            "id": {
-                "applicationName": "admin",
-                "customerId": "D12345",
-                "time": "2022-12-11 01:06:26.303000000",
-                "uniqueQualifier": "-12345",
-            },
-            "ipAddress": "12.12.12.12",
-            "kind": "admin#reports#activity",
-            "name": "CHANGE_CALENDAR_SETTING",
-            "parameters": {
-                "DOMAIN_NAME": "example.io",
-                "NEW_VALUE": "READ_WRITE_ACCESS",
-                "OLD_VALUE": "READ_ONLY_ACCESS",
-                "ORG_UNIT_NAME": "Example IO",
-                "SETTING_NAME": "SHARING_OUTSIDE_DOMAIN",
-            },
-            "type": "CALENDAR_SETTINGS",
-        }
-    )
+admin_set_default_calendar_sharing_outside_domain_setting_to_read_write_access = json.dumps(
+    {
+        "actor": {"callerType": "USER", "email": "example@example.io", "profileId": "12345"},
+        "id": {
+            "applicationName": "admin",
+            "customerId": "D12345",
+            "time": "2022-12-11 01:06:26.303000000",
+            "uniqueQualifier": "-12345",
+        },
+        "ipAddress": "12.12.12.12",
+        "kind": "admin#reports#activity",
+        "name": "CHANGE_CALENDAR_SETTING",
+        "parameters": {
+            "DOMAIN_NAME": "example.io",
+            "NEW_VALUE": "READ_WRITE_ACCESS",
+            "OLD_VALUE": "READ_ONLY_ACCESS",
+            "ORG_UNIT_NAME": "Example IO",
+            "SETTING_NAME": "SHARING_OUTSIDE_DOMAIN",
+        },
+        "type": "CALENDAR_SETTINGS",
+    }
 )
-workspace_calendar_external_sharing_admin_set_default_calendar_sharing_outside_domain_setting_to_manage_access = (
-    json.dumps(
-        {
-            "actor": {"callerType": "USER", "email": "example@example.io", "profileId": "12345"},
-            "id": {
-                "applicationName": "admin",
-                "customerId": "D12345",
-                "time": "2022-12-11 01:06:26.303000000",
-                "uniqueQualifier": "-12345",
-            },
-            "ipAddress": "12.12.12.12",
-            "kind": "admin#reports#activity",
-            "name": "CHANGE_CALENDAR_SETTING",
-            "parameters": {
-                "DOMAIN_NAME": "example.io",
-                "NEW_VALUE": "MANAGE_ACCESS",
-                "OLD_VALUE": "READ_WRITE_ACCESS",
-                "ORG_UNIT_NAME": "Example IO",
-                "SETTING_NAME": "SHARING_OUTSIDE_DOMAIN",
-            },
-            "type": "CALENDAR_SETTINGS",
-        }
-    )
+admin_set_default_calendar_sharing_outside_domain_setting_to_manage_access = json.dumps(
+    {
+        "actor": {"callerType": "USER", "email": "example@example.io", "profileId": "12345"},
+        "id": {
+            "applicationName": "admin",
+            "customerId": "D12345",
+            "time": "2022-12-11 01:06:26.303000000",
+            "uniqueQualifier": "-12345",
+        },
+        "ipAddress": "12.12.12.12",
+        "kind": "admin#reports#activity",
+        "name": "CHANGE_CALENDAR_SETTING",
+        "parameters": {
+            "DOMAIN_NAME": "example.io",
+            "NEW_VALUE": "MANAGE_ACCESS",
+            "OLD_VALUE": "READ_WRITE_ACCESS",
+            "ORG_UNIT_NAME": "Example IO",
+            "SETTING_NAME": "SHARING_OUTSIDE_DOMAIN",
+        },
+        "type": "CALENDAR_SETTINGS",
+    }
 )
-workspace_calendar_external_sharing_non_default_calendar_sharing_outside_domain_event = json.dumps(
+non_default_calendar_sharing_outside_domain_event = json.dumps(
     {
         "actor": {"callerType": "USER", "email": "user@example.io", "profileId": "111111111111111111111"},
         "id": {
@@ -1888,7 +1878,7 @@ workspace_calendar_external_sharing_non_default_calendar_sharing_outside_domain_
         "type": "CUSTOMER_TAKEOUT",
     }
 )
-workspace_calendar_external_sharing_listobject_type = json.dumps(
+listobject_type = json.dumps(
     {
         "actor": {"email": "user@example.io", "profileId": "118111111111111111111"},
         "id": {
@@ -1918,7 +1908,7 @@ workspace_calendar_external_sharing_listobject_type = json.dumps(
         "type": "access",
     }
 )
-workspace_gmail_enhanced_predelivery_scanning_workspace_admin_disables_enhanced_pre_delivery_scanning = json.dumps(
+workspace_admin_disables_enhanced_pre_delivery_scanning = json.dumps(
     {
         "actor": {"callerType": "USER", "email": "example@example.io", "profileId": "12345"},
         "id": {
@@ -1940,7 +1930,7 @@ workspace_gmail_enhanced_predelivery_scanning_workspace_admin_disables_enhanced_
         "type": "APPLICATION_SETTINGS",
     }
 )
-workspace_gmail_enhanced_predelivery_scanning_admin_set_default_calendar_sharing_outside_domain_setting_to_read_only_access = json.dumps(
+admin_set_default_calendar_sharing_outside_domain_setting_to_read_only_access = json.dumps(
     {
         "actor": {"callerType": "USER", "email": "example@example.io", "profileId": "12345"},
         "id": {
@@ -1962,7 +1952,7 @@ workspace_gmail_enhanced_predelivery_scanning_admin_set_default_calendar_sharing
         "type": "CALENDAR_SETTINGS",
     }
 )
-workspace_gmail_enhanced_predelivery_scanning_listobject_type = json.dumps(
+listobject_type = json.dumps(
     {
         "actor": {"email": "user@example.io", "profileId": "118111111111111111111"},
         "id": {
@@ -2053,7 +2043,7 @@ workspace_apps_marketplace_new_domain_application_docusign_for_google = json.dum
         "name": "ADD_APPLICATION",
         "parameters": {
             "APP_ID": "469176070494",
-            "APPLICATION_ENABLED": "True",
+            "APPLICATION_ENABLED": "true",
             "APPLICATION_NAME": "DocuSign eSignature for Google",
         },
         "type": "DOMAIN_SETTINGS",
@@ -2072,7 +2062,7 @@ workspace_apps_marketplace_new_domain_application_microsoft_apps_for_google = js
         "name": "ADD_APPLICATION",
         "parameters": {
             "APP_ID": "469176070494",
-            "APPLICATION_ENABLED": "True",
+            "APPLICATION_ENABLED": "true",
             "APPLICATION_NAME": "Microsoft Applications for Google",
         },
         "type": "DOMAIN_SETTINGS",
@@ -2108,7 +2098,6 @@ workspace_apps_marketplace_new_domain_application_listobject_type = json.dumps(
         "type": "access",
     }
 )
-
 
 login_failure = json.dumps(
     {
@@ -2582,7 +2571,6 @@ multiple_failed_login_attempts_with_int_type = json.dumps(
         "parameters": {"USER_EMAIL": "homer.simpson@example.io", "FAILED_PASSWD_ATTEMPTS": 100},
     }
 )
-
 
 forwarding_to_external_address = json.dumps(
     {

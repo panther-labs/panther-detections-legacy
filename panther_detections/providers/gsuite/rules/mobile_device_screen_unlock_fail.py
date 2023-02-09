@@ -1,8 +1,8 @@
 import typing
 
-from panther_sdk import PantherEvent, detection
+from panther_sdk import PantherEvent, detection, schema
 
-from panther_detections.utils import match_filters, standard_tags
+from panther_detections.utils import match_filters
 
 from .. import sample_logs
 
@@ -15,20 +15,6 @@ def mobile_device_screen_unlock_fail(
 ) -> detection.Rule:
     """Someone failed to unlock a user's device multiple times in quick succession."""
 
-    def rule_filter(max_attempts) -> detection.PythonFilter:
-        def _rule_filter(event: PantherEvent, max_attempts) -> bool:
-            from panther_detections.utils.legacy_filters import deep_get
-
-            if deep_get(event, "id", "applicationName") != "mobile":
-                return False
-
-            if event.get("name") == "FAILED_PASSWORD_ATTEMPTS_EVENT":
-                attempts = deep_get(event, "parameters", "FAILED_PASSWD_ATTEMPTS")
-                return int(attempts if attempts else 0) > max_attempts
-            return False
-
-        return detection.PythonFilter(func=_rule_filter)
-
     def _title(event: PantherEvent) -> str:
         return (
             f"User [{event.deep_get('actor', 'email', default='<UNKNOWN_USER>')}]"
@@ -40,13 +26,15 @@ def mobile_device_screen_unlock_fail(
         # enabled=,
         name="GSuite User Device Unlock Failures",
         rule_id="GSuite.DeviceUnlockFailure",
-        log_types=["GSuite.ActivityEvent"],
+        log_types=schema.LogTypeGSuiteActivityEvent,
         severity=detection.SeverityMedium,
         description="Someone failed to unlock a user's device multiple times in quick succession.",
         tags=["GSuite", "Credential Access:Brute Force"],
         reports={"MITRE ATT&CK": ["TA0006:T1110"]},
+        # pylint: disable=line-too-long
         reference="https://developers.google.com/admin-sdk/reports/v1/appendix/activity/mobile#FAILED_PASSWORD_ATTEMPTS_EVENT",
-        runbook="Verify that these unlock attempts came from the user, and not a malicious actor which has acquired the user's device.",
+        runbook="Verify that these unlock attempts came from the user,"
+        "and not a malicious actor which has acquired the user's device.",
         alert_title=_title,
         summary_attrs=["actor:email"],
         # threshold=,
@@ -54,12 +42,9 @@ def mobile_device_screen_unlock_fail(
         # alert_grouping=,
         filters=(pre_filters or [])
         + [
-            # match_filters.deep_equal("id.applicationName", "mobile"),
-            # match_filters.deep_equal(
-            #     "name", "FAILED_PASSWORD_ATTEMPTS_EVENT"),
-            # match_filters.deep_greater_than(
-            #     float("parameters.FAILED_PASSWD_ATTEMPTS"), 10),
-            rule_filter(10)
+            match_filters.deep_equal("id.applicationName", "mobile"),
+            match_filters.deep_equal("name", "FAILED_PASSWORD_ATTEMPTS_EVENT"),
+            match_filters.deep_greater_than(float("parameters.FAILED_PASSWD_ATTEMPTS"), 10),
         ],
         unit_tests=(
             [

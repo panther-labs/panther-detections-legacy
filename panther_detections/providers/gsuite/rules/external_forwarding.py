@@ -1,16 +1,10 @@
 import typing
 
-from panther_sdk import PantherEvent, detection
+from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
-
-# from .._shared import (
-#     create_alert_context,
-#     rule_tags,
-#     standard_tags,
-# )
 
 __all__ = ["external_forwarding"]
 
@@ -21,19 +15,18 @@ def external_forwarding(
 ) -> detection.Rule:
     """A user has configured mail forwarding to an external domain"""
 
-    def rule_filter() -> detection.PythonFilter:
-        def _rule_filter(event: PantherEvent) -> bool:
-            from panther_detections.utils.legacy_filters import deep_get
-
-            # List of external domains that are allowed to be forwarded to
-            ALLOWED_DOMAINS = ["example.com"]
-            if event.get("name") == "email_forwarding_out_of_domain":
-                domain = deep_get(event, "parameters", "email_forwarding_destination_address").split("@")[-1]
-                if domain not in ALLOWED_DOMAINS:
-                    return True
+    def check_allowed_domain(
+        allowed_domains: typing.List[str],
+    ) -> detection.PythonFilter:
+        def _check_allowed_domain(event: PantherEvent) -> bool:
+            # todo: create helper in _shared
+            domain = event.deep_get("parameters", "email_forwarding_destination_address").split("@")[-1]
+            # todo: can this be refactored using match_filters
+            if domain not in allowed_domains:
+                return True
             return False
 
-        return detection.PythonFilter(func=_rule_filter)
+        return detection.PythonFilter(func=_check_allowed_domain)
 
     def _title(event: PantherEvent) -> str:
         external_address = event.deep_get("parameters", "email_forwarding_destination_address")
@@ -45,11 +38,12 @@ def external_forwarding(
         enabled=False,
         name="Gsuite Mail forwarded to external domain",
         rule_id="GSuite.ExternalMailForwarding",
-        log_types=["GSuite.ActivityEvent"],
+        log_types=schema.LogTypeGSuiteActivityEvent,
         severity=detection.SeverityHigh,
         description="A user has configured mail forwarding to an external domain",
         tags=["GSuite", "Collection:Email Collection", "Configuration Required"],
         reports={"MITRE ATT&CK": ["TA0009:T1114"]},
+        # pylint: disable=line-too-long
         reference="https://developers.google.com/admin-sdk/reports/v1/appendix/activity/login#email_forwarding_out_of_domain",
         runbook="Follow up with user to remove this forwarding rule if not allowed.",
         alert_title=_title,
@@ -57,7 +51,12 @@ def external_forwarding(
         # threshold=,
         # alert_context=,
         # alert_grouping=,
-        filters=(pre_filters or []) + [match_filters.deep_equal("id.applicationName", "user_accounts"), rule_filter()],
+        filters=(pre_filters or [])
+        + [
+            match_filters.deep_equal("id.applicationName", "user_accounts"),
+            match_filters.deep_equal("name", "email_forwarding_out_of_domain"),
+            check_allowed_domain(["example.com"]),
+        ],
         unit_tests=(
             [
                 detection.JSONUnitTest(
@@ -76,7 +75,9 @@ def external_forwarding(
                     data=sample_logs.external_forwarding_non_forwarding_event,
                 ),
                 detection.JSONUnitTest(
-                    name="ListObject Type", expect_match=False, data=sample_logs.external_forwarding_listobject_type
+                    name="ListObject Type",
+                    expect_match=False,
+                    data=sample_logs.external_forwarding_listobject_type,
                 ),
             ]
         ),

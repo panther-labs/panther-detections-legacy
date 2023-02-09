@@ -1,9 +1,11 @@
 import json
 import typing
 
-from panther_sdk import PantherEvent, detection
+from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters
+
+from .._shared import rule_tags
 
 __all__ = ["suspicious_logins"]
 
@@ -12,22 +14,6 @@ def suspicious_logins(
     pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
 ) -> detection.Rule:
-    def rule_filter() -> detection.PythonFilter:
-        def _rule_filter(event: PantherEvent) -> bool:
-            SUSPICIOUS_LOGIN_TYPES = {
-                "suspicious_login",
-                "suspicious_login_less_secure_app",
-                "suspicious_programmatic_login",
-            }
-
-            # now a filter
-            # if event["id"]["applicationName"] != "login":
-            #     return False
-
-            return bool(event.get("name") in SUSPICIOUS_LOGIN_TYPES)
-
-        return detection.PythonFilter(func=_rule_filter)
-
     def _title(event: PantherEvent) -> str:
         user = event["parameters"]["affected_email_address"]
         if not user:
@@ -41,13 +27,25 @@ def suspicious_logins(
         overrides=overrides,
         rule_id="GSuite.SuspiciousLogins",
         name="Suspicious GSuite Login",
-        log_types=["GSuite.ActivityEvent"],
-        tags=["GSuite"],
+        log_types=schema.LogTypeGSuiteActivityEvent,
+        tags=rule_tags(),
         severity=detection.SeverityMedium,
         description="GSuite reported a suspicious login for this user.",
         reference="https://developers.google.com/admin-sdk/reports/v1/appendix/activity/login#suspicious_login",
-        runbook="Check out the details of the login and verify this behavior with the user to ensure the account wasn't compromised.",
-        filters=(pre_filters or []) + [match_filters.deep_equal("id.applicationName", "login"), rule_filter()],
+        runbook="Check out the details of the login and verify this behavior with the user"
+        "to ensure the account wasn't compromised.",
+        filters=(pre_filters or [])
+        + [
+            match_filters.deep_equal("id.applicationName", "login"),
+            match_filters.deep_in(
+                "name",
+                {
+                    "suspicious_login",
+                    "suspicious_login_less_secure_app",
+                    "suspicious_programmatic_login",
+                },
+            ),
+        ],
         alert_title=_title,
         alert_context=_make_context,
         summary_attrs=["actor:email"],

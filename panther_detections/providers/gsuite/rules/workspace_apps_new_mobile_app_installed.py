@@ -1,16 +1,10 @@
 import typing
 
-from panther_sdk import PantherEvent, detection
+from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
-
-# from .._shared import (
-#     create_alert_context,
-#     rule_tags,
-#     standard_tags,
-# )
 
 __all__ = ["workspace_apps_new_mobile_app_installed"]
 
@@ -24,11 +18,11 @@ def workspace_apps_new_mobile_app_installed(
     def _title(event: PantherEvent) -> str:
         # If no 'dedup' function is defined, the return value of
         # this method will act as deduplication string.
-        mobile_app_pkg_id = event.get("parameters", {}).get("MOBILE_APP_PACKAGE_ID", "<NO_MOBILE_APP_PACKAGE_ID_FOUND>")
+        mobile_pkg_id = event.get("parameters", {}).get("MOBILE_APP_PACKAGE_ID", "<NO_MOBILE_APP_PACKAGE_ID_FOUND>")
         return (
             f"Google Workspace User [{event.get('actor',{}).get('email','<NO_EMAIL_FOUND>')}] "
             f"added application "
-            f"[{mobile_app_pkg_id}] "
+            f"[{mobile_pkg_id}] "
             f"to your org's mobile application allowlist for "
             f"[{event.get('parameters',{}).get('DEVICE_TYPE','<NO_DEVICE_TYPE_FOUND>')}]."
         )
@@ -38,9 +32,10 @@ def workspace_apps_new_mobile_app_installed(
         # enabled=,
         name="Google Workspace Apps New Mobile App Installed",
         rule_id="Google.Workspace.Apps.New.Mobile.App.Installed",
-        log_types=["GSuite.ActivityEvent"],
+        log_types=schema.LogTypeGSuiteActivityEvent,
         severity=detection.SeverityMedium,
-        description="A new mobile application was added to your organization's mobile apps whitelist in Google Workspace Apps.",
+        description="A new mobile application was added to your"
+        "organization's mobile apps whitelist in Google Workspace Apps.",
         # tags=,
         # reports=,
         # reference=,

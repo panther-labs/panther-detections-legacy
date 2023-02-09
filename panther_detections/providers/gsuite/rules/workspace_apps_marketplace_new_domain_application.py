@@ -1,16 +1,10 @@
 import typing
 
-from panther_sdk import PantherEvent, detection
+from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
-
-# from .._shared import (
-#     create_alert_context,
-#     rule_tags,
-#     standard_tags,
-# )
 
 __all__ = ["workspace_apps_marketplace_new_domain_application"]
 
@@ -36,9 +30,10 @@ def workspace_apps_marketplace_new_domain_application(
         # enabled=,
         name="Google Workspace Apps Marketplace New Domain Application",
         rule_id="Google.Workspace.Apps.Marketplace.New.Domain.Application",
-        log_types=["GSuite.ActivityEvent"],
+        log_types=schema.LogTypeGSuiteActivityEvent,
         severity=detection.SeverityMedium,
-        description="A Google Workspace User configured a new domain application from the Google Workspace Apps Marketplace.",
+        description="A Google Workspace User configured a new domain application"
+        "from the Google Workspace Apps Marketplace.",
         # tags=,
         # reports=,
         # reference=,
@@ -50,13 +45,8 @@ def workspace_apps_marketplace_new_domain_application(
         alert_grouping=detection.AlertGrouping(period_minutes=60),
         filters=(pre_filters or [])
         + [
-            # def rule(event):
-            #    # Return True to match the log event and trigger an alert.
-            #    return (
-            #        event.get("name") == "ADD_APPLICATION"
-            #        and event.get("parameters", {}).get("APPLICATION_ENABLED", "<NO_APPLICATION_FOUND>")
-            #        == "true"
-            #    )
+            match_filters.deep_equal("name", "ADD_APPLICATION"),
+            match_filters.deep_equal("parameters.APPLICATION_ENABLED", "true"),
         ],
         unit_tests=(
             [

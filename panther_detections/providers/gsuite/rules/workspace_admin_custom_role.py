@@ -1,16 +1,11 @@
 import typing
 
-from panther_sdk import PantherEvent, detection
+from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
-
-# from .._shared import (
-#     create_alert_context,
-#     rule_tags,
-#     standard_tags,
-# )
+from .._shared import rule_tags
 
 __all__ = ["workspace_admin_custom_role"]
 
@@ -20,12 +15,6 @@ def workspace_admin_custom_role(
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
 ) -> detection.Rule:
     """A Google Workspace administrator created a new custom administrator role."""
-
-    def rule_filter() -> detection.PythonFilter:
-        def _rule_filter(event: PantherEvent) -> bool:
-            return event.get("type", "") == "DELEGATED_ADMIN_SETTINGS" and event.get("name", "") == "CREATE_ROLE"
-
-        return detection.PythonFilter(func=_rule_filter)
 
     def _title(event: PantherEvent) -> str:
         # (Optional) Return a string which will be shown as the alert title.
@@ -43,10 +32,10 @@ def workspace_admin_custom_role(
         # enabled=,
         name="Google Workspace Admin Custom Role",
         rule_id="Google.Workspace.Admin.Custom.Role",
-        log_types=["GSuite.ActivityEvent"],
+        log_types=schema.LogTypeGSuiteActivityEvent,
         severity=detection.SeverityMedium,
         description="A Google Workspace administrator created a new custom administrator role.",
-        tags=["admin", "administrator", "google workspace", "role"],
+        tags=rule_tags("admin", "administrator", "google workspace", "role"),
         # reports=,
         # reference=,
         runbook="Please review this activity with the administrator and ensure this behavior was authorized.",
@@ -55,11 +44,17 @@ def workspace_admin_custom_role(
         threshold=1,
         # alert_context=,
         alert_grouping=detection.AlertGrouping(period_minutes=60),
-        filters=(pre_filters or []) + [rule_filter()],
+        filters=(pre_filters or [])
+        + [
+            match_filters.deep_equal("type", "DELEGATED_ADMIN_SETTINGS"),
+            match_filters.deep_equal("name", "CREATE_ROLE"),
+        ],
         unit_tests=(
             [
                 detection.JSONUnitTest(
-                    name="Delete Role", expect_match=False, data=sample_logs.workspace_admin_custom_role_delete_role
+                    name="Delete Role",
+                    expect_match=False,
+                    data=sample_logs.workspace_admin_custom_role_delete_role,
                 ),
                 detection.JSONUnitTest(
                     name="New Custom Role Created",

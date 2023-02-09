@@ -1,16 +1,13 @@
+# pylint: disable=line-too-long, undefined-variable, unused-import
+
 import typing
 
-from panther_sdk import PantherEvent, detection
+from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
-
-# from .._shared import (
-#     create_alert_context,
-#     rule_tags,
-#     standard_tags,
-# )
+from .._shared import rule_tags
 
 
 def drive_external_share(
@@ -72,7 +69,7 @@ def drive_external_share(
         enabled=False,
         name="External GSuite File Share",
         rule_id="GSuite.Drive.ExternalFileShare",
-        log_types=["GSuite.Reports"],
+        log_types=schema.LogTypeGSuiteReports,
         severity=detection.SeverityHigh,
         description="An employee shared a sensitive file externally with another organization",
         tags=["GSuite", "Security Control", "Configuration Required", "Collection:Data from Information Repositories"],

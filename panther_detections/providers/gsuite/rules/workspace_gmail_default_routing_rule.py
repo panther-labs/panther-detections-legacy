@@ -1,16 +1,9 @@
 import typing
 
-from panther_sdk import PantherEvent, detection
-
-from panther_detections.utils import match_filters
+from panther_sdk import PantherEvent, detection, schema
 
 from .. import sample_logs
-
-# from .._shared import (
-#     create_alert_context,
-#     rule_tags,
-#     standard_tags,
-# )
+from .._shared import rule_tags
 
 __all__ = ["workspace_gmail_default_routing_rule"]
 
@@ -20,7 +13,6 @@ def workspace_gmail_default_routing_rule(
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
 ) -> detection.Rule:
     """A Workspace Admin Has Modified A Default Routing Rule In Gmail"""
-    # from panther_base_helpers import deep_get
 
     def rule_filter() -> detection.PythonFilter:
         def _rule_filter(event: PantherEvent) -> bool:
@@ -54,13 +46,16 @@ def workspace_gmail_default_routing_rule(
         # enabled=,
         name="GSuite Workspace Gmail Default Routing Rule Modified",
         rule_id="GSuite.Workspace.GmailDefaultRoutingRuleModified",
-        log_types=["GSuite.ActivityEvent"],
+        log_types=schema.LogTypeGSuiteActivityEvent,
         severity=detection.SeverityHigh,
         description="A Workspace Admin Has Modified A Default Routing Rule In Gmail",
-        tags=["GSuite"],
+        tags=rule_tags(),
         reports={"MITRE ATT&CK": ["TA0003:T1098"]},
         reference="https://support.google.com/a/answer/2368153?hl=en",
-        runbook="Administrators use Default Routing to set up how inbound email is delivered within an organization. The configuration of the default routing rule needs to be inspected in order to verify the intent of the rule is benign. If this change was not planned, inspect the other actions taken by this actor.",
+        runbook="Administrators use Default Routing to set up how inbound email is delivered within an organization."
+        "The configuration of the default routing rule needs to be inspected in order to"
+        "verify the intent of the rule is benign. If this change was not planned"
+        "inspect the other actions taken by this actor.",
         alert_title=_title,
         summary_attrs=["actor:email"],
         # threshold=,
@@ -72,22 +67,22 @@ def workspace_gmail_default_routing_rule(
                 detection.JSONUnitTest(
                     name="Workspace Admin Creates Default Routing Rule",
                     expect_match=True,
-                    data=sample_logs.workspace_gmail_default_routing_rule_workspace_admin_creates_default_routing_rule,
+                    data=sample_logs.workspace_admin_creates_default_routing_rule,
                 ),
                 detection.JSONUnitTest(
                     name="Workspace Admin Deletes Default Routing Rule",
                     expect_match=True,
-                    data=sample_logs.workspace_gmail_default_routing_rule_workspace_admin_deletes_default_routing_rule,
+                    data=sample_logs.workspace_admin_deletes_default_routing_rule,
                 ),
                 detection.JSONUnitTest(
                     name="Admin Set Default Calendar SHARING_OUTSIDE_DOMAIN Setting to READ_ONLY_ACCESS",
                     expect_match=False,
-                    data=sample_logs.workspace_gmail_default_routing_rule_admin_set_default_calendar_sharing_outside_domain_setting_to_read_only_access,
+                    data=sample_logs.admin_set_default_calendar_sharing_outside_domain_setting_to_read_only_access,
                 ),
                 detection.JSONUnitTest(
                     name="ListObject Type",
                     expect_match=False,
-                    data=sample_logs.workspace_gmail_default_routing_rule_listobject_type,
+                    data=sample_logs.listobject_type,
                 ),
             ]
         ),

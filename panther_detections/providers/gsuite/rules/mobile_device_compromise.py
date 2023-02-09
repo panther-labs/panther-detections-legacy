@@ -1,16 +1,11 @@
 import typing
 
-from panther_sdk import PantherEvent, detection
+from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
-
-# from .._shared import (
-#     create_alert_context,
-#     rule_tags,
-#     standard_tags,
-# )
+from .._shared import rule_tags
 
 __all__ = ["mobile_device_compromise"]
 
@@ -20,6 +15,7 @@ def mobile_device_compromise(
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
 ) -> detection.Rule:
     """GSuite reported a user's device has been compromised."""
+
     # from panther_base_helpers import deep_get
 
     def _title(event: PantherEvent) -> str:
@@ -30,9 +26,7 @@ def mobile_device_compromise(
 
     def rule_filter() -> detection.PythonFilter:
         def _rule_filter(event: PantherEvent) -> bool:
-            # from global_helpers import deep_get
             if event.get("name") == "DEVICE_COMPROMISED_EVENT":
-                # return bool(deep_get(event, "parameters", "DEVICE_COMPROMISED_STATE") == "COMPROMISED")
                 return bool(event["parameters"]["DEVICE_COMPROMISED_STATE"] == "COMPROMISED")
 
             return False
@@ -44,11 +38,12 @@ def mobile_device_compromise(
         # enabled=,
         name="GSuite User Device Compromised",
         rule_id="GSuite.DeviceCompromise",
-        log_types=["GSuite.ActivityEvent"],
+        log_types=schema.LogTypeGSuiteActivityEvent,
         severity=detection.SeverityMedium,
         description="GSuite reported a user's device has been compromised.",
-        tags=["GSuite"],
+        tags=rule_tags(),
         # reports=,
+        # pylint: disable=line-too-long
         reference="https://developers.google.com/admin-sdk/reports/v1/appendix/activity/mobile#DEVICE_COMPROMISED_EVENT",
         runbook="Have the user change their passwords and reset the device.",
         alert_title=_title,

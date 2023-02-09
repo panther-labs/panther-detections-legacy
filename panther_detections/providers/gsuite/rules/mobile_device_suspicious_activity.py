@@ -1,16 +1,11 @@
 import typing
 
-from panther_sdk import PantherEvent, detection
+from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
-
-# from .._shared import (
-#     create_alert_context,
-#     rule_tags,
-#     standard_tags,
-# )
+from .._shared import rule_tags
 
 __all__ = ["mobile_device_suspicious_activity"]
 
@@ -31,11 +26,12 @@ def mobile_device_suspicious_activity(
         # enabled=,
         name="GSuite Device Suspicious Activity",
         rule_id="GSuite.DeviceSuspiciousActivity",
-        log_types=["GSuite.ActivityEvent"],
+        log_types=schema.LogTypeGSuiteActivityEvent,
         severity=detection.SeverityLow,
         description="GSuite reported a suspicious activity on a user's device.",
-        tags=["GSuite"],
+        tags=rule_tags(),
         # reports=,
+        # pylint: disable=line-too-long
         reference="https://developers.google.com/admin-sdk/reports/v1/appendix/activity/mobile#SUSPICIOUS_ACTIVITY_EVENT",
         runbook="Validate that the suspicious activity was expected by the user.",
         alert_title=_title,
@@ -47,10 +43,6 @@ def mobile_device_suspicious_activity(
         + [
             match_filters.deep_equal("id.applicationName", "mobile"),
             match_filters.deep_equal("name", "SUSPICIOUS_ACTIVITY_EVENT"),
-            # def rule(event):
-            #    if deep_get(event, "id", "applicationName") != "mobile":
-            #        return False
-            #    return bool(event.get("name") == "SUSPICIOUS_ACTIVITY_EVENT")
         ],
         unit_tests=(
             [

@@ -1,17 +1,10 @@
 import typing
 
-from panther_sdk import PantherEvent, detection
+from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
-
-# from .._shared import (
-#     create_alert_context,
-#     rule_tags,
-#     standard_tags,
-# )
-
 
 __all__ = ["leaked_password"]
 
@@ -33,13 +26,16 @@ def leaked_password(
         # enabled=,
         name="GSuite User Password Leaked",
         rule_id="GSuite.LeakedPassword",
-        log_types=["GSuite.ActivityEvent"],
+        log_types=schema.LogTypeGSuiteActivityEvent,
         severity=detection.SeverityHigh,
         description="GSuite reported a user's password has been compromised, so they disabled the account.",
         tags=["GSuite", "Credential Access:Unsecured Credentials"],
         reports={"MITRE ATT&CK": ["TA0006:T1552"]},
+        # pylint: disable=line-too-long
         reference="https://developers.google.com/admin-sdk/reports/v1/appendix/activity/login#account_disabled_password_leak",
-        runbook="GSuite has already disabled the compromised user's account. Consider investigating how the user's account was compromised, and reset their account and password. Advise the user to change any other passwords in use that are the sae as the compromised password.",
+        runbook="GSuite has already disabled the compromised user's account."
+        "Consider investigating how the user's account was compromised, and reset their account and password."
+        "Advise the user to change any other passwords in use that are the sae as the compromised password.",
         alert_title=_title,
         summary_attrs=["actor:email"],
         # threshold=,

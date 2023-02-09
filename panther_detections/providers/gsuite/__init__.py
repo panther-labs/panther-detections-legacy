@@ -3,8 +3,11 @@ from typing import Literal
 from . import rules
 from ._shared import *
 
-# def use_reports_events_with_defaults() -> None:
-#     rules.drive_overly_visible()
+
+def use_reports_events_with_defaults() -> None:
+    rules.drive_overly_visible()
+
+
 #     rules.drive_external_share()
 #     rules.drive_visibility_change()
 
@@ -39,5 +42,4 @@ def use_activityevents_with_defaults() -> None:
     rules.workspace_trusted_domains_allowlist()
     rules.doc_ownership_transfer()
     rules.google_access()
-    rules.permissions_delegated()
     rules.user_suspended()

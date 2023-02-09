@@ -1,16 +1,10 @@
 import typing
 
-from panther_sdk import PantherEvent, detection
+from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters, standard_tags
 
 from .. import sample_logs
-
-# from .._shared import (
-#     create_alert_context,
-#     rule_tags,
-#     standard_tags,
-# )
 
 __all__ = ["gov_attack"]
 
@@ -31,7 +25,7 @@ def gov_attack(
         overrides=overrides,
         name="GSuite Government Backed Attack",
         rule_id="GSuite.GovernmentBackedAttack",
-        log_types=["GSuite.ActivityEvent"],
+        log_types=schema.LogTypeGSuiteActivityEvent,
         tags=standard_tags.IDENTITY_AND_ACCESS_MGMT,  # Check this
         severity=detection.SeverityCritical,
         description="GSuite reported that it detected a government backed attack against your account.",

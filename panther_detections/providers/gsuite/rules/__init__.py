@@ -1,10 +1,10 @@
 from .advanced_protection import *
 from .calendar_made_public import *
 from .doc_ownership_transfer import *
+from .drive_overly_visible import *
 from .external_forwarding import *
 from .google_access import *
 
-# from .drive_overly_visible import * WIP
 # from .drive_external_share import * WIP
 # from .drive_visibility_change import * WIP
 from .gov_attack import *
@@ -16,7 +16,6 @@ from .login_type import *
 from .mobile_device_compromise import *
 from .mobile_device_suspicious_activity import *
 from .passthrough_rule import *
-from .permissions_delegated import *
 from .suspicious_logins import *
 from .two_step_verification import *
 from .user_suspended import *

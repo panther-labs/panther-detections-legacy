@@ -1,16 +1,8 @@
 import typing
 
-from panther_sdk import PantherEvent, detection
-
-from panther_detections.utils import match_filters
+from panther_sdk import PantherEvent, detection, schema
 
 from .. import sample_logs
-
-# from .._shared import (
-#     create_alert_context,
-#     rule_tags,
-#     standard_tags,
-# )
 
 __all__ = ["workspace_apps_marketplace_allowlist"]
 
@@ -56,7 +48,7 @@ def workspace_apps_marketplace_allowlist(
         # enabled=,
         name="Google Workspace Apps Marketplace Allowlist",
         rule_id="Google.Workspace.Apps.Marketplace.Allowlist",
-        log_types=["GSuite.ActivityEvent"],
+        log_types=schema.LogTypeGSuiteActivityEvent,
         severity=detection.SeverityMedium,
         description="Google Workspace Marketplace application allowlist settings were modified.",
         # tags=,

@@ -317,3 +317,43 @@ def deep_between_exclusive(
     return detection.PythonFilter(
         func=_deep_between_exclusive,
     )
+
+
+def deep_ends_with(path: str, value: typing.Any) -> detection.PythonFilter:
+    """Returns True when the value at the provided path ends with the provided value"""
+
+    def _deep_ends_with(event: PantherEvent) -> bool:
+        import collections
+        import functools
+
+        keys = path.split(".")
+
+        actual = functools.reduce(
+            lambda d, key: d.get(key, None) if isinstance(d, collections.abc.Mapping) else None,
+            keys,
+            event,
+        )
+
+        return bool(actual.endswith(value))
+
+    return detection.PythonFilter(func=_deep_ends_with)
+
+
+def deep_starts_with(path: str, value: typing.Any) -> detection.PythonFilter:
+    """Returns True when the value at the provided path starts with the provided value"""
+
+    def _deep_starts_with(event: PantherEvent) -> bool:
+        import collections
+        import functools
+
+        keys = path.split(".")
+
+        actual = functools.reduce(
+            lambda d, key: d.get(key, None) if isinstance(d, collections.abc.Mapping) else None,
+            keys,
+            event,
+        )
+
+        return bool(actual.startswith(value))
+
+    return detection.PythonFilter(func=_deep_starts_with)

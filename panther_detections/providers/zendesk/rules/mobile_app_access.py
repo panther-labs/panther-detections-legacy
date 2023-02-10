@@ -1,5 +1,3 @@
-import typing
-
 from panther_sdk import PantherEvent, detection
 
 from panther_detections.utils import match_filters
@@ -9,8 +7,8 @@ from .._shared import ZENDESK_CHANGE_DESCRIPTION
 
 
 def mobile_app_access(
-    pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
+    extensions: detection.RuleExtensions = detection.RuleExtensions(),
 ) -> detection.Rule:
     """A user updated account setting that enabled or disabled mobile app access."""
     # from panther_base_helpers import ZENDESK_CHANGE_DESCRIPTION
@@ -27,6 +25,7 @@ def mobile_app_access(
 
     return detection.Rule(
         overrides=overrides,
+        extensions=extensions,
         name="Zendesk Mobile App Access Modified",
         rule_id="Zendesk.MobileAppAccessUpdated",
         log_types=["Zendesk.Audit"],
@@ -37,8 +36,7 @@ def mobile_app_access(
         alert_title=_title,
         summary_attrs=["p_any_ip_addresses"],
         alert_grouping=detection.AlertGrouping(period_minutes=60),
-        filters=(pre_filters or [])
-        + [
+        filters=[
             match_filters.deep_equal("source_type", "account_setting"),
             match_filters.deep_equal("source_label", "Zendesk Support Mobile App Access"),
             match_filters.deep_in("action", MOBILE_APP_ACTIONS),

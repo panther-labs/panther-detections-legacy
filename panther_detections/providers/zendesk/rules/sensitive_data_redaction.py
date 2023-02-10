@@ -1,5 +1,3 @@
-import typing
-
 from panther_sdk import PantherEvent, detection
 
 from panther_detections.utils import match_filters
@@ -9,8 +7,8 @@ from .._shared import ZENDESK_CHANGE_DESCRIPTION
 
 
 def sensitive_data_redaction(
-    pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
+    extensions: detection.RuleExtensions = detection.RuleExtensions(),
 ) -> detection.Rule:
     """A user updated account setting that disabled credit card redaction."""
 
@@ -30,6 +28,7 @@ def sensitive_data_redaction(
 
     return detection.Rule(
         overrides=overrides,
+        extensions=extensions,
         name="Zendesk Credit Card Redaction Off",
         rule_id="Zendesk.SensitiveDataRedactionOff",
         log_types=["Zendesk.Audit"],
@@ -41,8 +40,7 @@ def sensitive_data_redaction(
         alert_title=_title,
         summary_attrs=["p_any_ip_addresses"],
         alert_grouping=detection.AlertGrouping(period_minutes=60),
-        filters=(pre_filters or [])
-        + [
+        filters=[
             match_filters.deep_equal("source_type", "account_setting"),
             match_filters.deep_equal("source_label", "Credit Card Redaction"),
             match_filters.deep_in("action", REDACTION_ACTIONS),

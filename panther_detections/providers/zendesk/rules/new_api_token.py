@@ -1,5 +1,3 @@
-import typing
-
 from panther_sdk import PantherEvent, detection
 
 from panther_detections.utils import match_filters
@@ -14,8 +12,8 @@ from .. import sample_logs
 
 
 def new_api_token(
-    pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
+    extensions: detection.RuleExtensions = detection.RuleExtensions(),
 ) -> detection.Rule:
     """A user created a new API token to be used with Zendesk."""
     API_TOKEN_ACTIONS = [
@@ -34,6 +32,7 @@ def new_api_token(
 
     return detection.Rule(
         overrides=overrides,
+        extensions=extensions,
         name="Zendesk API Token Created",
         rule_id="Zendesk.NewAPIToken",
         log_types=["Zendesk.Audit"],
@@ -45,8 +44,10 @@ def new_api_token(
         alert_title=_title,
         summary_attrs=["p_any_ip_addresses"],
         alert_grouping=detection.AlertGrouping(period_minutes=60),
-        filters=(pre_filters or [])
-        + [match_filters.deep_equal("source_type", "api_token"), match_filters.deep_in("action", API_TOKEN_ACTIONS)],
+        filters=[
+            match_filters.deep_equal("source_type", "api_token"),
+            match_filters.deep_in("action", API_TOKEN_ACTIONS),
+        ],
         unit_tests=(
             [
                 detection.JSONUnitTest(

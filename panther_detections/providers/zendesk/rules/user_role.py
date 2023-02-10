@@ -1,5 +1,3 @@
-import typing
-
 from panther_sdk import PantherEvent, detection
 
 from panther_detections.utils import match_filters, standard_types
@@ -9,8 +7,8 @@ from .._shared import zendesk_get_roles
 
 
 def user_role(
-    pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
+    extensions: detection.RuleExtensions = detection.RuleExtensions(),
 ) -> detection.Rule:
     """A user's Zendesk role was changed"""
 
@@ -30,6 +28,7 @@ def user_role(
 
     return detection.Rule(
         overrides=overrides,
+        extensions=extensions,
         name="Zendesk User Role Changed",
         rule_id="Zendesk.UserRoleChanged",
         log_types=["Zendesk.Audit"],
@@ -38,8 +37,7 @@ def user_role(
         alert_title=_title,
         summary_attrs=["p_any_ip_addresses"],
         alert_grouping=detection.AlertGrouping(period_minutes=60),
-        filters=(pre_filters or [])
-        + [
+        filters=[
             match_filters.deep_equal("source_type", "user"),
             match_filters.deep_equal("action", "update"),
             detection.PythonFilter(func=admin_role_filter),

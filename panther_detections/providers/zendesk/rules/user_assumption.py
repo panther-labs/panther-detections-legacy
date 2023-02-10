@@ -1,5 +1,3 @@
-import typing
-
 from panther_sdk import PantherEvent, detection
 
 from panther_detections.utils import match_filters
@@ -8,8 +6,8 @@ from .. import sample_logs
 
 
 def user_assumption(
-    pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
+    extensions: detection.RuleExtensions = detection.RuleExtensions(),
 ) -> detection.Rule:
     """User enabled or disabled zendesk support user assumption."""
     USER_SUSPENSION_ACTIONS = [
@@ -26,6 +24,7 @@ def user_assumption(
 
     return detection.Rule(
         overrides=overrides,
+        extensions=extensions,
         name="Enabled Zendesk Support to Assume Users",
         rule_id="Zendesk.UserAssumption",
         log_types=["Zendesk.Audit"],
@@ -36,8 +35,7 @@ def user_assumption(
         runbook="Investigate whether allowing zendesk support to assume users is necessary. If not, disable the feature.",
         alert_title=_title,
         summary_attrs=["p_any_addresses"],
-        filters=(pre_filters or [])
-        + [
+        filters=[
             match_filters.deep_equal("source_type", "account_setting"),
             match_filters.deep_in("action", USER_SUSPENSION_ACTIONS),
             detection.PythonFilter(func=_source_label_filter),

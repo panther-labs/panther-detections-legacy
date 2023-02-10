@@ -1,5 +1,3 @@
-import typing
-
 from panther_sdk import PantherEvent, detection
 
 from panther_detections.utils import match_filters
@@ -9,8 +7,8 @@ from .._shared import ZENDESK_CHANGE_DESCRIPTION
 
 
 def new_owner(
-    pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
+    extensions: detection.RuleExtensions = detection.RuleExtensions(),
 ) -> detection.Rule:
     """Only one admin user can be the account owner. Ensure the change in ownership is expected."""
     import re
@@ -31,6 +29,7 @@ def new_owner(
 
     return detection.Rule(
         overrides=overrides,
+        extensions=extensions,
         name="Zendesk Account Owner Changed",
         rule_id="Zendesk.AccountOwnerChanged",
         log_types=["Zendesk.Audit"],
@@ -43,8 +42,7 @@ def new_owner(
         # threshold=,
         # alert_context=,
         alert_grouping=detection.AlertGrouping(period_minutes=60),
-        filters=(pre_filters or [])
-        + [
+        filters=[
             match_filters.deep_equal("action", "update"),
             match_filters.deep_equal("source_type", "account"),
             detection.PythonFilter(func=_filter),

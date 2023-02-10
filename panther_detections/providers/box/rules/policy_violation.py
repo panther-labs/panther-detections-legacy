@@ -1,5 +1,3 @@
-import typing
-
 from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters
@@ -9,8 +7,8 @@ from .._shared import POLICY_VIOLATIONS, rule_tags
 
 
 def policy_violation(
-    pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
+    extensions: detection.RuleExtensions = detection.RuleExtensions(),
 ) -> detection.Rule:
     """A user violated the content workflow policy."""
 
@@ -22,6 +20,7 @@ def policy_violation(
 
     return detection.Rule(
         overrides=overrides,
+        extensions=extensions,
         name="Box Content Workflow Policy Violation",
         rule_id="Box.Content.Workflow.Policy.Violation",
         log_types=[schema.LogTypeBoxEvent],
@@ -33,7 +32,7 @@ def policy_violation(
         " and take measure to ensure they understand policy.",
         alert_title=_title,
         summary_attrs=["event_type"],
-        filters=(pre_filters or []) + [match_filters.deep_in("event_type", POLICY_VIOLATIONS)],
+        filters=[match_filters.deep_in("event_type", POLICY_VIOLATIONS)],
         unit_tests=(
             [
                 detection.JSONUnitTest(name="Regular Event", expect_match=False, data=sample_logs.regular_event),

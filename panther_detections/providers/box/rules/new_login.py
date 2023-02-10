@@ -1,5 +1,3 @@
-import typing
-
 from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters
@@ -9,8 +7,8 @@ from .._shared import rule_tags
 
 
 def new_login(
-    pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
+    extensions: detection.RuleExtensions = detection.RuleExtensions(),
 ) -> detection.Rule:
     """A user logged in from a new device."""
 
@@ -21,6 +19,7 @@ def new_login(
 
     return detection.Rule(
         overrides=overrides,
+        extensions=extensions,
         name="Box New Login",
         rule_id="Box.New.Login",
         log_types=[schema.LogTypeBoxEvent],
@@ -32,8 +31,7 @@ def new_login(
         runbook="Investigate whether this is a valid user login.",
         alert_title=_title,
         summary_attrs=["ip_address"],
-        filters=(pre_filters or [])
-        + [
+        filters=[
             # ADD_LOGIN_ACTIVITY_DEVICE
             #  detect when a user logs in from a device not previously seen
             match_filters.deep_equal("event_type", "ADD_LOGIN_ACTIVITY_DEVICE")

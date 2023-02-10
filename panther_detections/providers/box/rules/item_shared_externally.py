@@ -1,5 +1,3 @@
-import typing
-
 from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils.legacy_utils import deep_get
@@ -16,8 +14,8 @@ from .._shared import (
 
 
 def item_shared_externally(
-    pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
+    extensions: detection.RuleExtensions = detection.RuleExtensions(),
 ) -> detection.Rule:
     """A user has shared an item and it is accessible to anyone with the share link (internal or external to the
     company). This rule requires that the boxsdk[jwt] be installed in the environment."""
@@ -51,6 +49,7 @@ def item_shared_externally(
 
     return detection.Rule(
         overrides=overrides,
+        extensions=extensions,
         enabled=False,
         name="Box item shared externally",
         rule_id="Box.Item.Shared.Externally",
@@ -66,7 +65,7 @@ def item_shared_externally(
         summary_attrs=["ip_address"],
         threshold=10,
         alert_grouping=detection.AlertGrouping(period_minutes=60),
-        filters=(pre_filters or []) + [detection.PythonFilter(func=_filter)],
+        filters=[detection.PythonFilter(func=_filter)],
         unit_tests=(
             [
                 detection.JSONUnitTest(name="Regular Event", expect_match=False, data=sample_logs.regular_event),

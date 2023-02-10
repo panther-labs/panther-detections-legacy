@@ -1,5 +1,3 @@
-import typing
-
 from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils.legacy_utils import deep_get
@@ -9,8 +7,8 @@ from .._shared import box_parse_additional_details, rule_tags
 
 
 def malicious_content(
-    pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
+    extensions: detection.RuleExtensions = detection.RuleExtensions(),
 ) -> detection.Rule:
     """Box has detect malicious content, such as a virus."""
 
@@ -47,6 +45,7 @@ def malicious_content(
 
     return detection.Rule(
         overrides=overrides,
+        extensions=extensions,
         name="Malicious Content Detected",
         rule_id="Box.Malicious.Content",
         log_types=[schema.LogTypeBoxEvent],
@@ -58,7 +57,7 @@ def malicious_content(
         runbook="Investigate whether this is a false positive or if the virus needs to be contained appropriately.",
         alert_title=_title,
         summary_attrs=["event_type"],
-        filters=(pre_filters or []) + [detection.PythonFilter(_filter)],
+        filters=[detection.PythonFilter(_filter)],
         unit_tests=(
             [
                 detection.JSONUnitTest(name="Regular Event", expect_match=False, data=sample_logs.regular_event),

@@ -1,5 +1,3 @@
-import typing
-
 from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters
@@ -9,8 +7,8 @@ from .._shared import rule_tags
 
 
 def untrusted_device(
-    pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
+    extensions: detection.RuleExtensions = detection.RuleExtensions(),
 ) -> detection.Rule:
     """A user attempted to login from an untrusted device."""
 
@@ -22,6 +20,7 @@ def untrusted_device(
 
     return detection.Rule(
         overrides=overrides,
+        extensions=extensions,
         name="Box Untrusted Device Login",
         rule_id="Box.Untrusted.Device",
         log_types=[schema.LogTypeBoxEvent],
@@ -33,8 +32,7 @@ def untrusted_device(
         runbook="Investigate whether this is a valid user attempting to login to box.",
         alert_title=_title,
         summary_attrs=["ip_address"],
-        filters=(pre_filters or [])
-        + [
+        filters=[
             # DEVICE_TRUST_CHECK_FAILED
             #  detect when a user attempts to login from an untrusted device
             match_filters.deep_equal("event_type", "DEVICE_TRUST_CHECK_FAILED")

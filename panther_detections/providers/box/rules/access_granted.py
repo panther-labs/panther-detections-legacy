@@ -1,5 +1,3 @@
-import typing
-
 from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters
@@ -9,8 +7,8 @@ from .._shared import rule_tags
 
 
 def access_granted(
-    pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
+    extensions: detection.RuleExtensions = detection.RuleExtensions(),
 ) -> detection.Rule:
     """A user granted access to their box account to Box technical support from account settings."""
 
@@ -22,6 +20,7 @@ def access_granted(
 
     return detection.Rule(
         overrides=overrides,
+        extensions=extensions,
         name="Box Access Granted",
         rule_id="Box.Access.Granted",
         log_types=[schema.LogTypeBoxEvent],
@@ -32,7 +31,7 @@ def access_granted(
         runbook="Investigate whether the user purposefully granted access to their account.",
         alert_title=_title,
         summary_attrs=["p_any_ip_addresses"],
-        filters=(pre_filters or []) + [match_filters.deep_equal("event_type", "ACCESS_GRANTED")],
+        filters=[match_filters.deep_equal("event_type", "ACCESS_GRANTED")],
         unit_tests=(
             [
                 detection.JSONUnitTest(name="Regular Event", expect_match=False, data=sample_logs.regular_event),

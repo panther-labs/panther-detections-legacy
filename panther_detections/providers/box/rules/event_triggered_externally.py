@@ -1,5 +1,3 @@
-import typing
-
 from panther_sdk import PantherEvent, detection, schema
 
 from .. import sample_logs
@@ -7,8 +5,8 @@ from .._shared import DOMAINS, rule_tags
 
 
 def event_triggered_externally(
-    pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
+    extensions: detection.RuleExtensions = detection.RuleExtensions(),
 ) -> detection.Rule:
     """An external user has triggered a box enterprise event."""
 
@@ -30,6 +28,7 @@ def event_triggered_externally(
 
     return detection.Rule(
         overrides=overrides,
+        extensions=extensions,
         enabled=False,
         name="Box event triggered by unknown or external user",
         rule_id="Box.Event.Triggered.Externally",
@@ -44,7 +43,7 @@ def event_triggered_externally(
         summary_attrs=["ip_address"],
         threshold=10,
         alert_grouping=detection.AlertGrouping(period_minutes=60),
-        filters=(pre_filters or []) + [detection.PythonFilter(func=_filter)],
+        filters=[detection.PythonFilter(func=_filter)],
         unit_tests=(
             [
                 detection.JSONUnitTest(

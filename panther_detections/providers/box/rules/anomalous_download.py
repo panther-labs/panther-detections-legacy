@@ -1,5 +1,3 @@
-import typing
-
 from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils.legacy_utils import deep_get
@@ -9,11 +7,10 @@ from .._shared import box_parse_additional_details, rule_tags
 
 
 def anomalous_download(
-    pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
+    extensions: detection.RuleExtensions = detection.RuleExtensions(),
 ) -> detection.Rule:
     """A user's download activity has altered significantly."""
-    # from panther_base_helpers import box_parse_additional_details, deep_get
 
     def _title(event: PantherEvent) -> str:
         details = box_parse_additional_details(event)
@@ -40,6 +37,7 @@ def anomalous_download(
 
     return detection.Rule(
         overrides=overrides,
+        extensions=extensions,
         name="Box Shield Detected Anomalous Download Activity",
         rule_id="Box.Shield.Anomalous.Download",
         log_types=[schema.LogTypeBoxEvent],
@@ -51,7 +49,7 @@ def anomalous_download(
         runbook="Investigate whether this was triggered by expected user download activity.",
         alert_title=_title,
         summary_attrs=["event_type", "ip_address"],
-        filters=(pre_filters or []) + [detection.PythonFilter(func=_filter)],
+        filters=[detection.PythonFilter(func=_filter)],
         unit_tests=(
             [
                 detection.JSONUnitTest(name="Regular Event", expect_match=False, data=sample_logs.regular_event),

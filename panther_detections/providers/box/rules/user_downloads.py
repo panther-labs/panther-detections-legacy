@@ -1,5 +1,3 @@
-import typing
-
 from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters
@@ -9,8 +7,8 @@ from .._shared import rule_tags
 
 
 def user_downloads(
-    pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
+    extensions: detection.RuleExtensions = detection.RuleExtensions(),
 ) -> detection.Rule:
     """A user has exceeded the threshold for number of downloads within a single time frame."""
 
@@ -22,6 +20,7 @@ def user_downloads(
 
     return detection.Rule(
         overrides=overrides,
+        extensions=extensions,
         name="Box Large Number of Downloads",
         rule_id="Box.Large.Number.Downloads",
         log_types=[schema.LogTypeBoxEvent],
@@ -36,7 +35,7 @@ def user_downloads(
         summary_attrs=["ip_address"],
         threshold=100,
         alert_grouping=detection.AlertGrouping(period_minutes=60),
-        filters=(pre_filters or []) + [match_filters.deep_equal("event_type", "DOWNLOAD")],
+        filters=[match_filters.deep_equal("event_type", "DOWNLOAD")],
         unit_tests=(
             [
                 detection.JSONUnitTest(name="Regular Event", expect_match=False, data=sample_logs.regular_event),

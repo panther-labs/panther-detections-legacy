@@ -1,5 +1,3 @@
-import typing
-
 from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters
@@ -9,8 +7,8 @@ from .._shared import rule_tags
 
 
 def brute_force_login(
-    pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
+    extensions: detection.RuleExtensions = detection.RuleExtensions(),
 ) -> detection.Rule:
     """A Box user was denied access more times than the configured threshold."""
 
@@ -22,6 +20,7 @@ def brute_force_login(
 
     return detection.Rule(
         overrides=overrides,
+        extensions=extensions,
         enabled=False,
         name="--DEPRECATED -- Box Brute Force Login",
         rule_id="Box.Brute.Force.Login",
@@ -36,7 +35,7 @@ def brute_force_login(
         summary_attrs=["event_type", "ip_address"],
         threshold=10,
         alert_grouping=detection.AlertGrouping(period_minutes=10),
-        filters=(pre_filters or []) + [match_filters.deep_equal("event_type", "FAILED_LOGIN")],
+        filters=[match_filters.deep_equal("event_type", "FAILED_LOGIN")],
         unit_tests=(
             [
                 detection.JSONUnitTest(name="Regular Event", expect_match=False, data=sample_logs.regular_event),

@@ -1,5 +1,3 @@
-import typing
-
 from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils.legacy_utils import deep_get
@@ -9,8 +7,8 @@ from .._shared import SUSPICIOUS_EVENT_TYPES, box_parse_additional_details, rule
 
 
 def suspicious_login_or_session(
-    pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
+    extensions: detection.RuleExtensions = detection.RuleExtensions(),
 ) -> detection.Rule:
     """A user login event or session event was tagged as medium to high severity by Box Shield."""
 
@@ -39,6 +37,7 @@ def suspicious_login_or_session(
 
     return detection.Rule(
         overrides=overrides,
+        extensions=extensions,
         name="Box Shield Suspicious Alert Triggered",
         rule_id="Box.Shield.Suspicious.Alert",
         log_types=[schema.LogTypeBoxEvent],
@@ -50,7 +49,7 @@ def suspicious_login_or_session(
         runbook="Investigate whether this was triggered by an expected user event.",
         alert_title=_title,
         summary_attrs=["event_type", "ip_address"],
-        filters=(pre_filters or []) + [detection.PythonFilter(func=_filter)],
+        filters=[detection.PythonFilter(func=_filter)],
         unit_tests=(
             [
                 detection.JSONUnitTest(name="Regular Event", expect_match=False, data=sample_logs.regular_event),

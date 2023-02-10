@@ -1,5 +1,3 @@
-import typing
-
 from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters
@@ -11,7 +9,7 @@ __all__ = ["workspace_password_enforce_strong_disabled"]
 
 
 def workspace_password_enforce_strong_disabled(
-    pre_filters: typing.List[detection.AnyFilter] = None,
+    extensions: detection.RuleExtensions = detection.RuleExtensions(),
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
 ) -> detection.Rule:
     """A Workspace Admin Has Disabled The Enforcement Of Strong Passwords"""
@@ -24,6 +22,7 @@ def workspace_password_enforce_strong_disabled(
 
     return detection.Rule(
         overrides=overrides,
+        extensions=extensions,
         # enabled=,
         name="GSuite Workspace Strong Password Enforcement Has Been Disabled",
         rule_id="GSuite.Workspace.PasswordEnforceStrongDisabled",
@@ -40,8 +39,7 @@ def workspace_password_enforce_strong_disabled(
         # threshold=,
         # alert_context=,
         # alert_grouping=,
-        filters=(pre_filters or [])
-        + [
+        filters=[
             match_filters.deep_equal("id.applicationName", "admin"),
             match_filters.deep_equal("name", "CHANGE_APPLICATION_SETTING"),
             match_filters.deep_equal("type", "APPLICATION_SETTINGS"),

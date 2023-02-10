@@ -1,5 +1,3 @@
-import typing
-
 from panther_sdk import PantherEvent, detection, schema
 
 from .. import sample_logs
@@ -12,7 +10,7 @@ __all__ = ["workspace_gmail_enhanced_predelivery_scanning"]
 
 
 def workspace_gmail_enhanced_predelivery_scanning(
-    pre_filters: typing.List[detection.AnyFilter] = None,
+    extensions: detection.RuleExtensions = detection.RuleExtensions(),
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
 ) -> detection.Rule:
     """A Workspace Admin Has Disabled Pre-Delivery Scanning For Gmail."""
@@ -46,6 +44,7 @@ def workspace_gmail_enhanced_predelivery_scanning(
 
     return detection.Rule(
         overrides=overrides,
+        extensions=extensions,
         # enabled=,
         name="GSuite Workspace Gmail Pre-Delivery Message Scanning Disabled",
         rule_id="GSuite.Workspace.GmailPredeliveryScanningDisabled",
@@ -62,7 +61,7 @@ def workspace_gmail_enhanced_predelivery_scanning(
         # threshold=,
         # alert_context=,
         # alert_grouping=,
-        filters=(pre_filters or []) + [detection.PythonFilter(func=_check_scanning_disabled)],
+        filters=[detection.PythonFilter(func=_check_scanning_disabled)],
         unit_tests=(
             [
                 detection.JSONUnitTest(

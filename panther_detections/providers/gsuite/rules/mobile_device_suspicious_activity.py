@@ -1,5 +1,3 @@
-import typing
-
 from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters
@@ -11,7 +9,7 @@ __all__ = ["mobile_device_suspicious_activity"]
 
 
 def mobile_device_suspicious_activity(
-    pre_filters: typing.List[detection.AnyFilter] = None,
+    extensions: detection.RuleExtensions = detection.RuleExtensions(),
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
 ) -> detection.Rule:
     """GSuite reported a suspicious activity on a user's device."""
@@ -23,6 +21,7 @@ def mobile_device_suspicious_activity(
 
     return detection.Rule(
         overrides=overrides,
+        extensions=extensions,
         # enabled=,
         name="GSuite Device Suspicious Activity",
         rule_id="GSuite.DeviceSuspiciousActivity",
@@ -39,8 +38,7 @@ def mobile_device_suspicious_activity(
         # threshold=,
         # alert_context=,
         # alert_grouping=,
-        filters=(pre_filters or [])
-        + [
+        filters=[
             match_filters.deep_equal("id.applicationName", "mobile"),
             match_filters.deep_equal("name", "SUSPICIOUS_ACTIVITY_EVENT"),
         ],

@@ -1,5 +1,4 @@
 import json
-import typing
 
 from panther_sdk import PantherEvent, detection, schema
 
@@ -11,7 +10,7 @@ __all__ = ["suspicious_logins"]
 
 
 def suspicious_logins(
-    pre_filters: typing.List[detection.AnyFilter] = None,
+    extensions: detection.RuleExtensions = detection.RuleExtensions(),
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
 ) -> detection.Rule:
     def _title(event: PantherEvent) -> str:
@@ -20,11 +19,12 @@ def suspicious_logins(
             user = "<UNKNOWN_USER>"
         return f"A suspicious login was reported for user [{user}]"
 
-    def _make_context(event):
+    def _make_context(event: PantherEvent):
         return event
 
     return detection.Rule(
         overrides=overrides,
+        extensions=extensions,
         rule_id="GSuite.SuspiciousLogins",
         name="Suspicious GSuite Login",
         log_types=schema.LogTypeGSuiteActivityEvent,
@@ -34,8 +34,7 @@ def suspicious_logins(
         reference="https://developers.google.com/admin-sdk/reports/v1/appendix/activity/login#suspicious_login",
         runbook="Check out the details of the login and verify this behavior with the user"
         "to ensure the account wasn't compromised.",
-        filters=(pre_filters or [])
-        + [
+        filters=[
             match_filters.deep_equal("id.applicationName", "login"),
             match_filters.deep_in(
                 "name",

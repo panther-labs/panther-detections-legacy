@@ -1,5 +1,3 @@
-import typing
-
 from panther_sdk import PantherEvent, detection, schema
 
 from .. import sample_logs
@@ -9,7 +7,7 @@ __all__ = ["workspace_advanced_protection_program"]
 
 
 def workspace_advanced_protection_program(
-    pre_filters: typing.List[detection.AnyFilter] = None,
+    extensions: detection.RuleExtensions = detection.RuleExtensions(),
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
 ) -> detection.Rule:
     """Your organization's Google Workspace Advanced Protection Program settings were modified."""
@@ -33,6 +31,7 @@ def workspace_advanced_protection_program(
 
     return detection.Rule(
         overrides=overrides,
+        extensions=extensions,
         # enabled=,
         name="Google Workspace Advanced Protection Program",
         rule_id="Google.Workspace.Advanced.Protection.Program",
@@ -48,7 +47,7 @@ def workspace_advanced_protection_program(
         threshold=1,
         # alert_context=,
         alert_grouping=detection.AlertGrouping(period_minutes=60),
-        filters=(pre_filters or []) + [detection.PythonFilter(func=_check_create_setting_evt)],
+        filters=[detection.PythonFilter(func=_check_create_setting_evt)],
         unit_tests=(
             [
                 detection.JSONUnitTest(

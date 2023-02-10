@@ -1,5 +1,3 @@
-import typing
-
 from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters
@@ -11,30 +9,21 @@ __all__ = ["doc_ownership_transfer"]
 
 
 def doc_ownership_transfer(
-    pre_filters: typing.List[detection.AnyFilter] = None,
+    extensions: detection.RuleExtensions = detection.RuleExtensions(),
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
 ) -> detection.Rule:
     """A GSuite document's ownership was transferred to an external party."""
 
-    def rule_filter() -> detection.PythonFilter:
-        def _rule_filter(event: PantherEvent) -> bool:
-            from panther_detections.utils.legacy_filters import deep_get
-
-            org_domains = {
-                "@example.com",
-            }
-
-            if deep_get(event, "id", "applicationName") != "admin":
-                return False
-            if bool(event.get("name") == "TRANSFER_DOCUMENT_OWNERSHIP"):
-                new_owner = deep_get(event, "parameters", "NEW_VALUE", default="<UNKNOWN USER>")
-                return bool(new_owner) and not any(new_owner.endswith(x) for x in org_domains)
-            return False
-
-        return detection.PythonFilter(func=_rule_filter)
+    def _check_in_domain(event: PantherEvent) -> bool:
+        org_domains = {
+            "@example.com",
+        }
+        new_owner = event.deep_get("parameters", "NEW_VALUE")
+        return bool(new_owner) and not any(new_owner.endswith(x) for x in org_domains)
 
     return detection.Rule(
         overrides=overrides,
+        extensions=extensions,
         enabled=False,
         name="GSuite Document External Ownership Transfer",
         rule_id="GSuite.DocOwnershipTransfer",
@@ -50,7 +39,11 @@ def doc_ownership_transfer(
         # threshold=,
         # alert_context=,
         # alert_grouping=,
-        filters=(pre_filters or []) + [match_filters.deep_equal("id.applicationName", "admin"), rule_filter()],
+        filters=[
+            match_filters.deep_equal("id.applicationName", "admin"),
+            match_filters.deep_equal("name", "TRANSFER_DOCUMENT_OWNERSHIP"),
+            detection.PythonFilter(func=_check_in_domain),
+        ],
         unit_tests=(
             [
                 detection.JSONUnitTest(

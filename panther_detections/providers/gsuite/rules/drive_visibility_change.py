@@ -1,8 +1,6 @@
 # pylint: disable-all
 # WIP rule
 
-import typing
-
 from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters
@@ -12,7 +10,7 @@ from .._shared import rule_tags
 
 
 def drive_visibility_change(
-    pre_filters: typing.List[detection.AnyFilter] = None,
+    extensions: detection.RuleExtensions = detection.RuleExtensions(),
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
 ) -> detection.Rule:
     """A Google drive resource became externally accessible."""
@@ -102,6 +100,7 @@ def drive_visibility_change(
 
     return detection.Rule(
         overrides=overrides,
+        extensions=extensions,
         enabled=False,
         name="GSuite External Drive Document",
         rule_id="GSuite.DriveVisibilityChanged",
@@ -117,8 +116,7 @@ def drive_visibility_change(
         # threshold=,
         alert_context=_alert_context,
         alert_grouping=detection.AlertGrouping(group_by=_group_by, period_minutes=15),
-        filters=(pre_filters or [])
-        + [
+        filters=[
             # def rule(event):
             #    # pylint: disable=too-complex
             #    global ALLOWED_DOMAINS  # pylint: disable=global-statement

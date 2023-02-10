@@ -1,5 +1,3 @@
-import typing
-
 from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters
@@ -11,7 +9,7 @@ __all__ = ["user_suspended"]
 
 
 def user_suspended(
-    pre_filters: typing.List[detection.AnyFilter] = None,
+    extensions: detection.RuleExtensions = detection.RuleExtensions(),
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
 ) -> detection.Rule:
     """A GSuite user was suspended, the account may have been compromised by a spam network."""
@@ -24,6 +22,7 @@ def user_suspended(
 
     return detection.Rule(
         overrides=overrides,
+        extensions=extensions,
         # enabled=,
         name="GSuite User Suspended",
         rule_id="GSuite.UserSuspended",
@@ -41,8 +40,7 @@ def user_suspended(
         # threshold=,
         # alert_context=,
         # alert_grouping=,
-        filters=(pre_filters or [])
-        + [
+        filters=[
             match_filters.deep_equal("id.applicationName", "login"),
             match_filters.deep_in(
                 "name",

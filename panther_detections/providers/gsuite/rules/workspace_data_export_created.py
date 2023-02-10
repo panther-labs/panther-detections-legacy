@@ -1,5 +1,3 @@
-import typing
-
 from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters
@@ -11,7 +9,7 @@ __all__ = ["workspace_data_export_created"]
 
 
 def workspace_data_export_created(
-    pre_filters: typing.List[detection.AnyFilter] = None,
+    extensions: detection.RuleExtensions = detection.RuleExtensions(),
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
 ) -> detection.Rule:
     """A Workspace Admin Has Created a Data Export"""
@@ -25,6 +23,7 @@ def workspace_data_export_created(
 
     return detection.Rule(
         overrides=overrides,
+        extensions=extensions,
         # enabled=,
         name="GSuite Workspace Data Export Has Been Created",
         rule_id="GSuite.Workspace.DataExportCreated",
@@ -41,7 +40,7 @@ def workspace_data_export_created(
         # threshold=,
         # alert_context=,
         # alert_grouping=,
-        filters=(pre_filters or []) + [match_filters.deep_starts_with("name", "CUSTOMER_TAKEOUT_")],
+        filters=[match_filters.deep_starts_with("name", "CUSTOMER_TAKEOUT_")],
         unit_tests=(
             [
                 detection.JSONUnitTest(

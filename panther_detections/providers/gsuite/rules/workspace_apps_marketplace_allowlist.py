@@ -1,6 +1,6 @@
-import typing
-
 from panther_sdk import PantherEvent, detection, schema
+
+from panther_detections.utils import match_filters
 
 from .. import sample_logs
 
@@ -8,21 +8,10 @@ __all__ = ["workspace_apps_marketplace_allowlist"]
 
 
 def workspace_apps_marketplace_allowlist(
-    pre_filters: typing.List[detection.AnyFilter] = None,
+    extensions: detection.RuleExtensions = detection.RuleExtensions(),
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
 ) -> detection.Rule:
     """Google Workspace Marketplace application allowlist settings were modified."""
-
-    def rule_filter() -> detection.PythonFilter:
-        def _rule_filter(event: PantherEvent) -> bool:
-            from panther_detections.utils.legacy_filters import deep_get
-
-            setting_name = deep_get(event, "parameters", "SETTING_NAME", default="<NO_SETTING_NAME>")
-            old_val = deep_get(event, "parameters", "OLD_VALUE", default="<NO_OLD_VALUE_FOUND>")
-            new_val = deep_get(event, "parameters", "NEW_VALUE", default="<NO_NEW_VALUE_FOUND>")
-            return setting_name == "ENABLE_G_SUITE_MARKETPLACE" and old_val != new_val
-
-        return detection.PythonFilter(func=_rule_filter)
 
     def _title(event: PantherEvent) -> str:
         # (Optional) Return a string which will be shown as the alert title.
@@ -45,6 +34,7 @@ def workspace_apps_marketplace_allowlist(
 
     return detection.Rule(
         overrides=overrides,
+        extensions=extensions,
         # enabled=,
         name="Google Workspace Apps Marketplace Allowlist",
         rule_id="Google.Workspace.Apps.Marketplace.Allowlist",
@@ -60,7 +50,10 @@ def workspace_apps_marketplace_allowlist(
         threshold=1,
         # alert_context=,
         alert_grouping=detection.AlertGrouping(period_minutes=60),
-        filters=(pre_filters or []) + [rule_filter()],
+        filters=[
+            match_filters.deep_equal("parameters.SETTING_NAME", "ENABLE_G_SUITE_MARKETPLACE"),
+            match_filters.deep_not_equal("parameters.OLD_VALUE", "parameters.NEW_VALUE"),
+        ],
         unit_tests=(
             [
                 detection.JSONUnitTest(

@@ -1,5 +1,3 @@
-import typing
-
 from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters
@@ -10,7 +8,7 @@ __all__ = ["workspace_apps_marketplace_new_domain_application"]
 
 
 def workspace_apps_marketplace_new_domain_application(
-    pre_filters: typing.List[detection.AnyFilter] = None,
+    extensions: detection.RuleExtensions = detection.RuleExtensions(),
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
 ) -> detection.Rule:
     """A Google Workspace User configured a new domain application from the Google Workspace Apps Marketplace."""
@@ -27,6 +25,7 @@ def workspace_apps_marketplace_new_domain_application(
 
     return detection.Rule(
         overrides=overrides,
+        extensions=extensions,
         # enabled=,
         name="Google Workspace Apps Marketplace New Domain Application",
         rule_id="Google.Workspace.Apps.Marketplace.New.Domain.Application",
@@ -43,8 +42,7 @@ def workspace_apps_marketplace_new_domain_application(
         threshold=1,
         # alert_context=,
         alert_grouping=detection.AlertGrouping(period_minutes=60),
-        filters=(pre_filters or [])
-        + [
+        filters=[
             match_filters.deep_equal("name", "ADD_APPLICATION"),
             match_filters.deep_equal("parameters.APPLICATION_ENABLED", "true"),
         ],

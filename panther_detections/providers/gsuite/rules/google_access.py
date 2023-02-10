@@ -1,5 +1,3 @@
-import typing
-
 from panther_sdk import detection, schema
 
 from panther_detections.utils import match_filters
@@ -11,13 +9,14 @@ __all__ = ["google_access"]
 
 
 def google_access(
-    pre_filters: typing.List[detection.AnyFilter] = None,
+    extensions: detection.RuleExtensions = detection.RuleExtensions(),
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
 ) -> detection.Rule:
     """Google accessed one of your GSuite resources directly, most likely in response to a support incident."""
 
     return detection.Rule(
         overrides=overrides,
+        extensions=extensions,
         # enabled=,
         name="Google Accessed a GSuite Reource",
         rule_id="GSuite.GoogleAccess",
@@ -34,8 +33,7 @@ def google_access(
         # threshold=,
         # alert_context=,
         # alert_grouping=,
-        filters=(pre_filters or [])
-        + [
+        filters=[
             match_filters.deep_equal("id.applicationName", "access_transparency"),
             match_filters.deep_equal("type", "GSUITE_RESOURCE"),
         ],

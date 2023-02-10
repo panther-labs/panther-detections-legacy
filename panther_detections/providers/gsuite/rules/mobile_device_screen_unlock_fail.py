@@ -1,5 +1,3 @@
-import typing
-
 from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters
@@ -10,7 +8,7 @@ __all__ = ["mobile_device_screen_unlock_fail"]
 
 
 def mobile_device_screen_unlock_fail(
-    pre_filters: typing.List[detection.AnyFilter] = None,
+    extensions: detection.RuleExtensions = detection.RuleExtensions(),
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
 ) -> detection.Rule:
     """Someone failed to unlock a user's device multiple times in quick succession."""
@@ -23,6 +21,7 @@ def mobile_device_screen_unlock_fail(
 
     return detection.Rule(
         overrides=overrides,
+        extensions=extensions,
         # enabled=,
         name="GSuite User Device Unlock Failures",
         rule_id="GSuite.DeviceUnlockFailure",
@@ -40,8 +39,7 @@ def mobile_device_screen_unlock_fail(
         # threshold=,
         # alert_context=,
         # alert_grouping=,
-        filters=(pre_filters or [])
-        + [
+        filters=[
             match_filters.deep_equal("id.applicationName", "mobile"),
             match_filters.deep_equal("name", "FAILED_PASSWORD_ATTEMPTS_EVENT"),
             match_filters.deep_greater_than(float("parameters.FAILED_PASSWD_ATTEMPTS"), 10),

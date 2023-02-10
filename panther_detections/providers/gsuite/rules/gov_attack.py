@@ -1,5 +1,3 @@
-import typing
-
 from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters, standard_tags
@@ -10,7 +8,7 @@ __all__ = ["gov_attack"]
 
 
 def gov_attack(
-    pre_filters: typing.List[detection.AnyFilter] = None,
+    extensions: detection.RuleExtensions = detection.RuleExtensions(),
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
 ) -> detection.Rule:
     """GSuite reported that it detected a government backed attack against your account."""
@@ -23,6 +21,7 @@ def gov_attack(
 
     return detection.Rule(
         overrides=overrides,
+        extensions=extensions,
         name="GSuite Government Backed Attack",
         rule_id="GSuite.GovernmentBackedAttack",
         log_types=schema.LogTypeGSuiteActivityEvent,
@@ -31,8 +30,7 @@ def gov_attack(
         description="GSuite reported that it detected a government backed attack against your account.",
         reference="https://developers.google.com/admin-sdk/reports/v1/appendix/activity/login#gov_attack_warning",
         runbook="Follow up with GSuite support for more details.",
-        filters=(pre_filters or [])
-        + [
+        filters=[
             # name == change_calendars_acls &
             # parameters.grantee_email == __public_principal__@public.calendar.google.com
             match_filters.deep_equal("name", "gov_attack_warning")

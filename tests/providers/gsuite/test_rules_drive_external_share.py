@@ -1,7 +1,7 @@
-import unittest
+# import unittest
 
-from panther_sdk import detection
-from panther_detections.providers import gsuite
+# from panther_sdk import detection
+# from panther_detections.providers import gsuite
 
 
 # class TestRulesDriveExternalShare(unittest.TestCase):

@@ -1,5 +1,3 @@
-import typing
-
 from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters
@@ -11,30 +9,13 @@ __all__ = ["workspace_password_reuse_enabled"]
 
 
 def workspace_password_reuse_enabled(
-    pre_filters: typing.List[detection.AnyFilter] = None,
+    extensions: detection.RuleExtensions = detection.RuleExtensions(),
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
 ) -> detection.Rule:
     """A Workspace Admin Has Enabled Password Reuse"""
 
-    def rule_filter() -> detection.PythonFilter:
-        def _rule_filter(event: PantherEvent) -> bool:
-            from panther_detections.utils.legacy_filters import deep_get
-
-            if all(
-                [
-                    (event.get("name", "") == "CHANGE_APPLICATION_SETTING"),
-                    (event.get("type", "") == "APPLICATION_SETTINGS"),
-                    (deep_get(event, "parameters", "NEW_VALUE", default="").lower() == "true"),
-                    (
-                        deep_get(event, "parameters", "SETTING_NAME", default="")
-                        == "Password Management - Enable password reuse"
-                    ),
-                ]
-            ):
-                return True
-            return False
-
-        return detection.PythonFilter(func=_rule_filter)
+    def _new_value_true(event: PantherEvent):
+        return event.deep_get("parameters", "NEW_VALUE").lower()
 
     def _title(event: PantherEvent) -> str:
         return (
@@ -44,6 +25,7 @@ def workspace_password_reuse_enabled(
 
     return detection.Rule(
         overrides=overrides,
+        extensions=extensions,
         # enabled=,
         name="GSuite Workspace Password Reuse Has Been Enabled",
         rule_id="GSuite.Workspace.PasswordReuseEnabled",
@@ -60,7 +42,12 @@ def workspace_password_reuse_enabled(
         # threshold=,
         # alert_context=,
         # alert_grouping=,
-        filters=(pre_filters or []) + [match_filters.deep_equal("id.applicationName", "admin"), rule_filter()],
+        filters=[
+            match_filters.deep_equal("id.applicationName", "admin"),
+            match_filters.deep_equal("type", "APPLICATION_SETTINGS"),
+            detection.PythonFilter(func=_new_value_true),
+            match_filters.deep_equal("parameters.SETTING_NAME", "Password Management - Enable password reuse"),
+        ],
         unit_tests=(
             [
                 detection.JSONUnitTest(

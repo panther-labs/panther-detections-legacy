@@ -10,7 +10,7 @@ __all__ = ["external_forwarding"]
 
 
 def external_forwarding(
-    pre_filters: typing.List[detection.AnyFilter] = None,
+    extensions: detection.RuleExtensions = detection.RuleExtensions(),
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
 ) -> detection.Rule:
     """A user has configured mail forwarding to an external domain"""
@@ -35,6 +35,7 @@ def external_forwarding(
 
     return detection.Rule(
         overrides=overrides,
+        extensions=extensions,
         enabled=False,
         name="Gsuite Mail forwarded to external domain",
         rule_id="GSuite.ExternalMailForwarding",
@@ -51,8 +52,7 @@ def external_forwarding(
         # threshold=,
         # alert_context=,
         # alert_grouping=,
-        filters=(pre_filters or [])
-        + [
+        filters=[
             match_filters.deep_equal("id.applicationName", "user_accounts"),
             match_filters.deep_equal("name", "email_forwarding_out_of_domain"),
             check_allowed_domain(["example.com"]),

@@ -1,5 +1,3 @@
-import typing
-
 from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters
@@ -10,7 +8,7 @@ __all__ = ["login_type"]
 
 
 def login_type(
-    pre_filters: typing.List[detection.AnyFilter] = None,
+    extensions: detection.RuleExtensions = detection.RuleExtensions(),
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
 ) -> detection.Rule:
     """A login of a non-approved type was detected for this user."""
@@ -33,6 +31,7 @@ def login_type(
 
     return detection.Rule(
         overrides=overrides,
+        extensions=extensions,
         enabled=False,
         name="GSuite Login Type",
         rule_id="GSuite.LoginType",
@@ -48,8 +47,7 @@ def login_type(
         # threshold=,
         # alert_context=,
         # alert_grouping=,
-        filters=(pre_filters or [])
-        + [
+        filters=[
             match_filters.deep_equal("type", "login"),
             match_filters.deep_not_equal("name", "logout"),
             match_filters.deep_not_in("parameters.login_type", approved_login_types),

@@ -1,5 +1,3 @@
-import typing
-
 from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters
@@ -8,7 +6,7 @@ from .. import sample_logs
 
 
 def drive_overly_visible(
-    pre_filters: typing.List[detection.AnyFilter] = None,
+    extensions: detection.RuleExtensions = detection.RuleExtensions(),
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
 ) -> detection.Rule:
     """A Google drive resource that is overly visible has been modified."""
@@ -67,6 +65,7 @@ def drive_overly_visible(
 
     return detection.Rule(
         overrides=overrides,
+        extensions=extensions,
         # enabled=,
         name="GSuite Overly Visible Drive Document",
         rule_id="GSuite.DriveOverlyVisible",
@@ -82,8 +81,7 @@ def drive_overly_visible(
         # threshold=,
         # alert_context=,
         alert_grouping=detection.AlertGrouping(group_by=_group_by, period_minutes=15),
-        filters=(pre_filters or [])
-        + [
+        filters=[
             match_filters.deep_equal("id.applicationName", "drive"),
             details_in_params(),
         ],

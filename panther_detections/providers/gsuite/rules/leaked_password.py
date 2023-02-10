@@ -1,5 +1,3 @@
-import typing
-
 from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters
@@ -10,7 +8,7 @@ __all__ = ["leaked_password"]
 
 
 def leaked_password(
-    pre_filters: typing.List[detection.AnyFilter] = None,
+    extensions: detection.RuleExtensions = detection.RuleExtensions(),
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
 ) -> detection.Rule:
     """GSuite reported a user's password has been compromised, so they disabled the account."""
@@ -23,6 +21,7 @@ def leaked_password(
 
     return detection.Rule(
         overrides=overrides,
+        extensions=extensions,
         # enabled=,
         name="GSuite User Password Leaked",
         rule_id="GSuite.LeakedPassword",
@@ -41,8 +40,7 @@ def leaked_password(
         # threshold=,
         # alert_context=,
         # alert_grouping=,
-        filters=(pre_filters or [])
-        + [
+        filters=[
             match_filters.deep_equal("id.applicationName", "login"),
             match_filters.deep_equal("type", "account_warning"),
             match_filters.deep_in("name", ["account_disabled_password_leak"]),

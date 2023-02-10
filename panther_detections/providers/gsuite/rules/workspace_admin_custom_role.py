@@ -1,5 +1,3 @@
-import typing
-
 from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters
@@ -11,7 +9,7 @@ __all__ = ["workspace_admin_custom_role"]
 
 
 def workspace_admin_custom_role(
-    pre_filters: typing.List[detection.AnyFilter] = None,
+    extensions: detection.RuleExtensions = detection.RuleExtensions(),
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
 ) -> detection.Rule:
     """A Google Workspace administrator created a new custom administrator role."""
@@ -29,6 +27,7 @@ def workspace_admin_custom_role(
 
     return detection.Rule(
         overrides=overrides,
+        extensions=extensions,
         # enabled=,
         name="Google Workspace Admin Custom Role",
         rule_id="Google.Workspace.Admin.Custom.Role",
@@ -44,8 +43,7 @@ def workspace_admin_custom_role(
         threshold=1,
         # alert_context=,
         alert_grouping=detection.AlertGrouping(period_minutes=60),
-        filters=(pre_filters or [])
-        + [
+        filters=[
             match_filters.deep_equal("type", "DELEGATED_ADMIN_SETTINGS"),
             match_filters.deep_equal("name", "CREATE_ROLE"),
         ],

@@ -1,5 +1,3 @@
-import typing
-
 from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters
@@ -11,7 +9,7 @@ __all__ = ["advanced_protection"]
 
 
 def advanced_protection(
-    pre_filters: typing.List[detection.AnyFilter] = None,
+    extensions: detection.RuleExtensions = detection.RuleExtensions(),
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
 ) -> detection.Rule:
     """A user disabled advanced protection for themselves."""
@@ -24,6 +22,7 @@ def advanced_protection(
 
     return detection.Rule(
         overrides=overrides,
+        extensions=extensions,
         name="GSuite User Advanced Protection Change",
         rule_id="GSuite.AdvancedProtection",
         log_types=schema.LogTypeGSuiteActivityEvent,
@@ -36,8 +35,7 @@ def advanced_protection(
         runbook="Have the user re-enable Google Advanced Protection",
         alert_title=_title,
         summary_attrs=["actor:email"],
-        filters=(pre_filters or [])
-        + [
+        filters=[
             match_filters.deep_equal("id.applicationName", "user_accounts"),
             match_filters.deep_equal("name", "titanium_unenroll"),
         ],

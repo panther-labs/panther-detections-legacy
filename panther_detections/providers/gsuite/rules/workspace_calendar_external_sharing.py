@@ -1,5 +1,3 @@
-import typing
-
 from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters
@@ -11,7 +9,7 @@ __all__ = ["workspace_calendar_external_sharing"]
 
 
 def workspace_calendar_external_sharing(
-    pre_filters: typing.List[detection.AnyFilter] = None,
+    extensions: detection.RuleExtensions = detection.RuleExtensions(),
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
 ) -> detection.Rule:
     """A Workspace Admin Changed The Sharing Settings for Primary Calendars"""
@@ -26,6 +24,7 @@ def workspace_calendar_external_sharing(
 
     return detection.Rule(
         overrides=overrides,
+        extensions=extensions,
         # enabled=,
         name="GSuite Workspace Calendar External Sharing Setting Change",
         rule_id="GSuite.Workspace.CalendarExternalSharingSetting",
@@ -43,8 +42,7 @@ def workspace_calendar_external_sharing(
         # threshold=,
         # alert_context=,
         # alert_grouping=,
-        filters=(pre_filters or [])
-        + [
+        filters=[
             match_filters.deep_equal("name", "CHANGE_CALENDAR_SETTING"),
             match_filters.deep_equal("parameters.SETTING_NAME", "SHARING_OUTSIDE_DOMAIN"),
             match_filters.deep_in(

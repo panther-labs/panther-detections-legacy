@@ -1,6 +1,5 @@
-# pylint: disable=line-too-long, undefined-variable, unused-import
-
-import typing
+# pylint: disable-all
+# WIP rule
 
 from panther_sdk import PantherEvent, detection, schema
 
@@ -11,7 +10,7 @@ from .._shared import rule_tags
 
 
 def drive_external_share(
-    pre_filters: typing.List[detection.AnyFilter] = None,
+    extensions: detection.RuleExtensions = detection.RuleExtensions(),
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
 ) -> detection.Rule:
     """An employee shared a sensitive file externally with another organization"""
@@ -66,6 +65,7 @@ def drive_external_share(
 
     return detection.Rule(
         overrides=overrides,
+        extensions=extensions,
         enabled=False,
         name="External GSuite File Share",
         rule_id="GSuite.Drive.ExternalFileShare",
@@ -81,8 +81,7 @@ def drive_external_share(
         # threshold=,
         # alert_context=,
         # alert_grouping=,
-        filters=(pre_filters or [])
-        + [
+        filters=[
             # def rule(event):
             #    application_name = deep_get(event, "id", "applicationName")
             #    events = event.get("events")

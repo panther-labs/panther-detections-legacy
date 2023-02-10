@@ -1,5 +1,3 @@
-import typing
-
 from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters
@@ -10,7 +8,7 @@ __all__ = ["workspace_apps_new_mobile_app_installed"]
 
 
 def workspace_apps_new_mobile_app_installed(
-    pre_filters: typing.List[detection.AnyFilter] = None,
+    extensions: detection.RuleExtensions = detection.RuleExtensions(),
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
 ) -> detection.Rule:
     """A new mobile application was added to your organization's mobile apps whitelist in Google Workspace Apps."""
@@ -29,6 +27,7 @@ def workspace_apps_new_mobile_app_installed(
 
     return detection.Rule(
         overrides=overrides,
+        extensions=extensions,
         # enabled=,
         name="Google Workspace Apps New Mobile App Installed",
         rule_id="Google.Workspace.Apps.New.Mobile.App.Installed",
@@ -45,7 +44,7 @@ def workspace_apps_new_mobile_app_installed(
         threshold=1,
         # alert_context=,
         alert_grouping=detection.AlertGrouping(period_minutes=60),
-        filters=(pre_filters or []) + [match_filters.deep_equal("name", "ADD_MOBILE_APPLICATION_TO_WHITELIST")],
+        filters=[match_filters.deep_equal("name", "ADD_MOBILE_APPLICATION_TO_WHITELIST")],
         unit_tests=(
             [
                 detection.JSONUnitTest(

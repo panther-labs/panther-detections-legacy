@@ -1,5 +1,3 @@
-import typing
-
 from panther_core import PantherEvent
 from panther_sdk import detection, schema
 
@@ -12,7 +10,7 @@ __all__ = ["calendar_made_public"]
 
 
 def calendar_made_public(
-    pre_filters: typing.List[detection.AnyFilter] = None,
+    extensions: detection.RuleExtensions = detection.RuleExtensions(),
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
 ) -> detection.Rule:
     """GSuite Calendar Made Public"""
@@ -25,6 +23,7 @@ def calendar_made_public(
 
     return detection.Rule(
         overrides=overrides,
+        extensions=extensions,
         name="GSuite Calendar Made Public",
         rule_id="GSuite.CalendarMadePublic",
         log_types=schema.LogTypeGSuiteActivityEvent,
@@ -33,8 +32,7 @@ def calendar_made_public(
         description="A user or admin has modified a calendar to be public",
         reference="https://developers.google.com/admin-sdk/reports/v1/appendix/activity/calendar#change_calendar_acls",
         runbook="Follow up with user about this calendar share.",
-        filters=(pre_filters or [])
-        + [
+        filters=[
             match_filters.deep_equal("name", "change_calendar_acls"),
             match_filters.deep_equal(
                 "parameters.grantee_email",

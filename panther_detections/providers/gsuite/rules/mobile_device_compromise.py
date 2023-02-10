@@ -1,5 +1,3 @@
-import typing
-
 from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters
@@ -11,12 +9,10 @@ __all__ = ["mobile_device_compromise"]
 
 
 def mobile_device_compromise(
-    pre_filters: typing.List[detection.AnyFilter] = None,
+    extensions: detection.RuleExtensions = detection.RuleExtensions(),
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
 ) -> detection.Rule:
     """GSuite reported a user's device has been compromised."""
-
-    # from panther_base_helpers import deep_get
 
     def _title(event: PantherEvent) -> str:
         return (
@@ -24,17 +20,9 @@ def mobile_device_compromise(
             f"device was compromised"
         )
 
-    def rule_filter() -> detection.PythonFilter:
-        def _rule_filter(event: PantherEvent) -> bool:
-            if event.get("name") == "DEVICE_COMPROMISED_EVENT":
-                return bool(event["parameters"]["DEVICE_COMPROMISED_STATE"] == "COMPROMISED")
-
-            return False
-
-        return detection.PythonFilter(func=_rule_filter)
-
     return detection.Rule(
         overrides=overrides,
+        extensions=extensions,
         # enabled=,
         name="GSuite User Device Compromised",
         rule_id="GSuite.DeviceCompromise",
@@ -51,7 +39,11 @@ def mobile_device_compromise(
         # threshold=,
         # alert_context=,
         # alert_grouping=,
-        filters=(pre_filters or []) + [match_filters.deep_equal("id.applicationName", "mobile"), rule_filter()],
+        filters=[
+            match_filters.deep_equal("id.applicationName", "mobile"),
+            match_filters.deep_equal("name", "DEVICE_COMPROMISED_EVENT"),
+            match_filters.deep_equal("parameters.DEVICE_COMPROMISED_STATE", "COMPROMISED"),
+        ],
         unit_tests=(
             [
                 detection.JSONUnitTest(

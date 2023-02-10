@@ -1,6 +1,6 @@
-import typing
-
 from panther_sdk import PantherEvent, detection, schema
+
+from panther_detections.utils import match_filters
 
 from .. import sample_logs
 from .._shared import rule_tags
@@ -9,26 +9,10 @@ __all__ = ["workspace_gmail_default_routing_rule"]
 
 
 def workspace_gmail_default_routing_rule(
-    pre_filters: typing.List[detection.AnyFilter] = None,
+    extensions: detection.RuleExtensions = detection.RuleExtensions(),
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
 ) -> detection.Rule:
     """A Workspace Admin Has Modified A Default Routing Rule In Gmail"""
-
-    def rule_filter() -> detection.PythonFilter:
-        def _rule_filter(event: PantherEvent) -> bool:
-            from panther_detections.utils.legacy_filters import deep_get
-
-            if all(
-                [
-                    (event.get("type", "") == "EMAIL_SETTINGS"),
-                    (event.get("name", "").endswith("_GMAIL_SETTING")),
-                    (deep_get(event, "parameters", "SETTING_NAME", default="") == "MESSAGE_SECURITY_RULE"),
-                ]
-            ):
-                return True
-            return False
-
-        return detection.PythonFilter(func=_rule_filter)
 
     def _title(event: PantherEvent) -> str:
         # Gmail records the event name as DELETE_GMAIL_SETTING/CREATE_GMAIL_SETTING
@@ -43,6 +27,7 @@ def workspace_gmail_default_routing_rule(
 
     return detection.Rule(
         overrides=overrides,
+        extensions=extensions,
         # enabled=,
         name="GSuite Workspace Gmail Default Routing Rule Modified",
         rule_id="GSuite.Workspace.GmailDefaultRoutingRuleModified",
@@ -61,7 +46,11 @@ def workspace_gmail_default_routing_rule(
         # threshold=,
         # alert_context=,
         # alert_grouping=,
-        filters=(pre_filters or []) + [rule_filter()],
+        filters=[
+            match_filters.deep_equal("type", "EMAIL_SETTINGS"),
+            match_filters.deep_ends_with("name", "_GMAIL_SETTING"),
+            match_filters.deep_equal("parameters.SETTING_NAME", "MESSAGE_SECURITY_RULE"),
+        ],
         unit_tests=(
             [
                 detection.JSONUnitTest(

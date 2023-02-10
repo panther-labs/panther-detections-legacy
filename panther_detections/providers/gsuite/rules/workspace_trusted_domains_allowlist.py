@@ -1,5 +1,3 @@
-import typing
-
 from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters
@@ -11,7 +9,7 @@ __all__ = ["workspace_trusted_domains_allowlist"]
 
 
 def workspace_trusted_domains_allowlist(
-    pre_filters: typing.List[detection.AnyFilter] = None,
+    extensions: detection.RuleExtensions = detection.RuleExtensions(),
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
 ) -> detection.Rule:
     """A Workspace Admin Has Modified The Trusted Domains List"""
@@ -26,6 +24,7 @@ def workspace_trusted_domains_allowlist(
 
     return detection.Rule(
         overrides=overrides,
+        extensions=extensions,
         # enabled=,
         name="GSuite Workspace Trusted Domain Allowlist Modified",
         rule_id="GSuite.Workspace.TrustedDomainsAllowlist",
@@ -43,8 +42,7 @@ def workspace_trusted_domains_allowlist(
         # threshold=,
         # alert_context=,
         # alert_grouping=,
-        filters=(pre_filters or [])
-        + [
+        filters=[
             match_filters.deep_equal("type", "DOMAIN_SETTINGS"),
             match_filters.deep_ends_with("name", "_TRUSTED_DOMAINS"),
         ],

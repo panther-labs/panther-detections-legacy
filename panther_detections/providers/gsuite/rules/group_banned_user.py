@@ -1,5 +1,3 @@
-import typing
-
 from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters
@@ -11,7 +9,7 @@ __all__ = ["group_banned_user"]
 
 
 def group_banned_user(
-    pre_filters: typing.List[detection.AnyFilter] = None,
+    extensions: detection.RuleExtensions = detection.RuleExtensions(),
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
 ) -> detection.Rule:
     """A GSuite user was banned from an enterprise group by moderator action."""
@@ -24,6 +22,7 @@ def group_banned_user(
 
     return detection.Rule(
         overrides=overrides,
+        extensions=extensions,
         # enabled=,
         name="GSuite User Banned from Group",
         rule_id="GSuite.GroupBannedUser",
@@ -40,8 +39,7 @@ def group_banned_user(
         # threshold=,
         # alert_context=,
         # alert_grouping=,
-        filters=(pre_filters or [])
-        + [
+        filters=[
             match_filters.deep_equal("id.applicationName", "groups_enterprise"),
             match_filters.deep_equal("type", "moderator_action"),
             match_filters.deep_equal("name", "ban_user_with_moderation"),

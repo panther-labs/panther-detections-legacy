@@ -1,5 +1,4 @@
 import json
-import typing
 
 from panther_sdk import PantherEvent, detection, schema
 
@@ -9,19 +8,10 @@ __all__ = ["two_step_verification"]
 
 
 def two_step_verification(
-    pre_filters: typing.List[detection.AnyFilter] = None,
+    extensions: detection.RuleExtensions = detection.RuleExtensions(),
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
 ) -> detection.Rule:
-    def rule_filter() -> detection.PythonFilter:
-        def _rule(event: PantherEvent) -> bool:
-            if event.get("type") == "2sv_change" and event.get("name") == "2sv_disable":
-                return True
-            return False
-
-        return detection.PythonFilter(func=_rule)
-
     def _title(event: PantherEvent) -> str:
-        # from ..global_helpers import deep_get
         return (
             f"Two step verification was disabled for user"
             f" [{event.deep_get('actor', 'email', default='<UNKNOWN_USER>')}]"
@@ -29,6 +19,7 @@ def two_step_verification(
 
     return detection.Rule(
         overrides=overrides,
+        extensions=extensions,
         rule_id="GSuite.TwoStepVerification",
         name="GSuite User Two Step Verification Change",
         log_types=schema.LogTypeGSuiteActivityEvent,
@@ -38,10 +29,10 @@ def two_step_verification(
         reference="https://developers.google.com/admin-sdk/reports/v1/appendix/activity/user-accounts",
         runbook="Investigate the behavior that got the account suspended. Verify with the user"
         "that this intended behavior. If not, the account may have been compromised.",
-        filters=(pre_filters or [])
-        + [
+        filters=[
             match_filters.deep_equal("id.applicationName", "user_accounts"),
-            rule_filter(),
+            match_filters.deep_equal("type", "2sv_change"),
+            match_filters.deep_equal("name", "2sv_disable"),
         ],
         alert_title=_title,
         # alert_context=,

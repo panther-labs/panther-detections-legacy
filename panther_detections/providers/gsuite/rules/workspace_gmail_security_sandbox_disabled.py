@@ -1,5 +1,3 @@
-import typing
-
 from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters
@@ -11,7 +9,7 @@ __all__ = ["workspace_gmail_security_sandbox_disabled"]
 
 
 def workspace_gmail_security_sandbox_disabled(
-    pre_filters: typing.List[detection.AnyFilter] = None,
+    extensions: detection.RuleExtensions = detection.RuleExtensions(),
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
 ) -> detection.Rule:
     """A Workspace Admin Has Disabled The Security Sandbox"""
@@ -25,6 +23,7 @@ def workspace_gmail_security_sandbox_disabled(
 
     return detection.Rule(
         overrides=overrides,
+        extensions=extensions,
         # enabled=,
         name="GSuite Workspace Gmail Security Sandbox Disabled",
         rule_id="GSuite.Workspace.GmailSecuritySandboxDisabled",
@@ -42,8 +41,7 @@ def workspace_gmail_security_sandbox_disabled(
         # threshold=,
         # alert_context=,
         # alert_grouping=,
-        filters=(pre_filters or [])
-        + [
+        filters=[
             match_filters.deep_equal("id.applicationName", "admin"),
             match_filters.deep_equal("name", "CHANGE_APPLICATION_SETTING"),
             match_filters.deep_in("parameters.APPLICATION_NAME", {"gmail", "Gmail"}),

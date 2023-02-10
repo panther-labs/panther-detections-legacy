@@ -10,7 +10,7 @@ __all__ = ["all_meetings_secured_with_one_option_disabled"]
 
 def all_meetings_secured_with_one_option_disabled(
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
-    extensions: detection.RuleExtensions = detection.RuleExtensions(), 
+    extensions: detection.RuleExtensions = detection.RuleExtensions(),
 ) -> detection.Rule:
     """A Zoom User turned off your organization's requirement that all meetings are secured with one security option."""
 

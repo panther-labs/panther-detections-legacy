@@ -3,12 +3,7 @@ from panther_sdk import PantherEvent, detection, schema
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
-
-# from .._shared import (
-#     create_alert_context,
-#     rule_tags,
-#     standard_tags,
-# )
+from .._shared import API_TOKEN_ACTIONS, rule_tags
 
 
 def new_api_token(
@@ -16,10 +11,6 @@ def new_api_token(
     extensions: detection.RuleExtensions = detection.RuleExtensions(),
 ) -> detection.Rule:
     """A user created a new API token to be used with Zendesk."""
-    API_TOKEN_ACTIONS = [
-        "create",
-        "destroy",
-    ]
 
     def _title(event: PantherEvent) -> str:
         action = event.get("action", "<UNKNOWN_ACTION>")
@@ -38,7 +29,7 @@ def new_api_token(
         log_types=[schema.LogTypeZendeskAudit],
         severity=detection.DynamicStringField(func=_severity, fallback=detection.SeverityHigh),
         description="A user created a new API token to be used with Zendesk.",
-        tags=["Zendesk", "Credential Access:Steal Application Access Token"],
+        tags=rule_tags("Credential Access:Steal Application Access Token"),
         reports={"MITRE ATT&CK": ["TA0006:T1528"]},
         runbook="Validate the api token was created for valid use case, otherwise delete the token immediately.",
         alert_title=_title,

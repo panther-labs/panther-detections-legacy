@@ -3,7 +3,7 @@ from panther_sdk import PantherEvent, detection, schema
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
-from .._shared import ZENDESK_CHANGE_DESCRIPTION
+from .._shared import REDACTION_ACTIONS, ZENDESK_CHANGE_DESCRIPTION, rule_tags
 
 
 def sensitive_data_redaction(
@@ -11,11 +11,6 @@ def sensitive_data_redaction(
     extensions: detection.RuleExtensions = detection.RuleExtensions(),
 ) -> detection.Rule:
     """A user updated account setting that disabled credit card redaction."""
-
-    REDACTION_ACTIONS = [
-        "create",
-        "destroy",
-    ]
 
     def _title(event: PantherEvent) -> str:
         action = event.get(ZENDESK_CHANGE_DESCRIPTION, "<UNKNOWN_ACTION>")
@@ -34,7 +29,7 @@ def sensitive_data_redaction(
         log_types=[schema.LogTypeZendeskAudit],
         severity=detection.DynamicStringField(func=_severity, fallback=detection.SeverityHigh),
         description="A user updated account setting that disabled credit card redaction.",
-        tags=["Zendesk", "Collection:Data from Information Repositories"],
+        tags=rule_tags("Collection:Data from Information Repositories"),
         reports={"MITRE ATT&CK": ["TA0009:T1213"]},
         runbook="Re-enable credit card redaction.",
         alert_title=_title,

@@ -3,7 +3,7 @@ from panther_sdk import PantherEvent, detection, schema
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
-from .._shared import ZENDESK_CHANGE_DESCRIPTION
+from .._shared import MOBILE_APP_ACTIONS, ZENDESK_CHANGE_DESCRIPTION, rule_tags
 
 
 def mobile_app_access(
@@ -11,8 +11,6 @@ def mobile_app_access(
     extensions: detection.RuleExtensions = detection.RuleExtensions(),
 ) -> detection.Rule:
     """A user updated account setting that enabled or disabled mobile app access."""
-    # from panther_base_helpers import ZENDESK_CHANGE_DESCRIPTION
-    MOBILE_APP_ACTIONS = ["create", "update"]
 
     def _title(event: PantherEvent) -> str:
         action = event.get(ZENDESK_CHANGE_DESCRIPTION, "<UNKNOWN_ACTION>")
@@ -31,7 +29,7 @@ def mobile_app_access(
         log_types=[schema.LogTypeZendeskAudit],
         severity=detection.DynamicStringField(func=_severity, fallback=detection.SeverityMedium),
         description="A user updated account setting that enabled or disabled mobile app access.",
-        tags=["Zendesk", "Persistence:Valid Accounts"],
+        tags=rule_tags("Persistence:Valid Accounts"),
         reports={"MITRE ATT&CK": ["TA0003:T1078"]},
         alert_title=_title,
         summary_attrs=["p_any_ip_addresses"],

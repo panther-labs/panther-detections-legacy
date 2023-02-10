@@ -3,7 +3,7 @@ from panther_sdk import PantherEvent, detection, schema
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
-from .._shared import ZENDESK_CHANGE_DESCRIPTION
+from .._shared import ZENDESK_CHANGE_DESCRIPTION, ZENDESK_OWNER_CHANGED, rule_tags
 
 
 def new_owner(
@@ -11,18 +11,15 @@ def new_owner(
     extensions: detection.RuleExtensions = detection.RuleExtensions(),
 ) -> detection.Rule:
     """Only one admin user can be the account owner. Ensure the change in ownership is expected."""
-    import re
-
-    ZENDESK_OWNER_CHANGED = re.compile(r"Owner changed from (?P<old_owner>.+) to (?P<new_owner>[^$]+)", re.IGNORECASE)
 
     def _title(event: PantherEvent) -> str:
-        old_owner = "<UNKNOWN_USER>"
-        new_owner = "<UNKNOWN_USER>"
+        owner_old = "<UNKNOWN_USER>"
+        owner_new = "<UNKNOWN_USER>"
         matches = ZENDESK_OWNER_CHANGED.match(event.get(ZENDESK_CHANGE_DESCRIPTION, ""))
         if matches:
-            old_owner = matches.group("old_owner")
-            new_owner = matches.group("new_owner")
-        return f"zendesk administrative owner changed from {old_owner} to {new_owner}"
+            owner_old = matches.group("old_owner")
+            owner_new = matches.group("new_owner")
+        return f"zendesk administrative owner changed from {owner_old} to {owner_new}"
 
     def _filter(event: PantherEvent) -> bool:
         return event.get(ZENDESK_CHANGE_DESCRIPTION, "").lower().startswith("owner changed from ")
@@ -35,12 +32,10 @@ def new_owner(
         log_types=[schema.LogTypeZendeskAudit],
         severity=detection.SeverityHigh,
         description="Only one admin user can be the account owner. Ensure the change in ownership is expected.",
-        tags=["Zendesk", "Privilege Escalation:Valid Accounts"],
+        tags=rule_tags("Privilege Escalation:Valid Accounts"),
         reports={"MITRE ATT&CK": ["TA0004:T1078"]},
         alert_title=_title,
         summary_attrs=["p_any_ip_addresses"],
-        # threshold=,
-        # alert_context=,
         alert_grouping=detection.AlertGrouping(period_minutes=60),
         filters=[
             match_filters.deep_equal("action", "update"),

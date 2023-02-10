@@ -1,9 +1,35 @@
 import re
-from typing import Any, Dict, List
+from typing import List
 
-from panther_sdk import PantherEvent
+__all__ = [
+    "rule_tags",
+    "USER_SUSPENSION_ACTIONS",
+    "MOBILE_APP_ACTIONS",
+    "API_TOKEN_ACTIONS",
+    "SHARED_TAGS",
+    "REDACTION_ACTIONS",
+    "ZENDESK_CHANGE_DESCRIPTION",
+    "ZENDESK_APP_ROLE_ASSIGNED",
+    "ZENDESK_ROLE_ASSIGNED",
+    "ZENDESK_OWNER_CHANGED",
+    "zendesk_get_roles",
+]
 
-from panther_detections.utils import standard_tags
+
+SHARED_TAGS = [
+    "Zendesk",
+]
+
+
+def rule_tags(*extra_tags: str) -> List[str]:
+    return [*SHARED_TAGS, *extra_tags]
+
+
+USER_SUSPENSION_ACTIONS = ["create", "update"]
+MOBILE_APP_ACTIONS = ["create", "update"]
+API_TOKEN_ACTIONS = ["create", "destroy"]
+REDACTION_ACTIONS = ["create", "destroy"]
+
 
 # key names
 ZENDESK_CHANGE_DESCRIPTION = "change_description"
@@ -11,6 +37,7 @@ ZENDESK_APP_ROLE_ASSIGNED = re.compile(
     r"(?P<app>.*) role changed from (?P<old_role>.+) to (?P<new_role>.*)", re.IGNORECASE
 )
 ZENDESK_ROLE_ASSIGNED = re.compile(r"Role changed from (?P<old_role>.+) to (?P<new_role>[^$]+)", re.IGNORECASE)
+ZENDESK_OWNER_CHANGED = re.compile(r"Owner changed from (?P<old_owner>.+) to (?P<new_owner>[^$]+)", re.IGNORECASE)
 
 
 def zendesk_get_roles(event):
@@ -37,55 +64,3 @@ def zendesk_get_roles(event):
     if not new_role:
         new_role = "<UNKNOWN_APP>:<UNKNOWN_ROLE>"
     return (old_role,)
-
-
-# __all__ = [
-#     "rule_tags",
-#     "SYSTEM_LOG_TYPE",
-#     "SUPPORT_ACCESS_EVENTS",
-#     "SUPPORT_RESET_EVENTS",
-#     "SHARED_TAGS",
-#     "SHARED_SUMMARY_ATTRS",
-#     "create_alert_context",
-# ]
-
-# SYSTEM_LOG_TYPE = "Okta.SystemLog"
-
-# SUPPORT_ACCESS_EVENTS = [
-#     "user.session.impersonation.grant",
-#     "user.session.impersonation.initiate",
-# ]
-
-# SUPPORT_RESET_EVENTS = [
-#     "user.account.reset_password",
-#     "user.mfa.factor.update",
-#     "system.mfa.factor.deactivate",
-#     "user.mfa.attempt_bypass",
-# ]
-
-# SHARED_TAGS = [
-#     "Okta",
-#     standard_tags.IDENTITY_AND_ACCESS_MGMT,
-# ]
-
-# SHARED_SUMMARY_ATTRS = [
-#     "eventType",
-#     "severity",
-#     "displayMessage",
-#     "p_any_ip_addresses",
-# ]
-
-
-# def rule_tags(*extra_tags: str) -> List[str]:
-#     return [*SHARED_TAGS, *extra_tags]
-
-
-# def create_alert_context(event: PantherEvent) -> Dict[str, Any]:
-#     """Returns common context for Okta alerts"""
-
-#     return {
-#         "ips": event.get("p_any_ip_addresses", []),
-#         "actor": event.get("actor", ""),
-#         "target": event.get("target", ""),
-#         "client": event.get("client", ""),
-#     }

@@ -3,7 +3,7 @@ from panther_sdk import PantherEvent, detection, schema
 from panther_detections.utils import match_filters, standard_types
 
 from .. import sample_logs
-from .._shared import zendesk_get_roles
+from .._shared import rule_tags, zendesk_get_roles
 
 
 def user_role(
@@ -13,7 +13,7 @@ def user_role(
     """A user's Zendesk role was changed"""
 
     def _title(event: PantherEvent) -> str:
-        old_role, new_role = zendesk_get_roles(event)
+        old_role, new_role = zendesk_get_roles(event)  # pylint: disable=W0632
         return (
             f"Actor user [{event.udm('actor_user')}] changed [{event.udm('user')}] role from "
             f"{old_role} to {new_role}"
@@ -22,7 +22,7 @@ def user_role(
     def admin_role_filter(event: PantherEvent) -> bool:
         # admin roles have their own handling
         if event.udm("event_type") != standard_types.ADMIN_ROLE_ASSIGNED:
-            _, new_role = zendesk_get_roles(event)
+            _, new_role = zendesk_get_roles(event)  # pylint: disable=W0632
             return bool(new_role)
         return False
 
@@ -33,6 +33,7 @@ def user_role(
         rule_id="Zendesk.UserRoleChanged",
         log_types=[schema.LogTypeZendeskAudit],
         severity=detection.SeverityInfo,
+        tags=rule_tags(),
         description="A user's Zendesk role was changed",
         alert_title=_title,
         summary_attrs=["p_any_ip_addresses"],

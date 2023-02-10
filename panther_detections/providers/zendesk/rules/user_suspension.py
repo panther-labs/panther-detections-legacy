@@ -3,7 +3,7 @@ from panther_sdk import PantherEvent, detection, schema
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
-from .._shared import ZENDESK_CHANGE_DESCRIPTION
+from .._shared import USER_SUSPENSION_ACTIONS, ZENDESK_CHANGE_DESCRIPTION, rule_tags
 
 
 def user_suspension(
@@ -11,10 +11,6 @@ def user_suspension(
     extensions: detection.RuleExtensions = detection.RuleExtensions(),
 ) -> detection.Rule:
     """A user's Zendesk suspension status was changed."""
-    USER_SUSPENSION_ACTIONS = [
-        "create",
-        "update",
-    ]
 
     def _title(event: PantherEvent) -> str:
         suspension_status = event.get(ZENDESK_CHANGE_DESCRIPTION, "").lower()
@@ -28,7 +24,7 @@ def user_suspension(
             return "INFO"
         return "HIGH"
 
-    def suspended_filter(event: PantherEvent) -> bool:
+    def _filter(event: PantherEvent) -> bool:
         return "suspended" in event.get(ZENDESK_CHANGE_DESCRIPTION, "").lower()
 
     return detection.Rule(
@@ -39,7 +35,7 @@ def user_suspension(
         log_types=[schema.LogTypeZendeskAudit],
         severity=detection.DynamicStringField(func=_severity, fallback=detection.SeverityHigh),
         description="A user's Zendesk suspension status was changed.",
-        tags=["Zendesk", "Impact:Account Access Removal"],
+        tags=rule_tags("Impact:Account Access Removal"),
         reports={"MITRE ATT&CK": ["TA0040:T1531"]},
         runbook="Ensure the user's suspension status is appropriate.",
         alert_title=_title,
@@ -48,7 +44,7 @@ def user_suspension(
         filters=[
             match_filters.deep_equal("source_type", "user_setting"),
             match_filters.deep_in("action", USER_SUSPENSION_ACTIONS),
-            detection.PythonFilter(suspended_filter),
+            detection.PythonFilter(_filter),
         ],
         unit_tests=(
             [

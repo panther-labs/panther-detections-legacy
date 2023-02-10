@@ -3,6 +3,7 @@ from panther_sdk import PantherEvent, detection, schema
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
+from .._shared import USER_SUSPENSION_ACTIONS, rule_tags
 
 
 def user_assumption(
@@ -10,10 +11,6 @@ def user_assumption(
     extensions: detection.RuleExtensions = detection.RuleExtensions(),
 ) -> detection.Rule:
     """User enabled or disabled zendesk support user assumption."""
-    USER_SUSPENSION_ACTIONS = [
-        "create",
-        "update",
-    ]
 
     def _title(event: PantherEvent) -> str:
         return f"A user [{event.udm('actor_user')}] updated zendesk support user assumption settings"
@@ -30,9 +27,10 @@ def user_assumption(
         log_types=[schema.LogTypeZendeskAudit],
         severity=detection.SeverityMedium,
         description="User enabled or disabled zendesk support user assumption.",
-        tags=["Zendesk", "Lateral Movement:Use Alternate Authentication Material"],
+        tags=rule_tags("Lateral Movement:Use Alternate Authentication Material"),
         reports={"MITRE ATT&CK": ["TA0008:T1550"]},
-        runbook="Investigate whether allowing zendesk support to assume users is necessary. If not, disable the feature.",
+        runbook="Investigate whether allowing zendesk support to "
+        "assume users is necessary. If not, disable the feature.",
         alert_title=_title,
         summary_attrs=["p_any_addresses"],
         filters=[

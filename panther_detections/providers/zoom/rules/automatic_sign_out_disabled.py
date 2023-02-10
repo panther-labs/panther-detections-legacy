@@ -1,5 +1,3 @@
-import typing
-
 from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters
@@ -11,8 +9,8 @@ __all__ = ["automatic_sign_out_disabled"]
 
 
 def automatic_sign_out_disabled(
-    pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
+    extensions: detection.RuleExtensions = detection.RuleExtensions(),
 ) -> detection.Rule:
     """A Zoom User turned off your organization's setting to automatically
     sign users out after a specified period of time."""
@@ -38,8 +36,7 @@ def automatic_sign_out_disabled(
         alert_title=_title,
         threshold=1,
         alert_grouping=detection.AlertGrouping(period_minutes=60),
-        filters=(pre_filters or [])
-        + [
+        filters=[
             match_filters.deep_equal("action", "Update"),
             match_filters.deep_equal("category_type", "Account"),
             match_filters.deep_equal_pattern(

@@ -1,5 +1,3 @@
-import typing
-
 from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters
@@ -11,8 +9,8 @@ __all__ = ["user_promoted_to_privileged_role"]
 
 
 def user_promoted_to_privileged_role(
-    pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
+    extensions: detection.RuleExtensions = detection.RuleExtensions(),
 ) -> detection.Rule:
     """A Zoom user was promoted to a privileged role."""
 
@@ -30,6 +28,7 @@ def user_promoted_to_privileged_role(
 
     return detection.Rule(
         overrides=overrides,
+        extensions=extensions,
         name="Zoom User Promoted to Privileged Role",
         rule_id="Zoom.User.Promoted.to.Privileged.Role",
         log_types=schema.LogTypeZoomOperation,
@@ -39,8 +38,7 @@ def user_promoted_to_privileged_role(
         alert_title=_title,
         threshold=1,
         alert_grouping=detection.AlertGrouping(period_minutes=60),
-        filters=(pre_filters or [])
-        + [
+        filters=[
             match_filters.deep_equal_pattern("action", pattern=".+Update"),
             match_filters.deep_equal_pattern("operation_detail", pattern="Change Role.+"),
             match_filters.deep_equal("category_type", "User"),

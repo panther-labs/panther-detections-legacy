@@ -1,5 +1,3 @@
-import typing
-
 from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters
@@ -11,8 +9,8 @@ __all__ = ["operation_passcode_disabled"]
 
 
 def operation_passcode_disabled(
-    pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
+    extensions: detection.RuleExtensions = detection.RuleExtensions(),
 ) -> detection.Rule:
     """Meeting passcode requirement has been disabled from usergroup"""
 
@@ -30,6 +28,7 @@ def operation_passcode_disabled(
 
     return detection.Rule(
         overrides=overrides,
+        extensions=extensions,
         name="Zoom Meeting Passcode Disabled",
         rule_id="Zoom.PasscodeDisabled",
         log_types=schema.LogTypeZoomOperation,
@@ -41,8 +40,7 @@ def operation_passcode_disabled(
         runbook="Follow up with user or Zoom admin to ensure this meeting room's use case does not allow a passcode.",
         alert_title=_title,
         summary_attrs=["p_any_emails"],
-        filters=(pre_filters or [])
-        + [match_filters.deep_equal("category_type", "User Group"), detection.PythonFilter(func=_filter)],
+        filters=[match_filters.deep_equal("category_type", "User Group"), detection.PythonFilter(func=_filter)],
         unit_tests=(
             [
                 detection.JSONUnitTest(

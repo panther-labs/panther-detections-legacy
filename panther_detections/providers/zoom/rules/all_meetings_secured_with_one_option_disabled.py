@@ -1,5 +1,3 @@
-import typing
-
 from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters
@@ -11,8 +9,8 @@ __all__ = ["all_meetings_secured_with_one_option_disabled"]
 
 
 def all_meetings_secured_with_one_option_disabled(
-    pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
+    extensions: detection.RuleExtensions = detection.RuleExtensions(), 
 ) -> detection.Rule:
     """A Zoom User turned off your organization's requirement that all meetings are secured with one security option."""
 
@@ -24,6 +22,7 @@ def all_meetings_secured_with_one_option_disabled(
 
     return detection.Rule(
         overrides=overrides,
+        extensions=extensions,
         name="Zoom All Meetings Secured With One Option Disabled",
         rule_id="Zoom.All.Meetings.Secured.With.One.Option.Disabled",
         log_types=schema.LogTypeZoomOperation,
@@ -36,8 +35,7 @@ def all_meetings_secured_with_one_option_disabled(
         alert_title=_title,
         threshold=1,
         alert_grouping=detection.AlertGrouping(period_minutes=60),
-        filters=(pre_filters or [])
-        + [
+        filters=[
             match_filters.deep_equal("action", "Update"),
             match_filters.deep_equal("category_type", "Account"),
             match_filters.deep_equal_pattern(

@@ -1,4 +1,4 @@
-from panther_sdk import PantherEvent, detection
+from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters
 
@@ -31,7 +31,7 @@ def sensitive_data_redaction(
         extensions=extensions,
         name="Zendesk Credit Card Redaction Off",
         rule_id="Zendesk.SensitiveDataRedactionOff",
-        log_types=["Zendesk.Audit"],
+        log_types=[schema.LogTypeZendeskAudit],
         severity=detection.DynamicStringField(func=_severity, fallback=detection.SeverityHigh),
         description="A user updated account setting that disabled credit card redaction.",
         tags=["Zendesk", "Collection:Data from Information Repositories"],

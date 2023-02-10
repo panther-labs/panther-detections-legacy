@@ -1,4 +1,4 @@
-from panther_sdk import PantherEvent, detection
+from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters, standard_types
 
@@ -31,7 +31,7 @@ def user_role(
         extensions=extensions,
         name="Zendesk User Role Changed",
         rule_id="Zendesk.UserRoleChanged",
-        log_types=["Zendesk.Audit"],
+        log_types=[schema.LogTypeZendeskAudit],
         severity=detection.SeverityInfo,
         description="A user's Zendesk role was changed",
         alert_title=_title,

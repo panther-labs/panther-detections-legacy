@@ -1,4 +1,4 @@
-from panther_sdk import PantherEvent, detection
+from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters
 
@@ -27,7 +27,7 @@ def user_assumption(
         extensions=extensions,
         name="Enabled Zendesk Support to Assume Users",
         rule_id="Zendesk.UserAssumption",
-        log_types=["Zendesk.Audit"],
+        log_types=[schema.LogTypeZendeskAudit],
         severity=detection.SeverityMedium,
         description="User enabled or disabled zendesk support user assumption.",
         tags=["Zendesk", "Lateral Movement:Use Alternate Authentication Material"],

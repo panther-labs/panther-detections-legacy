@@ -1,4 +1,4 @@
-from panther_sdk import PantherEvent, detection
+from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters
 
@@ -32,7 +32,7 @@ def new_owner(
         extensions=extensions,
         name="Zendesk Account Owner Changed",
         rule_id="Zendesk.AccountOwnerChanged",
-        log_types=["Zendesk.Audit"],
+        log_types=[schema.LogTypeZendeskAudit],
         severity=detection.SeverityHigh,
         description="Only one admin user can be the account owner. Ensure the change in ownership is expected.",
         tags=["Zendesk", "Privilege Escalation:Valid Accounts"],

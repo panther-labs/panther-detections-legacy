@@ -1,4 +1,4 @@
-from panther_sdk import PantherEvent, detection
+from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters
 
@@ -36,7 +36,7 @@ def user_suspension(
         extensions=extensions,
         name="Zendesk User Suspension Status Changed",
         rule_id="Zendesk.UserSuspension",
-        log_types=["Zendesk.Audit"],
+        log_types=[schema.LogTypeZendeskAudit],
         severity=detection.DynamicStringField(func=_severity, fallback=detection.SeverityHigh),
         description="A user's Zendesk suspension status was changed.",
         tags=["Zendesk", "Impact:Account Access Removal"],

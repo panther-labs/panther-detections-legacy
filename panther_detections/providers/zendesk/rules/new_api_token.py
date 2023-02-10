@@ -1,4 +1,4 @@
-from panther_sdk import PantherEvent, detection
+from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters
 
@@ -35,7 +35,7 @@ def new_api_token(
         extensions=extensions,
         name="Zendesk API Token Created",
         rule_id="Zendesk.NewAPIToken",
-        log_types=["Zendesk.Audit"],
+        log_types=[schema.LogTypeZendeskAudit],
         severity=detection.DynamicStringField(func=_severity, fallback=detection.SeverityHigh),
         description="A user created a new API token to be used with Zendesk.",
         tags=["Zendesk", "Credential Access:Steal Application Access Token"],

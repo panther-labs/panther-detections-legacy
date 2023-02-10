@@ -1,4 +1,4 @@
-from panther_sdk import PantherEvent, detection
+from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters
 
@@ -28,7 +28,7 @@ def mobile_app_access(
         extensions=extensions,
         name="Zendesk Mobile App Access Modified",
         rule_id="Zendesk.MobileAppAccessUpdated",
-        log_types=["Zendesk.Audit"],
+        log_types=[schema.LogTypeZendeskAudit],
         severity=detection.DynamicStringField(func=_severity, fallback=detection.SeverityMedium),
         description="A user updated account setting that enabled or disabled mobile app access.",
         tags=["Zendesk", "Persistence:Valid Accounts"],

@@ -23,6 +23,7 @@ def automatic_sign_out_disabled(
 
     return detection.Rule(
         overrides=overrides,
+        extensions=extensions,
         name="Zoom Automatic Sign Out Disabled",
         rule_id="Zoom.Automatic.Sign.Out.Disabled",
         log_types=schema.LogTypeZoomOperation,

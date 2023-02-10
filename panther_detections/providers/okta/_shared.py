@@ -6,15 +6,12 @@ from panther_detections.utils import standard_tags
 
 __all__ = [
     "rule_tags",
-    "SYSTEM_LOG_TYPE",
     "SUPPORT_ACCESS_EVENTS",
     "SUPPORT_RESET_EVENTS",
     "SHARED_TAGS",
     "SHARED_SUMMARY_ATTRS",
     "create_alert_context",
 ]
-
-SYSTEM_LOG_TYPE = "Okta.SystemLog"
 
 SUPPORT_ACCESS_EVENTS = [
     "user.session.impersonation.grant",

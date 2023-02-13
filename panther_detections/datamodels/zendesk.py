@@ -19,15 +19,15 @@ from panther_detections.utils import standard_types
 # sys.setprofile(tracefunc)
 
 
-
 ZENDESK_TWO_FACTOR_SOURCES = {
     "Two-Factor authentication for all admins and agents",
     "Require Two Factor",
 }
 
+
 def get_user_event_type(event: PantherEvent) -> str:
     # check for login events
-    
+
     if event.get("action") == "login":
         if event.get(ZENDESK_CHANGE_DESCRIPTION, "").lower().startswith("successful sign-in"):
             return standard_types.SUCCESSFUL_LOGIN
@@ -38,15 +38,18 @@ def get_user_event_type(event: PantherEvent) -> str:
             return standard_types.ADMIN_ROLE_ASSIGNED
     return None
 
+
 def get_event_type(event: PantherEvent) -> str:
     # user related events
     from panther_detections.datamodels.zendesk import get_user_event_type
+
     if event.get("source_type", "") == "user":
         return get_user_event_type(event)
     # account related events
     if event.get("source_type", "") == "account_setting":
         return get_account_setting_event_type(event)
     return None
+
 
 def get_account_setting_event_type(event: PantherEvent) -> str:
     if event.get("source_label", "") in ZENDESK_TWO_FACTOR_SOURCES:

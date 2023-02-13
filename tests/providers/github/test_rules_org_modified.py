@@ -15,11 +15,13 @@ class TestRulesOrgModified(unittest.TestCase):
 
     def test_org_modified_title(self) -> None:
         rule = github.rules.org_modified()
-        evt = PantherEvent(json.loads(github.sample_logs.SAMPLEEVENT))
+        evt = PantherEvent(
+            json.loads(github.sample_logs.org_modified_github___team_deleted)
+        )
 
-        title = rule.alert_title(evt) #type: ignore
+        title = rule.alert_title(evt)  # type: ignore
 
-        #self.assertEqual(title, "ADD TITLE")
-    
-    
-    
+        self.assertEqual(
+            title,
+            "GitHub.Audit: User [None] team.destroy <UNKNOWN_USER> to org [my-org]",
+        )

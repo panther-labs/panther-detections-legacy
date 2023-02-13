@@ -13,6 +13,7 @@ public_repository_created_public_repo_created = json.dumps(
         "visibility": "public",
     }
 )
+
 public_repository_created_private_repo_created = json.dumps(
     {
         "_document_id": "abCD",
@@ -26,6 +27,7 @@ public_repository_created_private_repo_created = json.dumps(
         "visibility": "private",
     }
 )
+
 user_role_updated_github___member_updated = json.dumps(
     {
         "actor": "cat",
@@ -36,6 +38,7 @@ user_role_updated_github___member_updated = json.dumps(
         "user": "bob",
     }
 )
+
 user_role_updated_github___member_updated = json.dumps(
     {
         "actor": "cat",
@@ -46,6 +49,7 @@ user_role_updated_github___member_updated = json.dumps(
         "user": "bob",
     }
 )
+
 branch_policy_override_github___branch_protection_policy_override = json.dumps(
     {
         "actor": "cat",
@@ -56,6 +60,7 @@ branch_policy_override_github___branch_protection_policy_override = json.dumps(
         "repo": "my-org/my-repo",
     }
 )
+
 branch_policy_override_github___protected_branch_name_updated = json.dumps(
     {
         "actor": "cat",
@@ -66,6 +71,7 @@ branch_policy_override_github___protected_branch_name_updated = json.dumps(
         "repo": "my-org/my-repo",
     }
 )
+
 org_auth_modified_github___authentication_method_changed = json.dumps(
     {
         "actor": "cat",
@@ -76,6 +82,7 @@ org_auth_modified_github___authentication_method_changed = json.dumps(
         "repo": "my-org/my-repo",
     }
 )
+
 org_auth_modified_github___non_auth_related_org_change = json.dumps(
     {
         "actor": "cat",
@@ -86,6 +93,7 @@ org_auth_modified_github___non_auth_related_org_change = json.dumps(
         "repo": "my-org/my-repo",
     }
 )
+
 org_ip_allowlist_github___ip_allow_list_modified = json.dumps(
     {
         "actor": "cat",
@@ -95,6 +103,7 @@ org_ip_allowlist_github___ip_allow_list_modified = json.dumps(
         "org": "my-org",
     }
 )
+
 org_ip_allowlist_github___ip_allow_list_disabled = json.dumps(
     {
         "actor": "cat",
@@ -104,6 +113,7 @@ org_ip_allowlist_github___ip_allow_list_disabled = json.dumps(
         "p_log_type": "GitHub.Audit",
     }
 )
+
 org_ip_allowlist_github___non_ip_allow_list_action = json.dumps(
     {
         "actor": "cat",
@@ -113,6 +123,7 @@ org_ip_allowlist_github___non_ip_allow_list_action = json.dumps(
         "p_log_type": "GitHub.Audit",
     }
 )
+
 organization_app_integration_installed_app_integration_installation = json.dumps(
     {
         "_document_id": "A-2345",
@@ -126,6 +137,7 @@ organization_app_integration_installed_app_integration_installation = json.dumps
         "p_any_usernames": ["user_name"],
     }
 )
+
 organization_app_integration_installed_app_integration_installation_2 = json.dumps(
     {
         "_document_id": "A-1234",
@@ -138,6 +150,7 @@ organization_app_integration_installed_app_integration_installation_2 = json.dum
         "org": "example-io",
     }
 )
+
 organization_app_integration_installed_repository_archived = json.dumps(
     {
         "action": "repo.archived",
@@ -148,6 +161,7 @@ organization_app_integration_installed_repository_archived = json.dumps(
         "repo": "my-org/my-repo",
     }
 )
+
 branch_protection_disabled_github___branch_protection_disabled = json.dumps(
     {
         "actor": "cat",
@@ -158,6 +172,7 @@ branch_protection_disabled_github___branch_protection_disabled = json.dumps(
         "repo": "my-org/my-repo",
     }
 )
+
 branch_protection_disabled_github___protected_branch_name_updated = json.dumps(
     {
         "actor": "cat",
@@ -168,6 +183,7 @@ branch_protection_disabled_github___protected_branch_name_updated = json.dumps(
         "repo": "my-org/my-repo",
     }
 )
+
 repo_created_github___repo_created = json.dumps(
     {
         "actor": "cat",
@@ -252,66 +268,6 @@ team_modified_github___team_add_repository = json.dumps(
         "org": "my-org",
         "p_log_type": "GitHub.Audit",
         "repo": "my-org/my-repo",
-    }
-)
-repo_initial_access_github___initial_access = json.dumps(
-    {
-        "@timestamp": 1623971719091,
-        "business": "",
-        "org": "my-org",
-        "repo": "my-org/my-repo",
-        "action": "git.push",
-        "p_log_type": "GitHub.Audit",
-        "protocol_name": "ssh",
-        "repository": "my-org/my-repo",
-        "repository_public": False,
-        "actor": "cat",
-        "user": "",
-    }
-)
-repo_initial_access_github___repeated_access = json.dumps(
-    {
-        "@timestamp": 1623971719091,
-        "business": "",
-        "org": "my-org",
-        "repo": "my-org/my-repo",
-        "action": "git.push",
-        "p_log_type": "GitHub.Audit",
-        "protocol_name": "ssh",
-        "repository": "my-org/my-repo",
-        "repository_public": False,
-        "actor": "cat",
-        "user": "",
-    }
-)
-repo_initial_access_github___initial_access_public_repo = json.dumps(
-    {
-        "@timestamp": 1623971719091,
-        "business": "",
-        "org": "my-org",
-        "repo": "my-org/my-repo",
-        "action": "git.push",
-        "p_log_type": "GitHub.Audit",
-        "protocol_name": "ssh",
-        "repository": "my-org/my-repo",
-        "repository_public": True,
-        "actor": "cat",
-        "user": "",
-    }
-)
-repo_initial_access_github___clone_without_actor = json.dumps(
-    {
-        "@timestamp": 1623971719091,
-        "business": "",
-        "org": "my-org",
-        "repo": "my-org/my-repo",
-        "action": "git.push",
-        "p_log_type": "GitHub.Audit",
-        "protocol_name": "ssh",
-        "repository": "my-org/my-repo",
-        "repository_public": False,
-        "actor": "",
-        "user": "",
     }
 )
 repo_hook_modified_github___webhook_created = json.dumps(
@@ -480,19 +436,21 @@ advanced_security_change_enterprise_log_business_advanced_security_enabled = jso
         "user": "bobert",
     }
 )
-advanced_security_change_enterprise_log_business_advanced_security_disabled = json.dumps(
-    {
-        "@timestamp": 1671111111111,
-        "_document_id": "gAcccccccccccccccccccc",
-        "action": "business_advanced_security.disabled",
-        "actor": "bobert",
-        "actor_ip": "12.12.12.12",
-        "actor_location": {"country_code": "US"},
-        "business": "example-enterprise",
-        "created_at": 1671111111111,
-        "operation_type": "modify",
-        "user": "bobert",
-    }
+advanced_security_change_enterprise_log_business_advanced_security_disabled = (
+    json.dumps(
+        {
+            "@timestamp": 1671111111111,
+            "_document_id": "gAcccccccccccccccccccc",
+            "action": "business_advanced_security.disabled",
+            "actor": "bobert",
+            "actor_ip": "12.12.12.12",
+            "actor_location": {"country_code": "US"},
+            "business": "example-enterprise",
+            "created_at": 1671111111111,
+            "operation_type": "modify",
+            "user": "bobert",
+        }
+    )
 )
 org_modified_github___team_deleted = json.dumps(
     {

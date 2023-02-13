@@ -1,5 +1,3 @@
-import typing
-
 from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters
@@ -21,16 +19,17 @@ def org_modified(
 ) -> detection.Rule:
     """Detects when a user is added or removed from a GitHub Org."""
 
-    # def _title(event: PantherEvent) -> str:
-    #    action = event.get("action")
-    #    if event.get("action") == "org.add_member":
-    #        action = "added"
-    #    elif event.get("action") == "org.remove_member":
-    #        action = "removed"
-    #    return (
-    #        f"GitHub.Audit: User [{event.udm('actor_user')}] {action} "
-    #        f"{event.get('user', '<UNKNOWN_USER>')} to org [{event.get('org','<UNKNOWN_ORG>')}]"
-    #    )
+    def _title(event: PantherEvent) -> str:
+        action = event.get("action")
+        if event.get("action") == "org.add_member":
+            action = "added"
+        elif event.get("action") == "org.remove_member":
+            action = "removed"
+        return (
+            f"GitHub.Audit: User [{event.get('actor_user')}] {action} "
+            # f"GitHub.Audit: User [{event.udm('actor_user')}] {action} "
+            f"{event.get('user', '<UNKNOWN_USER>')} to org [{event.get('org','<UNKNOWN_ORG>')}]"
+        )
 
     return detection.Rule(
         overrides=overrides,
@@ -50,10 +49,7 @@ def org_modified(
         # threshold=,
         # alert_context=,
         # alert_grouping=,
-        filters=[
-            # def rule(event):
-            #    return event.get("action") == "org.add_member" or event.get("action") == "org.remove_member"
-        ],
+        filters=[match_filters.deep_in("action", {"org.add_member", "org.remove_member"})],
         unit_tests=(
             [
                 detection.JSONUnitTest(

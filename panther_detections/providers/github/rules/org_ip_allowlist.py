@@ -1,16 +1,9 @@
-import typing
-
 from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
-
-# from .._shared import (
-#     create_alert_context,
-#     rule_tags,
-#     standard_tags,
-# )
+from .._shared import ALLOWLIST_ACTIONS, rule_tags
 
 __all__ = ["org_ip_allowlist"]
 
@@ -20,18 +13,9 @@ def org_ip_allowlist(
     extensions: detection.RuleExtensions = detection.RuleExtensions(),
 ) -> detection.Rule:
     """Detects changes to a GitHub Org IP Allow List"""
-    # ALLOWLIST_ACTIONS = [
-    #    "ip_allow_list.enable",
-    #    "ip_allow_list.disable",
-    #    "ip_allow_list.enable_for_installed_apps",
-    #    "ip_allow_list.disable_for_installed_apps",
-    #    "ip_allow_list_entry.create",
-    #    "ip_allow_list_entry.update",
-    #    "ip_allow_list_entry.destroy",
-    # ]
 
-    # def _title(event: PantherEvent) -> str:
-    #    return f"GitHub Org IP Allow list modified by {event.get('actor')}."
+    def _title(event: PantherEvent) -> str:
+        return f"GitHub Org IP Allow list modified by {event.get('actor')}."
 
     return detection.Rule(
         overrides=overrides,
@@ -42,7 +26,7 @@ def org_ip_allowlist(
         log_types=[schema.LogTypeGitHubAudit],
         severity=detection.SeverityMedium,
         description="Detects changes to a GitHub Org IP Allow List",
-        tags=["GitHub", "Persistence:Account Manipulation"],
+        tags=rule_tags("Persistence:Account Manipulation"),
         reports={"MITRE ATT&CK": ["TA0003:T1098"]},
         # reference=,
         runbook="Verify that the change was authorized and appropriate.",
@@ -52,10 +36,8 @@ def org_ip_allowlist(
         # alert_context=,
         # alert_grouping=,
         filters=[
-            # def rule(event):
-            #    return (
-            #        event.get("action").startswith("ip_allow_list") and event.get("action") in ALLOWLIST_ACTIONS
-            #    )
+            match_filters.deep_starts_with("action", "ip_allow_list"),
+            match_filters.deep_in("action", ALLOWLIST_ACTIONS),
         ],
         unit_tests=(
             [

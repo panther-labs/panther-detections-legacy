@@ -3,11 +3,7 @@ from panther_sdk import PantherEvent, detection, schema
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
-
-from .._shared import (
-    rule_tags,
-    github_alert_context
-)
+from .._shared import github_alert_context, rule_tags
 
 __all__ = ["branch_protection_disabled"]
 

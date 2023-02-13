@@ -1,16 +1,10 @@
-import typing
-
 from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
 
-# from .._shared import (
-#     create_alert_context,
-#     rule_tags,
-#     standard_tags,
-# )
+from .._shared import rule_tags
 
 __all__ = ["repo_created"]
 
@@ -21,8 +15,8 @@ def repo_created(
 ) -> detection.Rule:
     """Detects when a repository is created."""
 
-    # def _title(event: PantherEvent) -> str:
-    #    return f"Repository [{event.get('repo', '<UNKNOWN_REPO>')}] created."
+    def _title(event: PantherEvent) -> str:
+        return f"Repository [{event.get('repo', '<UNKNOWN_REPO>')}] created."
 
     return detection.Rule(
         overrides=overrides,
@@ -33,7 +27,7 @@ def repo_created(
         log_types=[schema.LogTypeGitHubAudit],
         severity=detection.SeverityInfo,
         description="Detects when a repository is created.",
-        tags=["GitHub"],
+        tags=rule_tags(),
         # reports=,
         # reference=,
         # runbook=,
@@ -42,14 +36,13 @@ def repo_created(
         # threshold=,
         # alert_context=,
         # alert_grouping=,
-        filters=[
-            # def rule(event):
-            #    return event.get("action") == "repo.create"
-        ],
+        filters=[match_filters.deep_equal("action", "repo.create")],
         unit_tests=(
             [
                 detection.JSONUnitTest(
-                    name="GitHub - Repo Created", expect_match=True, data=sample_logs.repo_created_github___repo_created
+                    name="GitHub - Repo Created",
+                    expect_match=True,
+                    data=sample_logs.repo_created_github___repo_created,
                 ),
                 detection.JSONUnitTest(
                     name="GitHub - Repo Archived",

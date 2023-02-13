@@ -1,16 +1,9 @@
-import typing
-
 from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
-
-# from .._shared import (
-#     create_alert_context,
-#     rule_tags,
-#     standard_tags,
-# )
+from .._shared import AUTH_CHANGE_EVENTS, github_alert_context, rule_tags
 
 __all__ = ["org_auth_modified"]
 
@@ -20,18 +13,9 @@ def org_auth_modified(
     extensions: detection.RuleExtensions = detection.RuleExtensions(),
 ) -> detection.Rule:
     """Detects changes to GitHub org authentication changes."""
-    # AUTH_CHANGE_EVENTS = [
-    #    "org.saml_disabled",
-    #    "org.saml_enabled",
-    #    "org.disable_two_factor_requirement",
-    #    "org.enable_two_factor_requirement",
-    #    "org.update_saml_provider_settings",
-    #    "org.enable_oauth_app_restrictions",
-    #    "org.disable_oauth_app_restrictions",
-    # ]
 
-    # def _title(event: PantherEvent) -> str:
-    #    return f"GitHub auth configuration was changed by {event.get('actor', '<UNKNOWN USER>')}"
+    def _title(event: PantherEvent) -> str:
+        return f"GitHub auth configuration was changed by {event.get('actor', '<UNKNOWN USER>')}"
 
     return detection.Rule(
         overrides=overrides,
@@ -42,20 +26,18 @@ def org_auth_modified(
         log_types=[schema.LogTypeGitHubAudit],
         severity=detection.SeverityCritical,
         description="Detects changes to GitHub org authentication changes.",
-        tags=["GitHub", "Persistence:Account Manipulation"],
+        tags=rule_tags("Persistence:Account Manipulation"),
         reports={"MITRE ATT&CK": ["TA0003:T1098"]},
         # reference=,
         runbook="Verify that the GitHub admin performed this activity and validate its use.",
         alert_title=_title,
         summary_attrs=["actor", "action"],
         # threshold=,
-        # alert_context=,
+        alert_context=github_alert_context,
         # alert_grouping=,
         filters=[
-            # def rule(event):
-            #    if not event.get("action").startswith("org."):
-            #        return False
-            #    return event.get("action") in AUTH_CHANGE_EVENTS
+            match_filters.deep_starts_with("action", "org."),
+            match_filters.deep_in("action", AUTH_CHANGE_EVENTS),
         ],
         unit_tests=(
             [

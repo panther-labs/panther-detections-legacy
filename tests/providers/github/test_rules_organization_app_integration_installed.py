@@ -15,19 +15,16 @@ class TestRulesOrganizationAppIntegrationInstalled(unittest.TestCase):
 
     def test_organization_app_integration_installed_title(self) -> None:
         rule = github.rules.organization_app_integration_installed()
-        evt = PantherEvent(json.loads(github.sample_logs.SAMPLEEVENT))
+        evt = PantherEvent(
+            json.loads(
+                github.sample_logs.organization_app_integration_installed_app_integration_installation
+            )
+        )
 
-        title = rule.alert_title(evt) #type: ignore
+        title = rule.alert_title(evt)  # type: ignore
 
-        #self.assertEqual(title, "ADD TITLE")
-    
-    def test_organization_app_integration_installed_group_by(self) -> None:
-        rule = github.rules.organization_app_integration_installed()
-        test_evt = PantherEvent(json.loads(github.sample_logs.SAMPLEEVENT))
-        key = rule.alert_grouping.group_by(test_evt)
-
-        #self.assertEqual(key, "DEDUP STRING")
-
-    
-    
-    
+        self.assertEqual(
+            title,
+            "Github User [user_name] in [your-organization] installed"
+            " the following integration: [Microsoft Teams for GitHub].",
+        )

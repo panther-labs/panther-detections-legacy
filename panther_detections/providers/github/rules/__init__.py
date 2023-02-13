@@ -9,7 +9,6 @@ from .public_repository_created import *
 from .repo_collaborator_change import *
 from .repo_created import *
 from .repo_hook_modified import *
-from .repo_initial_access import *
 from .repo_visibility_change import *
 from .repository_transfer import *
 from .secret_scanning_alert_created import *

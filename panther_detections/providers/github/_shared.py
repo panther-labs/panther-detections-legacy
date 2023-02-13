@@ -5,6 +5,8 @@ from panther_sdk import PantherEvent
 __all__ = [
     "ADV_SEC_ACTIONS",
     "SHARED_TAGS",
+    "AUTH_CHANGE_EVENTS",
+    "ALLOWLIST_ACTIONS",
     "rule_tags",
     "github_alert_context",
 ]
@@ -77,9 +79,26 @@ ADV_SEC_ACTIONS = {
     "repo.advanced_security_policy_selected_member_disabled": "HIGH",
 }
 
+SHARED_TAGS = ["GitHub"]
 
-SHARED_TAGS = [
-    "GitHub",
+AUTH_CHANGE_EVENTS = [
+    "org.saml_disabled",
+    "org.saml_enabled",
+    "org.disable_two_factor_requirement",
+    "org.enable_two_factor_requirement",
+    "org.update_saml_provider_settings",
+    "org.enable_oauth_app_restrictions",
+    "org.disable_oauth_app_restrictions",
+]
+
+ALLOWLIST_ACTIONS = [
+    "ip_allow_list.enable",
+    "ip_allow_list.disable",
+    "ip_allow_list.enable_for_installed_apps",
+    "ip_allow_list.disable_for_installed_apps",
+    "ip_allow_list_entry.create",
+    "ip_allow_list_entry.update",
+    "ip_allow_list_entry.destroy",
 ]
 
 

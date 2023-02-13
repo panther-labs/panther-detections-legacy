@@ -2,11 +2,7 @@ from panther_sdk import PantherEvent, schema
 
 from panther_detections.utils import event_type_helpers
 
-__all__ = [
-    "get_admin_role",
-    "get_event_type",
-    "github_audit"
-]
+__all__ = ["get_admin_role", "get_event_type", "github_audit"]
 
 
 def get_admin_role(_) -> str:

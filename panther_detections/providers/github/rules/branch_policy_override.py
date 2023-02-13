@@ -5,6 +5,9 @@ from panther_detections.utils import match_filters
 from .. import sample_logs
 from .._shared import rule_tags
 
+# from panther_detections.datamodels import github_audit
+
+
 __all__ = ["branch_policy_override"]
 
 
@@ -19,6 +22,7 @@ def branch_policy_override(
         return (
             f"A branch protection requirement in the repository"
             f" [{event.get('repo', '<UNKNOWN_REPO>')}]"
+            # f" was overridden by user [{event.udm('actor_user')}]"
             f" was overridden by user [{event.get('actor')}]"
         )
 

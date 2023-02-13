@@ -15,19 +15,16 @@ class TestRulesPublicRepositoryCreated(unittest.TestCase):
 
     def test_public_repository_created_title(self) -> None:
         rule = github.rules.public_repository_created()
-        evt = PantherEvent(json.loads(github.sample_logs.SAMPLEEVENT))
+        evt = PantherEvent(
+            json.loads(
+                github.sample_logs.public_repository_created_private_repo_created
+            )
+        )
 
-        title = rule.alert_title(evt) #type: ignore
+        title = rule.alert_title(evt)  # type: ignore
 
-        #self.assertEqual(title, "ADD TITLE")
-    
-    def test_public_repository_created_group_by(self) -> None:
-        rule = github.rules.public_repository_created()
-        test_evt = PantherEvent(json.loads(github.sample_logs.SAMPLEEVENT))
-        key = rule.alert_grouping.group_by(test_evt)
-
-        #self.assertEqual(key, "DEDUP STRING")
-
-    
-    
-    
+        self.assertEqual(
+            title,
+            "Repository [example-io/oops] "
+            "created with public status by Github user [example-actor].",
+        )

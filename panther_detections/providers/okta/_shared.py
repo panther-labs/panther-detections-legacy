@@ -11,6 +11,7 @@ __all__ = [
     "SHARED_TAGS",
     "SHARED_SUMMARY_ATTRS",
     "create_alert_context",
+    "get_key",
 ]
 
 SUPPORT_ACCESS_EVENTS = [

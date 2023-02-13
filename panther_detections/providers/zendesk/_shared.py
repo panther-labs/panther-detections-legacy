@@ -63,4 +63,4 @@ def zendesk_get_roles(event):
         old_role = "<UNKNOWN_APP>:<UNKNOWN_ROLE>"
     if not new_role:
         new_role = "<UNKNOWN_APP>:<UNKNOWN_ROLE>"
-    return (old_role,)
+    return (old_role, new_role)

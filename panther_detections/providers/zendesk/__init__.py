@@ -10,5 +10,5 @@ def use_all_with_defaults() -> None:
     rules.new_owner()
     rules.sensitive_data_redaction()
     rules.user_assumption()
-    # rules.user_role() #(WIP) fix udm
+    rules.user_role() #(WIP) fix udm
     rules.user_suspension()

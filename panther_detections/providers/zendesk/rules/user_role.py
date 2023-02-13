@@ -1,28 +1,33 @@
 from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters, standard_types
+from panther_detections.datamodels import zendesk
 
 from .. import sample_logs
 from .._shared import rule_tags, zendesk_get_roles
 
+#handle model
+zendesk.zendesk()
 
 def user_role(
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
     extensions: detection.RuleExtensions = detection.RuleExtensions(),
+
 ) -> detection.Rule:
     """A user's Zendesk role was changed"""
 
     def _title(event: PantherEvent) -> str:
-        old_role, new_role = zendesk_get_roles(event)  # pylint: disable=W0632
+        old_role, new_role = zendesk_get_roles(event)
         return (
             f"Actor user [{event.udm('actor_user')}] changed [{event.udm('user')}] role from "
             f"{old_role} to {new_role}"
         )
 
-    def admin_role_filter(event: PantherEvent) -> bool:
+    def _filter(event: PantherEvent) -> bool:
         # admin roles have their own handling
+        from panther_detections.providers.zendesk._shared import zendesk_get_roles
         if event.udm("event_type") != standard_types.ADMIN_ROLE_ASSIGNED:
-            _, new_role = zendesk_get_roles(event)  # pylint: disable=W0632
+            _, new_role = zendesk_get_roles(event)
             return bool(new_role)
         return False
 
@@ -41,7 +46,7 @@ def user_role(
         filters=[
             match_filters.deep_equal("source_type", "user"),
             match_filters.deep_equal("action", "update"),
-            detection.PythonFilter(func=admin_role_filter),
+            detection.PythonFilter(func=_filter),
         ],
         unit_tests=(
             [

@@ -1,17 +1,18 @@
 import typing
+
 from panther_sdk import PantherEvent, detection, schema
+
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
+
 # from .._shared import (
 #     create_alert_context,
 #     rule_tags,
 #     standard_tags,
 # )
 
-__all__ = [
-    "org_modified"
-]
+__all__ = ["org_modified"]
 
 
 def org_modified(
@@ -19,7 +20,7 @@ def org_modified(
     extensions: detection.RuleExtensions = detection.RuleExtensions(),
 ) -> detection.Rule:
     """Detects when a user is added or removed from a GitHub Org."""
-    
+
     # def _title(event: PantherEvent) -> str:
     #    action = event.get("action")
     #    if event.get("action") == "org.add_member":
@@ -31,55 +32,45 @@ def org_modified(
     #        f"{event.get('user', '<UNKNOWN_USER>')} to org [{event.get('org','<UNKNOWN_ORG>')}]"
     #    )
 
-    
-    
-    
-    
-    
-     
-    
-                  
     return detection.Rule(
         overrides=overrides,
         extensions=extensions,
-        #enabled=,
+        # enabled=,
         name="GitHub User Added or Removed from Org",
         rule_id="GitHub.Org.Modified",
-        log_types=[schema.GitHubAudit],
+        log_types=[schema.LogTypeGitHubAudit],
         severity=detection.SeverityInfo,
         description="Detects when a user is added or removed from a GitHub Org.",
-        tags=['GitHub', 'Initial Access:Supply Chain Compromise'],
-        reports={'MITRE ATT&CK': ['TA0001:T1195']},
-        #reference=,
-        #runbook=,
+        tags=["GitHub", "Initial Access:Supply Chain Compromise"],
+        reports={"MITRE ATT&CK": ["TA0001:T1195"]},
+        # reference=,
+        # runbook=,
         alert_title=_title,
-        #summary_attrs=,
-        #threshold=,
-        #alert_context=,
-        #alert_grouping=,
+        # summary_attrs=,
+        # threshold=,
+        # alert_context=,
+        # alert_grouping=,
         filters=[
             # def rule(event):
-    #    return event.get("action") == "org.add_member" or event.get("action") == "org.remove_member"
-
+            #    return event.get("action") == "org.add_member" or event.get("action") == "org.remove_member"
         ],
         unit_tests=(
             [
                 detection.JSONUnitTest(
                     name="GitHub - Team Deleted",
                     expect_match=False,
-                    data=sample_logs.org_modified_github___team_deleted
+                    data=sample_logs.org_modified_github___team_deleted,
                 ),
                 detection.JSONUnitTest(
                     name="GitHub - Org - User Added",
                     expect_match=True,
-                    data=sample_logs.org_modified_github___org___user_added
+                    data=sample_logs.org_modified_github___org___user_added,
                 ),
                 detection.JSONUnitTest(
                     name="GitHub - Org - User Removed",
                     expect_match=True,
-                    data=sample_logs.org_modified_github___org___user_removed
+                    data=sample_logs.org_modified_github___org___user_removed,
                 ),
-                
             ]
-        )
+        ),
     )

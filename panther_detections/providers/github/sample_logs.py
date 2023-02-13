@@ -480,21 +480,19 @@ advanced_security_change_enterprise_log_business_advanced_security_enabled = jso
         "user": "bobert",
     }
 )
-advanced_security_change_enterprise_log___business_advanced_security_disabled = (
-    json.dumps(
-        {
-            "@timestamp": 1671111111111,
-            "_document_id": "gAcccccccccccccccccccc",
-            "action": "business_advanced_security.disabled",
-            "actor": "bobert",
-            "actor_ip": "12.12.12.12",
-            "actor_location": {"country_code": "US"},
-            "business": "example-enterprise",
-            "created_at": 1671111111111,
-            "operation_type": "modify",
-            "user": "bobert",
-        }
-    )
+advanced_security_change_enterprise_log_business_advanced_security_disabled = json.dumps(
+    {
+        "@timestamp": 1671111111111,
+        "_document_id": "gAcccccccccccccccccccc",
+        "action": "business_advanced_security.disabled",
+        "actor": "bobert",
+        "actor_ip": "12.12.12.12",
+        "actor_location": {"country_code": "US"},
+        "business": "example-enterprise",
+        "created_at": 1671111111111,
+        "operation_type": "modify",
+        "user": "bobert",
+    }
 )
 org_modified_github___team_deleted = json.dumps(
     {

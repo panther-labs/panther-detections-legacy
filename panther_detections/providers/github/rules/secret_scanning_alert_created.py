@@ -1,17 +1,18 @@
 import typing
+
 from panther_sdk import PantherEvent, detection, schema
+
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
+
 # from .._shared import (
 #     create_alert_context,
 #     rule_tags,
 #     standard_tags,
 # )
 
-__all__ = [
-    "secret_scanning_alert_created"
-]
+__all__ = ["secret_scanning_alert_created"]
 
 
 def secret_scanning_alert_created(
@@ -19,12 +20,10 @@ def secret_scanning_alert_created(
     extensions: detection.RuleExtensions = detection.RuleExtensions(),
 ) -> detection.Rule:
     """GitHub detected a secret and created a secret scanning alert."""
-    
+
     # def _title(event: PantherEvent) -> str:
     #    return f"Github detected a secret in {event.get('repo')} (#{event.get('number')})"
 
-    
-    
     # def _alert_context(event: PantherEvent) -> Dict[str, Any]:
     #    return {
     #        "repo": event.get("repo"),
@@ -33,47 +32,38 @@ def secret_scanning_alert_created(
     #        f"{event.get('number')}",
     #    }
 
-    
-    
-     
-    
-                  
     return detection.Rule(
         overrides=overrides,
         extensions=extensions,
-        #enabled=,
+        # enabled=,
         name="GitHub Secret Scanning Alert Created",
         rule_id="GitHub.Secret.Scanning.Alert.Created",
-        log_types=[schema.GitHubAudit],
+        log_types=[schema.LogTypeGitHubAudit],
         severity=detection.SeverityMedium,
         description="GitHub detected a secret and created a secret scanning alert.",
-        tags=['GitHub'],
-        reports={'MITRE ATT&CK': ['TA0006:T1552']},
-        #reference=,
+        tags=["GitHub"],
+        reports={"MITRE ATT&CK": ["TA0006:T1552"]},
+        # reference=,
         runbook="Review the secret to determine if it needs to be revoked or the alert suppressed.",
         alert_title=_title,
-        #summary_attrs=,
-        #threshold=,
+        # summary_attrs=,
+        # threshold=,
         alert_context=_alert_context,
-        #alert_grouping=,
+        # alert_grouping=,
         filters=[
             # def rule(event):
-    #    return event.get("action") == "secret_scanning_alert.create"
-
+            #    return event.get("action") == "secret_scanning_alert.create"
         ],
         unit_tests=(
             [
                 detection.JSONUnitTest(
                     name="GitHub detected a secret",
                     expect_match=True,
-                    data=sample_logs.secret_scanning_alert_created_github_detected_a_secret
+                    data=sample_logs.secret_scanning_alert_created_github_detected_a_secret,
                 ),
                 detection.JSONUnitTest(
-                    name="Unrelated",
-                    expect_match=False,
-                    data=sample_logs.secret_scanning_alert_created_unrelated
+                    name="Unrelated", expect_match=False, data=sample_logs.secret_scanning_alert_created_unrelated
                 ),
-                
             ]
-        )
+        ),
     )

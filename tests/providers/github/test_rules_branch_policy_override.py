@@ -13,7 +13,7 @@ class TestRulesBranchPolicyOverride(unittest.TestCase):
 
         self.assertEqual(rule.name, name_override)
 
-    # todo: test data model + fix error
+    # todo: fix this test/data model error
     # panther_core.exceptions.PantherError: a data model hasn't been specified for log type: None
 
     def test_branch_policy_override_title(self) -> None:

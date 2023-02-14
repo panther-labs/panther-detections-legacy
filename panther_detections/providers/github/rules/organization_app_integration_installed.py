@@ -3,7 +3,6 @@ from panther_sdk import PantherEvent, detection, schema
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
-
 from .._shared import github_alert_context, rule_tags
 
 __all__ = ["organization_app_integration_installed"]
@@ -13,7 +12,8 @@ def organization_app_integration_installed(
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
     extensions: detection.RuleExtensions = detection.RuleExtensions(),
 ) -> detection.Rule:
-    """An application integration was installed to your organization's Github account by someone in your organization."""
+    """An application integration was installed to your organization's
+    Github account by someone in your organization."""
 
     def _title(event: PantherEvent) -> str:
         # (Optional) Return a string which will be shown as the alert title.

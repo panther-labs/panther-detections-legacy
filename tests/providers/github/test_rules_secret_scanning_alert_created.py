@@ -15,11 +15,12 @@ class TestRulesSecretScanningAlertCreated(unittest.TestCase):
 
     def test_secret_scanning_alert_created_title(self) -> None:
         rule = github.rules.secret_scanning_alert_created()
-        evt = PantherEvent(json.loads(github.sample_logs.SAMPLEEVENT))
+        evt = PantherEvent(
+            json.loads(
+                github.sample_logs.secret_scanning_alert_created_github_detected_a_secret
+            )
+        )
 
-        title = rule.alert_title(evt) #type: ignore
+        title = rule.alert_title(evt)  # type: ignore
 
-        #self.assertEqual(title, "ADD TITLE")
-    
-    
-    
+        self.assertEqual(title, "Github detected a secret in acme-co/website (#1792)")

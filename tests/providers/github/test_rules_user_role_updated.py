@@ -15,11 +15,12 @@ class TestRulesUserRoleUpdated(unittest.TestCase):
 
     def test_user_role_updated_title(self) -> None:
         rule = github.rules.user_role_updated()
-        evt = PantherEvent(json.loads(github.sample_logs.SAMPLEEVENT))
+        evt = PantherEvent(
+            json.loads(github.sample_logs.user_role_updated_github___member_updated)
+        )
 
-        title = rule.alert_title(evt) #type: ignore
+        title = rule.alert_title(evt)  # type: ignore
 
-        #self.assertEqual(title, "ADD TITLE")
-    
-    
-    
+        self.assertEqual(
+            title, "Org owner [cat] updated user's [bob] role ('admin' or 'member')"
+        )

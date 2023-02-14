@@ -3,10 +3,7 @@ from panther_sdk import PantherEvent, detection, schema
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
-
-from .._shared import (
-    rule_tags,
-)
+from .._shared import rule_tags
 
 __all__ = ["repo_hook_modified"]
 
@@ -37,9 +34,7 @@ def repo_hook_modified(
         name="GitHub Web Hook Modified",
         rule_id="GitHub.Repo.HookModified",
         log_types=[schema.LogTypeGitHubAudit],
-        severity=detection.DynamicStringField(
-            func=_severity, fallback=detection.SeverityInfo
-        ),
+        severity=detection.DynamicStringField(func=_severity, fallback=detection.SeverityInfo),
         description="Detects when a web hook is added, modified, or deleted in an org repository.",
         tags=rule_tags("Exfiltration:Automated Exfiltration"),
         reports={"MITRE ATT&CK": ["TA0010:T1020"]},

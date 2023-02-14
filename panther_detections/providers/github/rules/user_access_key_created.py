@@ -1,16 +1,9 @@
-import typing
-
 from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
-
-# from .._shared import (
-#     create_alert_context,
-#     rule_tags,
-#     standard_tags,
-# )
+from .._shared import rule_tags
 
 __all__ = ["user_access_key_created"]
 
@@ -21,8 +14,8 @@ def user_access_key_created(
 ) -> detection.Rule:
     """Detects when a GitHub user access key is created."""
 
-    # def _title(event: PantherEvent) -> str:
-    #    return f"User [{event.udm('actor_user')}] created a new ssh key"
+    def _title(event: PantherEvent) -> str:
+        return f"User [{event.get('actor')}] created a new ssh key"
 
     return detection.Rule(
         overrides=overrides,
@@ -33,7 +26,7 @@ def user_access_key_created(
         log_types=[schema.LogTypeGitHubAudit],
         severity=detection.SeverityInfo,
         description="Detects when a GitHub user access key is created.",
-        tags=["GitHub", "Persistence:Valid Accounts"],
+        tags=rule_tags("Persistence:Valid Accounts"),
         reports={"MITRE ATT&CK": ["TA0003:T1078"]},
         # reference=,
         # runbook=,
@@ -42,10 +35,7 @@ def user_access_key_created(
         # threshold=,
         # alert_context=,
         # alert_grouping=,
-        filters=[
-            # def rule(event):
-            #    return event.get("action") == "public_key.create"
-        ],
+        filters=[match_filters.deep_equal("action", "public_key.create")],
         unit_tests=(
             [
                 detection.JSONUnitTest(

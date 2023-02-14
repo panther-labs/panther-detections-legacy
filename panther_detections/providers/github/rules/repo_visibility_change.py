@@ -1,16 +1,9 @@
-import typing
-
 from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
-
-# from .._shared import (
-#     create_alert_context,
-#     rule_tags,
-#     standard_tags,
-# )
+from .._shared import rule_tags
 
 __all__ = ["repo_visibility_change"]
 
@@ -21,12 +14,12 @@ def repo_visibility_change(
 ) -> detection.Rule:
     """Detects when an organization repository visibility changes."""
 
-    # def _title(event: PantherEvent) -> str:
-    #    repo_access_link = f"https://github.com/{event.get('repo','<UNKNOWN_REPO>')}/settings/access"
-    #    return (
-    #        f"Repository [{event.get('repo', '<UNKNOWN_REPO>')}] visibility changed. "
-    #        f"View current visibility here: {repo_access_link}"
-    #    )
+    def _title(event: PantherEvent) -> str:
+        repo_access_link = f"https://github.com/{event.get('repo','<UNKNOWN_REPO>')}/settings/access"
+        return (
+            f"Repository [{event.get('repo', '<UNKNOWN_REPO>')}] visibility changed. "
+            f"View current visibility here: {repo_access_link}"
+        )
 
     return detection.Rule(
         overrides=overrides,
@@ -37,7 +30,7 @@ def repo_visibility_change(
         log_types=[schema.LogTypeGitHubAudit],
         severity=detection.SeverityHigh,
         description="Detects when an organization repository visibility changes.",
-        tags=["GitHub", "Exfiltration:Exfiltration Over Web Service"],
+        tags=rule_tags("Exfiltration:Exfiltration Over Web Service"),
         reports={"MITRE ATT&CK": ["TA0010:T1567"]},
         # reference=,
         # runbook=,
@@ -46,10 +39,7 @@ def repo_visibility_change(
         # threshold=,
         # alert_context=,
         # alert_grouping=,
-        filters=[
-            # def rule(event):
-            #    return event.get("action") == "repo.access"
-        ],
+        filters=[match_filters.deep_equal("action", "repo.access")],
         unit_tests=(
             [
                 detection.JSONUnitTest(

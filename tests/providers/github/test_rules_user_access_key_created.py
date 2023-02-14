@@ -15,11 +15,12 @@ class TestRulesUserAccessKeyCreated(unittest.TestCase):
 
     def test_user_access_key_created_title(self) -> None:
         rule = github.rules.user_access_key_created()
-        evt = PantherEvent(json.loads(github.sample_logs.SAMPLEEVENT))
+        evt = PantherEvent(
+            json.loads(
+                github.sample_logs.user_access_key_created_github___user_access_key_created
+            )
+        )
 
-        title = rule.alert_title(evt) #type: ignore
+        title = rule.alert_title(evt)  # type: ignore
 
-        #self.assertEqual(title, "ADD TITLE")
-    
-    
-    
+        self.assertEqual(title, "User [cat] created a new ssh key")

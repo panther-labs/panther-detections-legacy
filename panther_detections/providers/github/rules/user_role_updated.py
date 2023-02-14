@@ -1,16 +1,9 @@
-import typing
-
 from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
-
-# from .._shared import (
-#     create_alert_context,
-#     rule_tags,
-#     standard_tags,
-# )
+from .._shared import rule_tags
 
 __all__ = ["user_role_updated"]
 
@@ -21,11 +14,8 @@ def user_role_updated(
 ) -> detection.Rule:
     """Detects when a GitHub user role is upgraded to an admin or downgraded to a member"""
 
-    # def _title(event: PantherEvent) -> str:
-    #    return (
-    #        f"Org owner [{event.udm('actor_user')}] updated user's "
-    #        f"[{event.get('user')}] role ('admin' or 'member')"
-    #    )
+    def _title(event: PantherEvent) -> str:
+        return f"Org owner [{event.get('actor')}] updated user's " f"[{event.get('user')}] role ('admin' or 'member')"
 
     return detection.Rule(
         overrides=overrides,
@@ -36,7 +26,7 @@ def user_role_updated(
         log_types=[schema.LogTypeGitHubAudit],
         severity=detection.SeverityHigh,
         description="Detects when a GitHub user role is upgraded to an admin or downgraded to a member",
-        tags=["GitHub", "Persistence:Account Manipulation"],
+        tags=rule_tags("Persistence:Account Manipulation"),
         reports={"MITRE ATT&CK": ["TA0003:T1098"]},
         # reference=,
         # runbook=,
@@ -45,10 +35,7 @@ def user_role_updated(
         # threshold=,
         # alert_context=,
         # alert_grouping=,
-        filters=[
-            # def rule(event):
-            #    return event.get("action") == "org.update_member"
-        ],
+        filters=[match_filters.deep_equal("action", "org.update_member")],
         unit_tests=(
             [
                 detection.JSONUnitTest(
@@ -57,9 +44,9 @@ def user_role_updated(
                     data=sample_logs.user_role_updated_github___member_updated,
                 ),
                 detection.JSONUnitTest(
-                    name="GitHub - Member Updated",
+                    name="GitHub - Member Invited",
                     expect_match=False,
-                    data=sample_logs.user_role_updated_github___member_updated,
+                    data=sample_logs.user_role_updated_github___member_invited,
                 ),
             ]
         ),

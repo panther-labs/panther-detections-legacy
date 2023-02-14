@@ -15,11 +15,12 @@ class TestRulesTeamModified(unittest.TestCase):
 
     def test_team_modified_title(self) -> None:
         rule = github.rules.team_modified()
-        evt = PantherEvent(json.loads(github.sample_logs.SAMPLEEVENT))
+        evt = PantherEvent(
+            json.loads(github.sample_logs.team_modified_github___team_deleted)
+        )
 
-        title = rule.alert_title(evt) #type: ignore
+        title = rule.alert_title(evt)  # type: ignore
 
-        #self.assertEqual(title, "ADD TITLE")
-    
-    
-    
+        self.assertEqual(
+            title, "GitHub.Audit: User [cat] deleted team [<MISSING_TEAM>]"
+        )

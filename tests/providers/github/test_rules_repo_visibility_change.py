@@ -15,11 +15,16 @@ class TestRulesRepoVisibilityChange(unittest.TestCase):
 
     def test_repo_visibility_change_title(self) -> None:
         rule = github.rules.repo_visibility_change()
-        evt = PantherEvent(json.loads(github.sample_logs.SAMPLEEVENT))
+        evt = PantherEvent(
+            json.loads(
+                github.sample_logs.repo_visibility_change_github___repo_visibility_change
+            )
+        )
 
-        title = rule.alert_title(evt) #type: ignore
+        title = rule.alert_title(evt)  # type: ignore
 
-        #self.assertEqual(title, "ADD TITLE")
-    
-    
-    
+        self.assertEqual(
+            title,
+            "Repository [my-org/my-repo] visibility changed." 
+            " View current visibility here: https://github.com/my-org/my-repo/settings/access"
+        )

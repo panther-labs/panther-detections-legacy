@@ -1,5 +1,3 @@
-# _shared.py
-
 PANTHER_DETECTION_DELETE_ACTIONS = [
     "DELETE_DATA_MODEL",
     "DELETE_DETECTION",
@@ -8,3 +6,12 @@ PANTHER_DETECTION_DELETE_ACTIONS = [
     "DELETE_LOOKUP_TABLE",
     "DELETE_SAVED_DATA_LAKE_QUERY",
 ]
+
+PANTHER_ADMIN_PERMISSIONS = [
+    "UserModify",
+    "OrganizationAPITokenModify",
+    "OrganizationAPITokenRead",
+    "GeneralSettingsModify",
+]
+
+PANTHER_ROLE_ACTIONS = ["CREATE_USER_ROLE", "DELETE_USER_ROLE", "UPDATE_USER_ROLE"]

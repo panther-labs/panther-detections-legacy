@@ -42,7 +42,7 @@ def saml_modified(
         #enabled=,
         name="Panther SAML configuration has been modified",
         rule_id="Panther.SAML.Modified",
-        log_types=[schema.PantherAudit],
+        log_types=[schema.LogTypePantherAudit],
         severity=detection.SeverityHigh,
         description="An Admin has modified Panther's SAML configuration.",
         tags=['DataModel', 'Defense Evasion:Impair Defenses'],

@@ -6,14 +6,14 @@ saml_modified_saml_config_modified = json.dumps({
     "actor": {
         "attributes": {
             "email": "homer@springfield.gov",
-            "emailVerified": true,
+            "emailVerified": True,
             "roleId": "111111"
         },
         "id": "111111",
         "name": "Homer Simpson",
         "type": "USER"
     },
-    "errors": null,
+    "errors": None,
     "p_log_type": "Panther.Audit"
 })
 saml_modified_saml_config_viewed = json.dumps({
@@ -23,14 +23,14 @@ saml_modified_saml_config_viewed = json.dumps({
     "actor": {
         "attributes": {
             "email": "homer@springfield.gov",
-            "emailVerified": true,
+            "emailVerified": True,
             "roleId": "111111"
         },
         "id": "111111",
         "name": "Homer Simpson",
         "type": "USER"
     },
-    "errors": null,
+    "errors": None,
     "p_log_type": "Panther.Audit"
 })
 user_modified_admin_role_created = json.dumps({
@@ -50,20 +50,20 @@ user_modified_admin_role_created = json.dumps({
     "actor": {
         "attributes": {
             "email": "homer@springfield.gov",
-            "emailVerified": true,
+            "emailVerified": True,
             "roleId": "1111111"
         },
         "id": "11111111",
         "name": "Homer Simpson",
         "type": "USER"
     },
-    "errors": null,
+    "errors": None,
     "p_log_type": "Panther.Audit",
     "pantherVersion": "1.2.3",
     "sourceIP": "1.2.3.4",
     "timestamp": "2022-04-27 20:47:09.425"
 })
-user_modified_users's_email_was_changed = json.dumps({
+user_modified_users_email_was_changed = json.dumps({
     "XForwardedFor": [
         "1.2.3.4",
         "5.6.7.8"
@@ -89,7 +89,7 @@ user_modified_users's_email_was_changed = json.dumps({
     "actor": {
         "attributes": {
             "email": "admin.email@springfield.gov",
-            "emailVerified": false,
+            "emailVerified": False,
             "roleId": "89898989-8989-8989-8989-898989898989",
             "roleName": "Admin"
         },
@@ -118,7 +118,7 @@ user_modified_users's_email_was_changed = json.dumps({
     "timestamp": "2022-11-08 19:23:04.841",
     "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36"
 })
-user_modified_users's_role_was_changed = json.dumps({
+user_modified_users_role_was_changed = json.dumps({
     "XForwardedFor": [
         "5.6.7.8",
         "1.2.3.4"
@@ -144,7 +144,7 @@ user_modified_users's_role_was_changed = json.dumps({
     "actor": {
         "attributes": {
             "email": "admin.email@springfield.gov",
-            "emailVerified": false,
+            "emailVerified": False,
             "roleId": "12341234-1234-1234-1234-123412341234",
             "roleName": "Admin"
         },
@@ -188,14 +188,14 @@ detection_deleted_delete_1_detection = json.dumps({
     "actor": {
         "attributes": {
             "email": "homer@springfield.gov",
-            "emailVerified": true,
+            "emailVerified": True,
             "roleId": "11111111"
         },
         "id": "1111111",
         "name": "Homer Simpson",
         "type": "USER"
     },
-    "errors": null,
+    "errors": None,
     "p_log_type": "Panther.Audit",
     "sourceIP": "1.2.3.4",
     "timestamp": "2022-04-28 15:30:22.42"
@@ -224,14 +224,14 @@ detection_deleted_delete_many_detections = json.dumps({
     "actor": {
         "attributes": {
             "email": "homer@springfield.gov",
-            "emailVerified": true,
+            "emailVerified": True,
             "roleId": "111111"
         },
         "id": "1111111",
         "name": "Homer Simpson",
         "type": "USER"
     },
-    "errors": null,
+    "errors": None,
     "p_log_type": "Panther.Audit",
     "sourceIP": "1.2.3.4.",
     "timestamp": "2022-04-28 15:34:43.067"
@@ -243,14 +243,14 @@ detection_deleted_non_delete_event = json.dumps({
     "actor": {
         "attributes": {
             "email": "homer@springfield.gov",
-            "emailVerified": true,
+            "emailVerified": True,
             "roleId": "111111"
         },
         "id": "111111",
         "name": "Homer Simpson",
         "type": "USER"
     },
-    "errors": null,
+    "errors": None,
     "p_log_type": "Panther.Audit"
 })
 sensitive_role_created_admin_role_created = json.dumps({
@@ -270,14 +270,14 @@ sensitive_role_created_admin_role_created = json.dumps({
     "actor": {
         "attributes": {
             "email": "homer@springfield.gov",
-            "emailVerified": true,
+            "emailVerified": True,
             "roleId": "1111111"
         },
         "id": "11111111",
         "name": "Homer Simpson",
         "type": "USER"
     },
-    "errors": null,
+    "errors": None,
     "p_log_type": "Panther.Audit",
     "pantherVersion": "1.2.3",
     "sourceIP": "1.2.3.4",
@@ -298,14 +298,14 @@ sensitive_role_created_non_admin_role_created = json.dumps({
     "actor": {
         "attributes": {
             "email": "homer@springfield.gov",
-            "emailVerified": true,
+            "emailVerified": True,
             "roleId": "1111111"
         },
         "id": "11111111",
         "name": "Homer Simpson",
         "type": "USER"
     },
-    "errors": null,
+    "errors": None,
     "p_log_type": "Panther.Audit",
     "pantherVersion": "1.2.3",
     "sourceIP": "1.2.3.4",
@@ -338,7 +338,7 @@ sensitive_role_created_nonetype_error = json.dumps({
     "actor": {
         "attributes": {
             "email": "random@noreply.com",
-            "emailVerified": false,
+            "emailVerified": False,
             "roleId": "2a7bfe22-666d-4f71-99d2-c16b8666eca1",
             "roleName": "Admin"
         },

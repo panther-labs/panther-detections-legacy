@@ -54,7 +54,7 @@ def user_modified(
         #enabled=,
         name="A User's Panther Account was Modified",
         rule_id="Panther.User.Modified",
-        log_types=[schema.PantherAudit],
+        log_types=[schema.LogTypePantherAudit],
         severity=detection.SeverityHigh,
         description="A Panther user's role has been modified. This could mean password, email, or role has changed for the user.",
         tags=['DataModel', 'Persistence:Account Manipulation'],

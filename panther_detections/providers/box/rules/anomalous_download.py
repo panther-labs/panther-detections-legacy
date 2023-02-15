@@ -22,7 +22,7 @@ def anomalous_download(
             f"[{deep_get(event, 'created_by', 'name', default='<UNKNOWN_USER>')}]."
         )
 
-    def _filter(event: PantherEvent) -> bool:
+    def _filter_rule(event: PantherEvent) -> bool:
         from panther_detections.providers.box._shared import (  # pylint: disable=W0621
             box_parse_additional_details,
         )
@@ -49,7 +49,7 @@ def anomalous_download(
         runbook="Investigate whether this was triggered by expected user download activity.",
         alert_title=_title,
         summary_attrs=["event_type", "ip_address"],
-        filters=[detection.PythonFilter(func=_filter)],
+        filters=[detection.PythonFilter(func=_filter_rule)],
         unit_tests=(
             [
                 detection.JSONUnitTest(name="Regular Event", expect_match=False, data=sample_logs.regular_event),

@@ -26,7 +26,7 @@ def malicious_content(
             f"was marked malicious."
         )
 
-    def _filter(event: PantherEvent) -> bool:
+    def _filter_malicious_file(event: PantherEvent) -> bool:
         from panther_detections.providers.box._shared import (  # pylint: disable=W0621
             box_parse_additional_details,
         )
@@ -57,7 +57,7 @@ def malicious_content(
         runbook="Investigate whether this is a false positive or if the virus needs to be contained appropriately.",
         alert_title=_title,
         summary_attrs=["event_type"],
-        filters=[detection.PythonFilter(_filter)],
+        filters=[detection.PythonFilter(_filter_malicious_file)],
         unit_tests=(
             [
                 detection.JSONUnitTest(name="Regular Event", expect_match=False, data=sample_logs.regular_event),

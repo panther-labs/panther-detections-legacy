@@ -36,7 +36,7 @@ def item_shared_externally(
             item = lookup_box_file(user_id, item_id)
         return item
 
-    def _filter(event: PantherEvent) -> bool:
+    def _filter_external(event: PantherEvent) -> bool:
         # filter events
         if event.get("event_type") not in SHARE_EVENTS:
             return False
@@ -65,7 +65,7 @@ def item_shared_externally(
         summary_attrs=["ip_address"],
         threshold=10,
         alert_grouping=detection.AlertGrouping(period_minutes=60),
-        filters=[detection.PythonFilter(func=_filter)],
+        filters=[detection.PythonFilter(func=_filter_external)],
         unit_tests=(
             [
                 detection.JSONUnitTest(name="Regular Event", expect_match=False, data=sample_logs.regular_event),

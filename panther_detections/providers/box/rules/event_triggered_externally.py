@@ -16,7 +16,7 @@ def event_triggered_externally(
             f"triggered a box event."
         )
 
-    def _filter(event: PantherEvent) -> bool:
+    def _filter_external(event: PantherEvent) -> bool:
         # Check that all events are triggered by internal users
         if event.get("event_type") not in ("FAILED_LOGIN", "SHIELD_ALERT"):
             user = event.get("created_by", {})
@@ -43,7 +43,7 @@ def event_triggered_externally(
         summary_attrs=["ip_address"],
         threshold=10,
         alert_grouping=detection.AlertGrouping(period_minutes=60),
-        filters=[detection.PythonFilter(func=_filter)],
+        filters=[detection.PythonFilter(func=_filter_external)],
         unit_tests=(
             [
                 detection.JSONUnitTest(

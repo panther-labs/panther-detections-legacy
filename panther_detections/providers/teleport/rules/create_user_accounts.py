@@ -1,5 +1,3 @@
-import typing
-
 from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters
@@ -17,7 +15,7 @@ def create_user_accounts(
     def _title(event: PantherEvent) -> str:
         return f"User [{event.get('user', '<UNKNOWN_USER>')}] has manually modified system users"
 
-    def _filter(event: PantherEvent) -> bool:
+    def _filter_pattern_match(event: PantherEvent) -> bool:
         from panther_detections.utils.legacy_utils import pattern_match_list
 
         return pattern_match_list(event.get("program"), USER_CREATE_PATTERNS)
@@ -37,7 +35,10 @@ def create_user_accounts(
         alert_title=_title,
         summary_attrs=["event", "code", "user", "program", "path", "return_code", "login", "server_id", "sid"],
         alert_grouping=detection.AlertGrouping(period_minutes=15),
-        filters=[match_filters.deep_equal("event", "session.command"), detection.PythonFilter(func=_filter)],
+        filters=[
+            match_filters.deep_equal("event", "session.command"),
+            detection.PythonFilter(func=_filter_pattern_match),
+        ],
         unit_tests=(
             [
                 detection.JSONUnitTest(name="Echo command", expect_match=False, data=sample_logs.echo_command),

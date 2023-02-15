@@ -1,4 +1,5 @@
-from typing import Literal, List, Union
+from typing import List, Literal, Union
+
 from panther_sdk import detection
 
 from . import rules, sample_logs

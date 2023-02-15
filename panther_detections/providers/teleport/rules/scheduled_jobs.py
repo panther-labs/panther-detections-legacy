@@ -1,5 +1,3 @@
-import typing
-
 from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters
@@ -17,7 +15,7 @@ def scheduled_jobs(
     def _title(event: PantherEvent) -> str:
         return f"User [{event.get('user', '<UNKNOWN_USER>')}] has modified scheduled jobs"
 
-    def _filter(event: PantherEvent) -> bool:
+    def _filter_arg(event: PantherEvent) -> bool:
         if "-l" in event.get("argv", []):
             return False
         return True
@@ -41,7 +39,7 @@ def scheduled_jobs(
         filters=[
             match_filters.deep_equal("event", "session.command"),
             match_filters.deep_equal("program", "crontab"),
-            detection.PythonFilter(func=_filter),
+            detection.PythonFilter(func=_filter_arg),
         ],
         unit_tests=(
             [

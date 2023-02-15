@@ -1,5 +1,3 @@
-import typing
-
 from panther_sdk import PantherEvent, detection, schema
 
 from .. import sample_logs
@@ -18,7 +16,7 @@ def suspicious_commands(
             f"[{event.get('program', '<UNKNOWN_PROGRAM>')}]"
         )
 
-    def _filter(event: PantherEvent) -> bool:
+    def _filter_suspicious_commands(event: PantherEvent) -> bool:
         if event.get("event") == "session.command" and not event.get("argv"):
             return False
         # Check that the program is in our watch list
@@ -41,7 +39,7 @@ def suspicious_commands(
         alert_title=_title,
         summary_attrs=["event", "code", "user", "program", "path", "return_code", "login", "server_id", "sid"],
         alert_grouping=detection.AlertGrouping(period_minutes=60),
-        filters=detection.PythonFilter(func=_filter),
+        filters=detection.PythonFilter(func=_filter_suspicious_commands),
         unit_tests=(
             [
                 detection.JSONUnitTest(name="Echo command", expect_match=False, data=sample_logs.echo_command),

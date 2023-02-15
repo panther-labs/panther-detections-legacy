@@ -1,5 +1,6 @@
 import json
 
+# pylint: disable=line-too-long
 admin_create_admin_admin_create = json.dumps(
     {
         "action": "admin_create",

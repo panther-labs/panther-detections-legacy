@@ -1,16 +1,18 @@
-import typing
-
-from panther_sdk import PantherEvent, detection
+from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
-from .._shared import deserialize_administrator_log_event_description, duo_alert_context
+from .._shared import (
+    deserialize_administrator_log_event_description,
+    duo_alert_context,
+    rule_tags,
+)
 
 
 def admin_marked_push_fraudulent(
-    pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
+    extensions: detection.RuleExtensions = detection.RuleExtensions(),
 ) -> detection.Rule:
     """A Duo push was marked fraudulent by an admin."""
 
@@ -23,7 +25,7 @@ def admin_marked_push_fraudulent(
         return f"Duo Admin [{admin_username}] denied due to an anomalous 2FA push for [{user_email}]"
 
     def _filter(event: PantherEvent) -> bool:
-        from panther_detections.providers.duo._shared import (
+        from panther_detections.providers.duo._shared import (  # pylint: disable=W0621
             deserialize_administrator_log_event_description,
         )
 
@@ -32,16 +34,16 @@ def admin_marked_push_fraudulent(
 
     return detection.Rule(
         overrides=overrides,
+        extensions=extensions,
         name="Duo Admin Marked Push Fraudulent",
         rule_id="DUO.Admin.Action.MarkedFraudulent",
-        log_types=["Duo.Administrator"],
-        tags=["Duo"],
+        log_types=[schema.LogTypeDuoAdministrator],
+        tags=rule_tags(),
         severity=detection.SeverityMedium,
         description="A Duo push was marked fraudulent by an admin.",
         reference="https://duo.com/docs/adminapi#administrator-logs",
         runbook="Follow up with the administrator to determine reasoning for marking fraud.",
-        filters=(pre_filters or [])
-        + [
+        filters=[
             match_filters.deep_equal("action", "admin_2fa_error"),
             detection.PythonFilter(func=_filter),
         ],

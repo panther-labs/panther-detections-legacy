@@ -1,15 +1,14 @@
-import typing
-
-from panther_sdk import PantherEvent, detection
+from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
+from .._shared import rule_tags
 
 
 def admin_bypass_code_created(
-    pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
+    extensions: detection.RuleExtensions = detection.RuleExtensions(),
 ) -> detection.Rule:
     """A Duo administrator created an MFA bypass code for an application."""
 
@@ -22,13 +21,15 @@ def admin_bypass_code_created(
 
     return detection.Rule(
         overrides=overrides,
+        extensions=extensions,
         name="Duo Admin Bypass Code Created",
         rule_id="Duo.Admin.Bypass.Code.Created",
-        log_types=["Duo.Administrator"],
+        log_types=[schema.LogTypeDuoAdministrator],
+        tags=rule_tags(),
         severity=detection.SeverityMedium,
         description="A Duo administrator created an MFA bypass code for an application.",
         runbook="Confirm this was authorized and necessary behavior.",
-        filters=(pre_filters or []) + [match_filters.deep_equal("action", "bypass_create")],
+        filters=[match_filters.deep_equal("action", "bypass_create")],
         alert_title=_title,
         unit_tests=(
             [

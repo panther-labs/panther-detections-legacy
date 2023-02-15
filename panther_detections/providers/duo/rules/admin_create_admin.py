@@ -1,16 +1,18 @@
-import typing
-
-from panther_sdk import PantherEvent, detection
+from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
-from .._shared import deserialize_administrator_log_event_description, duo_alert_context
+from .._shared import (
+    deserialize_administrator_log_event_description,
+    duo_alert_context,
+    rule_tags,
+)
 
 
 def admin_create_admin(
-    pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
+    extensions: detection.RuleExtensions = detection.RuleExtensions(),
 ) -> detection.Rule:
     """A new Duo Administrator was created."""
 
@@ -25,12 +27,14 @@ def admin_create_admin(
 
     return detection.Rule(
         overrides=overrides,
+        extensions=extensions,
         name="Duo Admin Create Admin",
         rule_id="Duo.Admin.Create.Admin",
-        log_types=["Duo.Administrator"],
+        log_types=[schema.LogTypeDuoAdministrator],
+        tags=rule_tags(),
         severity=detection.SeverityHigh,
         description="A new Duo Administrator was created.",
-        filters=(pre_filters or []) + [match_filters.deep_equal("action", "admin_create")],
+        filters=[match_filters.deep_equal("action", "admin_create")],
         alert_title=_title,
         threshold=1,
         unit_tests=(

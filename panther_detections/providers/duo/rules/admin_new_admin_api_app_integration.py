@@ -1,18 +1,14 @@
-import typing
-
-from panther_sdk import PantherEvent, detection
-
-from panther_detections.utils import match_filters
+from panther_sdk import PantherEvent, detection, schema
 
 from .. import sample_logs
-from .._shared import deserialize_administrator_log_event_description, duo_alert_context
+from .._shared import duo_alert_context, rule_tags
 
 __all__ = ["admin_new_admin_api_app_integration"]
 
 
 def admin_new_admin_api_app_integration(
-    pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
+    extensions: detection.RuleExtensions = detection.RuleExtensions(),
 ) -> detection.Rule:
     """Identifies creation of new Admin API integrations for Duo."""
 
@@ -24,7 +20,7 @@ def admin_new_admin_api_app_integration(
         )
 
     def _filter(event: PantherEvent) -> bool:
-        from panther_detections.providers.duo._shared import (
+        from panther_detections.providers.duo._shared import (  # pylint: disable=W0621
             deserialize_administrator_log_event_description,
         )
 
@@ -36,16 +32,18 @@ def admin_new_admin_api_app_integration(
 
     return detection.Rule(
         overrides=overrides,
+        extensions=extensions,
         name="Duo Admin New Admin API App Integration",
         rule_id="Duo.Admin.New.Admin.API.App.Integration",
-        log_types=["Duo.Administrator"],
+        log_types=[schema.LogTypeDuoAdministrator],
+        tags=rule_tags(),
         severity=detection.SeverityHigh,
         description="Identifies creation of new Admin API integrations for Duo.",
         alert_title=_title,
         threshold=1,
         alert_context=duo_alert_context,
         alert_grouping=detection.AlertGrouping(period_minutes=60),
-        filters=(pre_filters or []) + [detection.PythonFilter(func=_filter)],
+        filters=[detection.PythonFilter(func=_filter)],
         unit_tests=(
             [
                 detection.JSONUnitTest(

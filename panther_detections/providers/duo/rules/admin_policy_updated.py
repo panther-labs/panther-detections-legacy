@@ -1,16 +1,14 @@
-import typing
-
-from panther_sdk import PantherEvent, detection
+from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
-from .._shared import duo_alert_context
+from .._shared import duo_alert_context, rule_tags
 
 
 def admin_policy_updated(
-    pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
+    extensions: detection.RuleExtensions = detection.RuleExtensions(),
 ) -> detection.Rule:
     """A Duo Administrator updated a Policy, which governs how users authenticate."""
 
@@ -22,12 +20,14 @@ def admin_policy_updated(
 
     return detection.Rule(
         overrides=overrides,
+        extensions=extensions,
         name="Duo Admin Policy Updated",
         rule_id="Duo.Admin.Policy.Updated",
-        log_types=["Duo.Administrator"],
+        log_types=[schema.LogTypeDuoAdministrator],
+        tags=rule_tags(),
         severity=detection.SeverityMedium,
         description="A Duo Administrator updated a Policy, which governs how users authenticate.",
-        filters=(pre_filters or []) + [match_filters.deep_equal("action", "policy_update")],
+        filters=[match_filters.deep_equal("action", "policy_update")],
         alert_title=_title,
         threshold=1,
         unit_tests=(

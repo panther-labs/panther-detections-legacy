@@ -4,8 +4,6 @@ from typing import Any, Dict, List
 
 from panther_sdk import PantherEvent
 
-from panther_detections.utils import standard_tags
-
 # __all__ = [
 #     "rule_tags",
 #     "SYSTEM_LOG_TYPE",
@@ -16,20 +14,6 @@ from panther_detections.utils import standard_tags
 #     "create_alert_context",
 # ]
 
-# SYSTEM_LOG_TYPE = "Okta.SystemLog"
-
-
-# SHARED_TAGS = [
-#     "Okta",
-#     standard_tags.IDENTITY_AND_ACCESS_MGMT,
-# ]
-
-# SHARED_SUMMARY_ATTRS = [
-#     "eventType",
-#     "severity",
-#     "displayMessage",
-#     "p_any_ip_addresses",
-# ]
 
 ENDPOINT_REASONS = [
     "endpoint_is_not_in_management_system",
@@ -37,6 +21,10 @@ ENDPOINT_REASONS = [
     "endpoint_is_not_trusted",
     "could_not_determine_if_endpoint_was_trusted",
     "invalid_device",
+]
+
+SHARED_TAGS = [
+    "Duo",
 ]
 
 

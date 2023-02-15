@@ -1,16 +1,14 @@
-import typing
-
-from panther_sdk import PantherEvent, detection
+from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
-from .._shared import duo_alert_context
+from .._shared import duo_alert_context, rule_tags
 
 
 def admin_mfa_restrictions_updated(
-    pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
+    extensions: detection.RuleExtensions = detection.RuleExtensions(),
 ) -> detection.Rule:
     """Detects changes to allowed MFA factors administrators can use to log into the admin panel."""
 
@@ -20,12 +18,14 @@ def admin_mfa_restrictions_updated(
 
     return detection.Rule(
         overrides=overrides,
+        extensions=extensions,
         name="Duo Admin MFA Restrictions Updated",
         rule_id="Duo.Admin.MFA.Restrictions.Updated",
-        log_types=["Duo.Administrator"],
+        log_types=[schema.LogTypeDuoAdministrator],
+        tags=rule_tags(),
         severity=detection.SeverityMedium,
         description="Detects changes to allowed MFA factors administrators can use to log into the admin panel.",
-        filters=(pre_filters or []) + [match_filters.deep_equal("action", "update_admin_factor_restrictions")],
+        filters=[match_filters.deep_equal("action", "update_admin_factor_restrictions")],
         alert_title=_title,
         threshold=1,
         alert_context=duo_alert_context,

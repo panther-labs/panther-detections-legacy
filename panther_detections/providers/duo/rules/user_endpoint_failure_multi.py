@@ -1,16 +1,14 @@
-import typing
-
-from panther_sdk import PantherEvent, detection
+from panther_sdk import PantherEvent, detection, schema
 
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
-from .._shared import ENDPOINT_REASONS, duo_alert_context_ip
+from .._shared import ENDPOINT_REASONS, duo_alert_context_ip, rule_tags
 
 
 def user_endpoint_failure_multi(
-    pre_filters: typing.List[detection.AnyFilter] = None,
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
+    extensions: detection.RuleExtensions = detection.RuleExtensions(),
 ) -> detection.Rule:
     """A Duo user's authentication was denied due to a suspicious error on the endpoint"""
 
@@ -22,15 +20,16 @@ def user_endpoint_failure_multi(
 
     return detection.Rule(
         overrides=overrides,
+        extensions=extensions,
         name="Duo User Denied For Endpoint Error",
         rule_id="DUO.User.Endpoint.Failure",
-        log_types=["Duo.Authentication"],
-        tags=["Duo"],
+        log_types=[schema.LogTypeDuoAuthentication],
+        tags=rule_tags(),
         severity=detection.SeverityMedium,
         description="A Duo user's authentication was denied due to a suspicious error on the endpoint",
         reference="https://duo.com/docs/adminapi#authentication-logs",
         runbook="Follow up with the endpoint owner to see status. Follow up with user to verify attempts.",
-        filters=(pre_filters or []) + [match_filters.deep_in("reason", ENDPOINT_REASONS)],
+        filters=[match_filters.deep_in("reason", ENDPOINT_REASONS)],
         alert_title=_title,
         unit_tests=(
             [

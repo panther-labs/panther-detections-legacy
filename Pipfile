@@ -13,6 +13,7 @@ pylint = "~=2.15.0"
 pylint-print = "~=1.0.0"
 nose = "~=1.3.7"
 twine = "*"
+coverage = "*"
 
 [packages]
 panther-sdk = "~=0.0.24"

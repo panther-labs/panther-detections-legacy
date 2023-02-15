@@ -21,7 +21,10 @@ def activity_audit(
     overrides: query.QueryOverrides = query.QueryOverrides(),
     extensions: query.QueryExtensions = query.QueryExtensions(),
 ) -> query.Query:
-    """Audit user activity across your environment. Customize to filter on specfic users, time ranges, etc"""
+    """Audit user activity across your environment.
+
+    Customize to filter on specfic users, time ranges, etc
+    """
 
     sql = """
       SELECT actor:displayName AS actor_name, actor:alternateId AS actor_email, eventType, COUNT(*) AS activity_count
@@ -65,7 +68,7 @@ def admin_access_granted(
     overrides: query.QueryOverrides = query.QueryOverrides(),
     extensions: query.QueryExtensions = query.QueryExtensions(),
 ) -> query.Query:
-    """Audit instances of admin access granted in your okta tenant"""
+    """Audit instances of admin access granted in your okta tenant."""
 
     sql = """
       SELECT 
@@ -137,7 +140,7 @@ def mfa_password_reset_audit(
     overrides: query.QueryOverrides = query.QueryOverrides(),
     extensions: query.QueryExtensions = query.QueryExtensions(),
 ) -> query.Query:
-    """Investigate Password and MFA resets for the last 7 days"""
+    """Investigate Password and MFA resets for the last 7 days."""
 
     sql = """
       SELECT p_event_time,actor:alternateId as actor_user,target[0]:alternateId as target_user, eventType,client:ipAddress as ip_address
@@ -176,7 +179,7 @@ def session_id_audit(
     overrides: query.QueryOverrides = query.QueryOverrides(),
     extensions: query.QueryExtensions = query.QueryExtensions(),
 ) -> query.Query:
-    """Search for activity releated to a specific SessionID in Okta panther_logs.okta_systemlog"""
+    """Search for activity releated to a specific SessionID in Okta panther_logs.okta_systemlog."""
 
     sql = """
         SELECT  
@@ -224,7 +227,8 @@ def session_id_audit(
         name="Okta Investigate Session ID Activity",
         enabled=True,
         sql=sql,
-        description="Search for activity releated to a specific SessionID in Okta panther_logs.okta_systemlog",
+        description="Search for activity releated to a specific SessionID in Okta "
+        "panther_logs.okta_systemlog",
         schedule=default_query_schedule,
     )
 
@@ -234,7 +238,7 @@ def support_access(
     overrides: query.QueryOverrides = query.QueryOverrides(),
     extensions: query.QueryExtensions = query.QueryExtensions(),
 ) -> query.Query:
-    """Show instances that Okta support was granted to your account"""
+    """Show instances that Okta support was granted to your account."""
 
     sql = """
       SELECT 

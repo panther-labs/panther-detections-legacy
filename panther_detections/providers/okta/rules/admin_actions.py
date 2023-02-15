@@ -3,12 +3,7 @@ from panther_sdk import PantherEvent, detection, schema
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
-from .._shared import (
-    SHARED_SUMMARY_ATTRS,
-    create_alert_context,
-    rule_tags,
-    standard_tags,
-)
+from .._shared import SHARED_SUMMARY_ATTRS, create_alert_context, rule_tags, standard_tags
 
 __all__ = [
     "admin_disabled_mfa",
@@ -20,7 +15,7 @@ def admin_disabled_mfa(
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
     extensions: detection.RuleExtensions = detection.RuleExtensions(),
 ) -> detection.Rule:
-    """An admin user has disabled the MFA requirement for your Okta account"""
+    """An admin user has disabled the MFA requirement for your Okta account."""
 
     def _title(event: PantherEvent) -> str:
         return f"Okta System-wide MFA Disabled by Admin User {event.udm('actor_user')}"
@@ -38,7 +33,8 @@ def admin_disabled_mfa(
         reports={detection.ReportKeyMITRE: ["TA0005:T1556"]},
         severity=detection.SeverityHigh,
         description="An admin user has disabled the MFA requirement for your Okta account",
-        reference="https://developer.okta.com/docs/reference/api/event-types/?q=system.mfa.factor.deactivate",
+        reference="https://developer.okta.com/docs/reference/api/event-types/"
+        "?q=system.mfa.factor.deactivate",
         runbook="Contact Admin to ensure this was sanctioned activity",
         filters=match_filters.deep_equal("eventType", "system.mfa.factor.deactivate"),
         alert_title=_title,
@@ -63,7 +59,7 @@ def admin_role_assigned(
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
     extensions: detection.RuleExtensions = detection.RuleExtensions(),
 ) -> detection.Rule:
-    """A user has been granted administrative privileges in Okta"""
+    """A user has been granted administrative privileges in Okta."""
 
     def _title(event: PantherEvent) -> str:
         target = event.get("target", [{}])
@@ -103,12 +99,15 @@ def admin_role_assigned(
             fallback=detection.SeverityInfo,
         ),
         description="A user has been granted administrative privileges in Okta",
-        reference="https://help.okta.com/en/prod/Content/Topics/Security/administrators-admin-comparison.htm",
+        reference="https://help.okta.com/en/prod/Content/Topics/Security/"
+        "administrators-admin-comparison.htm",
         runbook="Reach out to the user if needed to validate the activity",
         filters=[
             match_filters.deep_equal("eventType", "user.account.privilege.grant"),
             match_filters.deep_equal("outcome.result", "SUCCESS"),
-            match_filters.deep_equal_pattern("debugContext.debugData.privilegeGranted", r"[aA]dministrator"),
+            match_filters.deep_equal_pattern(
+                "debugContext.debugData.privilegeGranted", r"[aA]dministrator"
+            ),
         ],
         alert_title=_title,
         alert_context=create_alert_context,

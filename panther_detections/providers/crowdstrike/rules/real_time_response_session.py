@@ -12,21 +12,30 @@ def real_time_response_session(
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
     extensions: detection.RuleExtensions = detection.RuleExtensions(),
 ) -> detection.Rule:
-    """Alert when someone uses Crowdstrike’s RTR (real-time response)
-    capability to access a machine remotely to run commands."""
+    """Alert when someone uses Crowdstrike’s RTR (real-time response) capability to access a machine
+    remotely to run commands."""
 
     def _title(event: PantherEvent) -> str:
-
         user_name = event.deep_get("unknown_payload", "UserName", default="<unknown-UserName>")
-        hostname_field = event.deep_get("unknown_payload", "HostnameField", default="<unknown-HostNameField>")
-        return f"{user_name} started a Crowdstrike Real-Time Response (RTR) shell on {hostname_field}"
+        hostname_field = event.deep_get(
+            "unknown_payload", "HostnameField", default="<unknown-HostNameField>"
+        )
+        return (
+            f"{user_name} started a Crowdstrike Real-Time Response (RTR) shell on {hostname_field}"
+        )
 
     def _alert_context(event: PantherEvent) -> dict:
         return {
-            "Start Time": event.deep_get("unknown_payload", "StartTimestamp", default="<unknown-StartTimestamp>"),
-            "SessionId": event.deep_get("unknown_payload", "SessionId", default="<unknown-SessionId>"),
+            "Start Time": event.deep_get(
+                "unknown_payload", "StartTimestamp", default="<unknown-StartTimestamp>"
+            ),
+            "SessionId": event.deep_get(
+                "unknown_payload", "SessionId", default="<unknown-SessionId>"
+            ),
             "Actor": event.deep_get("unknown_payload", "UserName", default="<unknown-UserName>"),
-            "Target Host": event.deep_get("unknown_payload", "HostnameField", default="<unknown-HostnameField>"),
+            "Target Host": event.deep_get(
+                "unknown_payload", "HostnameField", default="<unknown-HostnameField>"
+            ),
         }
 
     return detection.Rule(
@@ -37,9 +46,11 @@ def real_time_response_session(
         log_types=[schema.LogTypeCrowdstrikeFDREvent, schema.LogTypeCrowdstrikeUnknown],
         tags=rule_tags(),
         severity=detection.SeverityMedium,
-        description="Alert when someone uses Crowdstrike’s RTR (real-time response) capability to access a machine "
+        description="Alert when someone uses Crowdstrike’s RTR (real-time response) capability "
+        "to access a machine "
         "remotely to run commands.",
-        reference="https://falcon.us-2.crowdstrike.com/documentation/71/real-time-response-and-network-containment#"
+        reference="https://falcon.us-2.crowdstrike.com/documentation/71/"
+        "real-time-response-and-network-containment#"
         "reviewing-real-time-response-audit-logs",
         runbook="Validate the real-time response session started by the Actor.",
         filters=[

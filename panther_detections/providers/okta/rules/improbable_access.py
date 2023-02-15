@@ -49,8 +49,12 @@ def geo_improbable_access_filter() -> detection.PythonFilter:
                     dumps(
                         {
                             "city": event.deep_get("client", "geographicalContext", "city"),
-                            "lon": event.deep_get("client", "geographicalContext", "geolocation", "lon"),
-                            "lat": event.deep_get("client", "geographicalContext", "geolocation", "lat"),
+                            "lon": event.deep_get(
+                                "client", "geographicalContext", "geolocation", "lon"
+                            ),
+                            "lat": event.deep_get(
+                                "client", "geographicalContext", "geolocation", "lat"
+                            ),
                             "time": event.get("p_event_time"),
                             "old_city": old_city,
                         }
@@ -76,7 +80,8 @@ def geo_improbable_access_filter() -> detection.PythonFilter:
         login_key = f"Okta.Login.GeographicallyImprobable{event.deep_get('actor', 'alternateId')}"
         # Retrieve the prior login info from the cache, if any
         last_login = get_string_set(login_key)
-        # If we haven't seen this user login recently, store this login for future use and don't alert
+        # If we haven't seen this user login recently, store this login for future use
+        # and don't alert
         if not last_login:
             store_login_info(login_key)
             return False
@@ -109,7 +114,7 @@ def geo_improbable_access(
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
     extensions: detection.RuleExtensions = detection.RuleExtensions(),
 ) -> detection.Rule:
-    """A user has subsequent logins from two geographic locations that are very far apart"""
+    """A user has subsequent logins from two geographic locations that are very far apart."""
 
     def _title(event: PantherEvent) -> str:
         from panther_oss_helpers import get_string_set  # type: ignore

@@ -12,10 +12,13 @@ def dns_request(
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
     extensions: detection.RuleExtensions = detection.RuleExtensions(),
 ) -> detection.Rule:
-    """A DNS request was made to a domain on an explicit denylist"""
+    """A DNS request was made to a domain on an explicit denylist."""
 
     def _title(event: PantherEvent) -> str:
-        return f"A denylisted domain [{event.get('DomainName')}] was queried by host {event.get('aid')}"
+        return (
+            f"A denylisted domain [{event.get('DomainName')}] was queried by host "
+            f"{event.get('aid')}"
+        )
 
     def _dedup(event: PantherEvent) -> str:
         #  Alert on every individual lookup of a bad domain, per machine
@@ -35,7 +38,8 @@ def dns_request(
         reports={"MITRE ATT&CK": ["TA0001:T1566"]},
         severity=detection.SeverityCritical,
         description="A DNS request was made to a domain on an explicit denylist",
-        reference="https://docs.runpanther.io/data-onboarding/supported-logs/crowdstrike#crowdstrike-dnsrequest",
+        reference="https://docs.runpanther.io/data-onboarding/supported-logs/"
+        "crowdstrike#crowdstrike-dnsrequest",
         runbook="Filter for host ID in title in Crowdstrike Host Management console to "
         "identify the system that queried the domain.",
         filters=[match_filters.deep_in("DomainName", DOMAIN_DENY_LIST)],

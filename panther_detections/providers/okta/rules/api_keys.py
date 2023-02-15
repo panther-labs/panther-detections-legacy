@@ -15,11 +15,13 @@ def api_key_created(
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
     extensions: detection.RuleExtensions = detection.RuleExtensions(),
 ) -> detection.Rule:
-    """A user created an API Key in Okta"""
+    """A user created an API Key in Okta."""
 
     def _title(event: PantherEvent) -> str:
         target = event.get("target", [{}])
-        key_name = target[0].get("displayName", "MISSING DISPLAY NAME") if target else "MISSING TARGET"
+        key_name = (
+            target[0].get("displayName", "MISSING DISPLAY NAME") if target else "MISSING TARGET"
+        )
 
         return (
             f"{event.deep_get('actor', 'displayName')} <{event.deep_get('actor', 'alternateId')}>"
@@ -61,14 +63,17 @@ def api_key_revoked(
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
     extensions: detection.RuleExtensions = detection.RuleExtensions(),
 ) -> detection.Rule:
-    """A user has revoked an API Key in Okta"""
+    """A user has revoked an API Key in Okta."""
 
     def _title(event: PantherEvent) -> str:
         target = event.get("target", [{}])
-        key_name = target[0].get("displayName", "MISSING DISPLAY NAME") if target else "MISSING TARGET"
+        key_name = (
+            target[0].get("displayName", "MISSING DISPLAY NAME") if target else "MISSING TARGET"
+        )
 
         return (
-            f"{event.get('actor', {}).get('displayName')} <{event.get('actor', {}).get('alternateId')}>"
+            f"{event.get('actor', {}).get('displayName')} "
+            f"<{event.get('actor', {}).get('alternateId')}>"
             f"revoked API key - <{key_name}>"
         )
 

@@ -1,5 +1,5 @@
 dirs := panther_detections
-max_line_len := 120
+max_line_len := 100
 
 lint: lint-pylint lint-fmt
 
@@ -15,11 +15,11 @@ lint-fmt:
 	pipenv run black --line-length=$(max_line_len) --check $(dirs)
 
 fmt:
-	pipenv run isort --profile=black $(dirs)
+	pipenv run isort --profile=black -l $(max_line_len) $(dirs)
 	pipenv run black --line-length=$(max_line_len) $(dirs)
 
 install:
-	pipenv install --dev
+	pipenv sync --dev
 
 test: 
 	pipenv run nosetests -v --with-coverage --cover-html --cover-html-dir=htmlcov

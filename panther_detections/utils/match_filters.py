@@ -6,7 +6,7 @@ __all__ = ["deep_equal", "deep_equal_pattern", "deep_in"]
 
 
 def deep_exists(path: str) -> detection.PythonFilter:
-    """Returns True when a value at the provided path exists"""
+    """Returns True when a value at the provided path exists."""
 
     def _deep_exists(event: PantherEvent) -> bool:
         import collections
@@ -26,7 +26,7 @@ def deep_exists(path: str) -> detection.PythonFilter:
 
 
 def deep_not_exists(path: str) -> detection.PythonFilter:
-    """Returns True when a value at the provided path does not exist"""
+    """Returns True when a value at the provided path does not exist."""
 
     def _deep_not_exists(event: PantherEvent) -> bool:
         import collections
@@ -46,7 +46,7 @@ def deep_not_exists(path: str) -> detection.PythonFilter:
 
 
 def deep_equal(path: str, value: typing.Any) -> detection.PythonFilter:
-    """Returns True when the provided value equals the value at the provided path"""
+    """Returns True when the provided value equals the value at the provided path."""
 
     def _deep_equal(event: PantherEvent) -> bool:
         import collections
@@ -66,7 +66,7 @@ def deep_equal(path: str, value: typing.Any) -> detection.PythonFilter:
 
 
 def deep_not_equal(path: str, value: typing.Any) -> detection.PythonFilter:
-    """Returns True when the provided value does not equal the value at the provided path"""
+    """Returns True when the provided value does not equal the value at the provided path."""
 
     def _deep_not_equal(event: PantherEvent) -> bool:
         import collections
@@ -86,7 +86,8 @@ def deep_not_equal(path: str, value: typing.Any) -> detection.PythonFilter:
 
 
 def deep_equal_pattern(path: str, pattern: str) -> detection.PythonFilter:
-    """Returns True when the provided pattern matches the value at the provided path using the 're' module"""
+    """Returns True when the provided pattern matches the value at the provided path using the 're'
+    module."""
 
     def _deep_equal_pattern(evt: PantherEvent) -> bool:
         import collections
@@ -108,7 +109,8 @@ def deep_equal_pattern(path: str, pattern: str) -> detection.PythonFilter:
 
 
 def deep_not_equal_pattern(path: str, pattern: str) -> detection.PythonFilter:
-    """Returns True when the provided pattern does not match the value at the provided path using the 're' module"""
+    """Returns True when the provided pattern does not match the value at the provided path using
+    the 're' module."""
 
     def _deep_not_equal_pattern(evt: PantherEvent) -> bool:
         import collections
@@ -130,7 +132,7 @@ def deep_not_equal_pattern(path: str, pattern: str) -> detection.PythonFilter:
 
 
 def deep_in(path: str, value: typing.List[typing.Any]) -> detection.PythonFilter:
-    """Returns True when one of the provided values are equal to the value at the provided path"""
+    """Returns True when one of the provided values are equal to the value at the provided path."""
 
     def _deep_in(evt: PantherEvent) -> bool:
         import collections
@@ -152,7 +154,7 @@ def deep_in(path: str, value: typing.List[typing.Any]) -> detection.PythonFilter
 
 
 def deep_not_in(path: str, value: typing.List[typing.Any]) -> detection.PythonFilter:
-    """Returns True when none of the provided values are equal to the value at the provided path"""
+    """Returns True when none of the provided values are equal to the value at the provided path."""
 
     def _deep_not_in(evt: PantherEvent) -> bool:
         import collections
@@ -174,7 +176,7 @@ def deep_not_in(path: str, value: typing.List[typing.Any]) -> detection.PythonFi
 
 
 def deep_less_than(path: str, value: typing.Union[int, float]) -> detection.PythonFilter:
-    """Returns True if the value at the provided path is less than a value"""
+    """Returns True if the value at the provided path is less than a value."""
 
     def _deep_less_than(evt: PantherEvent) -> bool:
         import collections
@@ -196,7 +198,7 @@ def deep_less_than(path: str, value: typing.Union[int, float]) -> detection.Pyth
 
 
 def deep_less_than_or_equal(path: str, value: typing.Union[int, float]) -> detection.PythonFilter:
-    """Returns True if the value at the provided path is less than or equal to a value"""
+    """Returns True if the value at the provided path is less than or equal to a value."""
 
     def _deep_less_than_or_equal(evt: PantherEvent) -> bool:
         import collections
@@ -218,7 +220,7 @@ def deep_less_than_or_equal(path: str, value: typing.Union[int, float]) -> detec
 
 
 def deep_greater_than(path: str, value: typing.Union[int, float]) -> detection.PythonFilter:
-    """Returns True if the value at the provided path is greater than a value"""
+    """Returns True if the value at the provided path is greater than a value."""
 
     def _deep_greater_than(evt: PantherEvent) -> bool:
         import collections
@@ -239,8 +241,10 @@ def deep_greater_than(path: str, value: typing.Union[int, float]) -> detection.P
     )
 
 
-def deep_greater_than_or_equal(path: str, value: typing.Union[int, float]) -> detection.PythonFilter:
-    """Returns True if the value at the provided path is greater than or equal to a value"""
+def deep_greater_than_or_equal(
+    path: str, value: typing.Union[int, float]
+) -> detection.PythonFilter:
+    """Returns True if the value at the provided path is greater than or equal to a value."""
 
     def _deep_greater_than_or_equal(evt: PantherEvent) -> bool:
         import collections
@@ -266,7 +270,8 @@ def deep_between(
     val_min: typing.Union[int, float],
     val_max: typing.Union[int, float],
 ) -> detection.PythonFilter:
-    """Returns True if the value at the provided path is between (or equal to) a maximum and minimum"""
+    """Returns True if the value at the provided path is between (or equal to) a maximum and
+    minimum."""
 
     if val_min >= val_max:
         raise RuntimeError("deep_between: min must be greater than max")
@@ -295,7 +300,8 @@ def deep_between_exclusive(
     val_min: typing.Union[int, float],
     val_max: typing.Union[int, float],
 ) -> detection.PythonFilter:
-    """Returns True if the value at the provided path is between, but not equal to, a maximum and minimum"""
+    """Returns True if the value at the provided path is between, but not equal to, a maximum and
+    minimum."""
 
     if val_min >= val_max:
         raise RuntimeError("deep_between_exclusive: min must be greater than max")

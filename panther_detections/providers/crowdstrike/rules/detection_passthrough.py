@@ -15,7 +15,10 @@ def detection_passthrough(
     """Crowdstrike Falcon has detected malicious activity on a host."""
 
     def _title(event: PantherEvent) -> str:
-        return f"Crowdstrike Alert ({event.get('Technique')}) - {event.get('ComputerName')}({event.get('UserName')})"
+        return (
+            f"Crowdstrike Alert ({event.get('Technique')}) - "
+            f"{event.get('ComputerName')}({event.get('UserName')})"
+        )
 
     def _severity(event: PantherEvent) -> str:
         return event.get("SeverityName")

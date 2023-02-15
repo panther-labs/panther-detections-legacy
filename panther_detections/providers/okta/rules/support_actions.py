@@ -22,7 +22,7 @@ def account_support_access(
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
     extensions: detection.RuleExtensions = detection.RuleExtensions(),
 ) -> detection.Rule:
-    """Detects when an admin user has granted access to Okta Support for your account"""
+    """Detects when an admin user has granted access to Okta Support for your account."""
 
     def _title(event: PantherEvent) -> str:
         return f"Okta Support Access Granted by {event.udm('actor_user')}"
@@ -37,7 +37,8 @@ def account_support_access(
         reports={detection.ReportKeyMITRE: ["TA0001:T1199"]},
         severity=detection.SeverityMedium,
         description="An admin user has granted access to Okta Support to your account",
-        reference="https://help.okta.com/en/prod/Content/Topics/Settings/settings-support-access.htm",
+        reference="https://help.okta.com/en/prod/Content/Topics/Settings/"
+        "settings-support-access.htm",
         runbook="Contact Admin to ensure this was sanctioned activity",
         filters=[
             match_filters.deep_in("eventType", SUPPORT_ACCESS_EVENTS),
@@ -64,7 +65,7 @@ def support_reset(
     overrides: detection.RuleOverrides = detection.RuleOverrides(),
     extensions: detection.RuleExtensions = detection.RuleExtensions(),
 ) -> detection.Rule:
-    """A Password or MFA factor was reset by Okta Support"""
+    """A Password or MFA factor was reset by Okta Support."""
 
     def _title(event: PantherEvent) -> str:
         return f"Okta Support Reset Password or MFA for user {event.udm('actor_user')}"

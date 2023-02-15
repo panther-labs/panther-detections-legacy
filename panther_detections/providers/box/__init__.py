@@ -10,8 +10,6 @@ def use_all_with_defaults() -> List[Union[detection.Rule]]:
     return [
         rules.access_granted(),
         rules.anomalous_download(),
-        rules.event_triggered_externally(),
-        rules.item_shared_externally(),
         rules.malicious_content(),
         rules.new_login(),
         rules.policy_violation(),

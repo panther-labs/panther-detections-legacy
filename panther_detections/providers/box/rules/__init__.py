@@ -1,7 +1,5 @@
 from .access_granted import *
 from .anomalous_download import *
-from .event_triggered_externally import *
-from .item_shared_externally import *
 from .malicious_content import *
 from .new_login import *
 from .policy_violation import *

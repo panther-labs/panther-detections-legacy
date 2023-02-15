@@ -18,7 +18,7 @@ def operation_passcode_disabled(
         context = get_zoom_usergroup_context(event)
         return f"Group {context['GroupName']} passcode requirement disabled by {event.get('operator')}"
 
-    def _filter(event: PantherEvent) -> bool:
+    def _filter_passcode_disabled(event: PantherEvent) -> bool:
         from panther_detections.providers.zoom._shared import (  # pylint: disable=W0621
             get_zoom_usergroup_context,
         )
@@ -40,7 +40,10 @@ def operation_passcode_disabled(
         runbook="Follow up with user or Zoom admin to ensure this meeting room's use case does not allow a passcode.",
         alert_title=_title,
         summary_attrs=["p_any_emails"],
-        filters=[match_filters.deep_equal("category_type", "User Group"), detection.PythonFilter(func=_filter)],
+        filters=[
+            match_filters.deep_equal("category_type", "User Group"),
+            detection.PythonFilter(func=_filter_passcode_disabled),
+        ],
         unit_tests=(
             [
                 detection.JSONUnitTest(

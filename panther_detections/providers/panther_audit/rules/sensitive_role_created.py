@@ -57,10 +57,7 @@ def sensitive_role_created(
         alert_title=_title,
         summary_attrs=["p_any_ip_addresses"],
         alert_context=_alert_context,
-        filters=[
-            # match_filters.deep_in("actionName", PANTHER_ROLE_ACTIONS),
-            check_role_create_success
-        ],
+        filters=[check_role_create_success()],
         unit_tests=(
             [
                 detection.JSONUnitTest(

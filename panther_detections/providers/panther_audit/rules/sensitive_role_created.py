@@ -1,9 +1,10 @@
 import typing
+
 from panther_sdk import PantherEvent, detection, schema
+
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
-
 from .._shared import PANTHER_ADMIN_PERMISSIONS, PANTHER_ROLE_ACTIONS
 
 __all__ = ["sensitive_role_created"]
@@ -17,11 +18,9 @@ def sensitive_role_created(
 
     def check_role_create_success() -> detection.PythonFilter:
         def _check_role_create_success(event: PantherEvent) -> bool:
-            if event.udm("event_type") not in PANTHER_ROLE_ACTIONS:
-                return False
-            role_permissions = set(
-                event.deep_get("actionParams", "input", "permissions", default="")
-            )
+            # if event.udm("event_type") not in PANTHER_ROLE_ACTIONS:
+            #     return False
+            role_permissions = set(event.deep_get("actionParams", "input", "permissions", default=""))
 
             return (
                 len(set(PANTHER_ADMIN_PERMISSIONS).intersection(role_permissions)) > 0
@@ -38,9 +37,11 @@ def sensitive_role_created(
 
     def _alert_context(event: PantherEvent) -> typing.Dict[str, typing.Any]:
         return {
-            "user": event.udm("actor_user"),
+            "user": event.get("actor_user"),
+            # "user": event.udm("actor_user"),
             "role_name": event.deep_get("actionParams", "name"),
-            "ip": event.udm("source_ip"),
+            "ip": event.get("source_ip"),
+            # "ip": event.udm("source_ip"),
         }
 
     return detection.Rule(
@@ -57,7 +58,10 @@ def sensitive_role_created(
         alert_title=_title,
         summary_attrs=["p_any_ip_addresses"],
         alert_context=_alert_context,
-        filters=[check_role_create_success()],
+        filters=[
+            match_filters.deep_in("actionName", PANTHER_ROLE_ACTIONS),
+            check_role_create_success(),
+        ],
         unit_tests=(
             [
                 detection.JSONUnitTest(

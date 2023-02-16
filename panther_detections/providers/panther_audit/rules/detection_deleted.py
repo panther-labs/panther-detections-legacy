@@ -1,5 +1,7 @@
 import typing
+
 from panther_sdk import PantherEvent, detection, schema
+
 from panther_detections.utils import match_filters
 
 from .. import sample_logs
@@ -46,9 +48,7 @@ def detection_deleted(
         unit_tests=(
             [
                 detection.JSONUnitTest(
-                    name="Delete 1 Detection",
-                    expect_match=True,
-                    data=sample_logs.detection_deleted_delete_1_detection
+                    name="Delete 1 Detection", expect_match=True, data=sample_logs.detection_deleted_delete_1_detection
                 ),
                 detection.JSONUnitTest(
                     name="Delete Many Detections",

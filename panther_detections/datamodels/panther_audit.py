@@ -1,5 +1,6 @@
+from panther_sdk import schema
+
 from panther_detections.utils import event_type_helpers as event_type
-from panther_sdk import PantherEvent, schema
 
 audit_log_type_map = {
     "CREATE_USER": event_type.USER_ACCOUNT_CREATED,

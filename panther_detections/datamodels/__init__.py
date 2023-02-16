@@ -1,1 +1,1 @@
-from panther_audit import *
+from .panther_audit import *

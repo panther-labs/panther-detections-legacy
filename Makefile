@@ -22,7 +22,9 @@ install:
 	pipenv sync --dev
 
 test: 
-	pipenv run nosetests -v --with-coverage --cover-html --cover-html-dir=htmlcov
+	pipenv run coverage run -m unittest discover tests
+	pipenv run coverage report
+	pipenv run coverage html
 
 docker-build:
 	docker build -t panther-detections .

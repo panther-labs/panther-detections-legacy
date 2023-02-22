@@ -1,14 +1,14 @@
 from pathlib import Path
 
-from setuptools import setup
+from setuptools import setup, find_packages
 
 this_directory = Path(__file__).parent
-VERSION = "0.0.7"
+VERSION = "0.0.9"
 
 setup(
     name="panther_detections",
     version=VERSION,
-    packages=["panther_detections"],
+    packages=find_packages(),
     package_data={"panther_detections": ["py.typed"]},
     license="AGPL-3.0",
     description="",

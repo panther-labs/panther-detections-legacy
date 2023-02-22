@@ -3,7 +3,7 @@ from pathlib import Path
 from setuptools import setup, find_packages
 
 this_directory = Path(__file__).parent
-VERSION = "0.0.9"
+VERSION = "0.0.8"
 
 setup(
     name="panther_detections",
